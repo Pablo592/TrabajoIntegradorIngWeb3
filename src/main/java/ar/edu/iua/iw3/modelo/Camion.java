@@ -2,6 +2,7 @@ package ar.edu.iua.iw3.modelo;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -18,12 +19,14 @@ public class Camion  implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
-	
+	@Column(length = 7, nullable = false, unique = true)
 	private String patente;
 	
+	@Column(length = 100, nullable = true)
 	private String descripcion;
 	
-	private float cisternadoLitros;
+	@Column(columnDefinition = "DOUBLE", nullable = false)
+	private double cisternadoLitros;
 
 	public long getId() {
 		return id;
@@ -49,11 +52,11 @@ public class Camion  implements Serializable {
 		this.descripcion = descripcion;
 	}
 
-	public float getCisternadoLitros() {
+	public double getCisternadoLitros() {
 		return cisternadoLitros;
 	}
 
-	public void setCisternadoLitros(float cisternadoLitros) {
+	public void setCisternadoLitros(double cisternadoLitros) {
 		this.cisternadoLitros = cisternadoLitros;
 	}
 	

@@ -2,6 +2,7 @@ package ar.edu.iua.iw3.modelo;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -18,11 +19,13 @@ public class Chofer implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
-	
+	@Column(length = 100, nullable = false)
 	private String nombre;
 	
+	@Column(length = 100, nullable = false)
 	private String apellido;
 	
+	@Column(length = 8, nullable = false, unique = true)
 	private Long documento;
 
 	public long getId() {
