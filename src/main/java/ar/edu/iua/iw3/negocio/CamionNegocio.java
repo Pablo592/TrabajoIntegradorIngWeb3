@@ -17,12 +17,9 @@ import ar.edu.iua.iw3.negocio.excepciones.NoEncontradoException;
 
 @Service
 public class CamionNegocio implements ICamionNegocio{
-
-
 	
 	private Logger log = LoggerFactory.getLogger(CamionNegocio.class);
-	
-	
+
 	@Autowired
 	private CamionRepository camionDAO;
 	

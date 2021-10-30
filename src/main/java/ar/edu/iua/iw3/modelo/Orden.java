@@ -1,13 +1,12 @@
 package ar.edu.iua.iw3.modelo;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import java.io.Serializable;
 import java.util.Calendar;
+import java.util.List;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "orden")
@@ -20,17 +19,25 @@ public class Orden implements Serializable{
 	private long id;
 	
 	
-	private Long numeroDeOrden;
-	
-	
+	private long numeroDeOrden;
+
+	@OneToOne(cascade =  CascadeType.ALL)
+	@JoinColumn(name = "id_camion")
 	private Camion camion;
-	private Cliente ciente;
-	private Chofer chofer;
+
+	@OneToOne(cascade =  CascadeType.ALL)
+	@JoinColumn(name = "id_cliente")
+	private Cliente cliente;
+
+	@OneToMany(targetEntity=Chofer.class, mappedBy="orden", fetch = FetchType.LAZY)
+	@JsonBackReference
+	private List<Chofer> choferList;
+
+	@OneToOne(cascade =  CascadeType.ALL)
+	@JoinColumn(name = "id_producto")
 	private Producto producto;
 	
 	private Calendar fechaRecepcion;
-	
-	
 	
 	private Calendar fechaPesajeInicial;
 	
@@ -38,241 +45,108 @@ public class Orden implements Serializable{
 	
 	private Calendar fechaFinProcesoCarga;
 	
-	private Calendar fechaPesajeFinal;
-	
-	
-	private Carga carga;
+	private Calendar fechaRecepcionPesajeFinal;
 
-	
-	
+	@OneToOne(cascade =  CascadeType.ALL)
+	@JoinColumn(name = "id_carga")
+	private Carga carga;
 	
 	public long getId() {
 		return id;
 	}
 
-
-
-
 	public void setId(long id) {
 		this.id = id;
 	}
 
-
-
-
-	public Long getNumeroDeOrden() {
+	public long getNumeroDeOrden() {
 		return numeroDeOrden;
 	}
 
-
-
-
-	public void setNumeroDeOrden(Long numeroDeOrden) {
+	public void setNumeroDeOrden(long numeroDeOrden) {
 		this.numeroDeOrden = numeroDeOrden;
 	}
-
-
-
 
 	public Camion getCamion() {
 		return camion;
 	}
 
-
-
-
 	public void setCamion(Camion camion) {
 		this.camion = camion;
 	}
 
-
-
-
-	public Cliente getCiente() {
-		return ciente;
+	public Cliente getCliente() {
+		return cliente;
 	}
 
-
-
-
-	public void setCiente(Cliente ciente) {
-		this.ciente = ciente;
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
 	}
 
-
-
-
-	public Chofer getChofer() {
-		return chofer;
+	public List<Chofer> getChoferList() {
+		return choferList;
 	}
 
-
-
-
-	public void setChofer(Chofer chofer) {
-		this.chofer = chofer;
+	public void setChoferList(List<Chofer> choferList) {
+		this.choferList = choferList;
 	}
-
-
-
 
 	public Producto getProducto() {
 		return producto;
 	}
 
-
-
-
 	public void setProducto(Producto producto) {
 		this.producto = producto;
 	}
-
-
-
 
 	public Calendar getFechaRecepcion() {
 		return fechaRecepcion;
 	}
 
-
-
-
 	public void setFechaRecepcion(Calendar fechaRecepcion) {
 		this.fechaRecepcion = fechaRecepcion;
 	}
-
-
-
 
 	public Calendar getFechaPesajeInicial() {
 		return fechaPesajeInicial;
 	}
 
-
-
-
 	public void setFechaPesajeInicial(Calendar fechaPesajeInicial) {
 		this.fechaPesajeInicial = fechaPesajeInicial;
 	}
-
-
-
 
 	public Calendar getFechaInicioProcesoCarga() {
 		return fechaInicioProcesoCarga;
 	}
 
-
-
-
 	public void setFechaInicioProcesoCarga(Calendar fechaInicioProcesoCarga) {
 		this.fechaInicioProcesoCarga = fechaInicioProcesoCarga;
 	}
-
-
-
 
 	public Calendar getFechaFinProcesoCarga() {
 		return fechaFinProcesoCarga;
 	}
 
-
-
-
 	public void setFechaFinProcesoCarga(Calendar fechaFinProcesoCarga) {
 		this.fechaFinProcesoCarga = fechaFinProcesoCarga;
 	}
 
-
-
-
-	public Calendar getFechaPesajeFinal() {
-		return fechaPesajeFinal;
+	public Calendar getFechaRecepcionPesajeFinal() {
+		return fechaRecepcionPesajeFinal;
 	}
 
-
-
-
-	public void setFechaPesajeFinal(Calendar fechaPesajeFinal) {
-		this.fechaPesajeFinal = fechaPesajeFinal;
+	public void setFechaRecepcionPesajeFinal(Calendar fechaRecepcionPesajeFinal) {
+		this.fechaRecepcionPesajeFinal = fechaRecepcionPesajeFinal;
 	}
-
-
-
 
 	public Carga getCarga() {
 		return carga;
 	}
 
-
-
-
 	public void setCarga(Carga carga) {
 		this.carga = carga;
 	}
 
-
-
-
-	private class Carga implements Serializable {
-
-		private static final long serialVersionUID = 1L;
-		
-		@Id
-		@GeneratedValue(strategy = GenerationType.IDENTITY)
-		private long id;
-		
-		private float masaAcumuladaKg;
-		
-		private float densidadProductoKilogramoLitro;
-		
-		private float temperaturaProductoCelcius;
-		
-		private float caudalLitroSegundo;
-
-		public long getId() {
-			return id;
-		}
-
-		public void setId(long id) {
-			this.id = id;
-		}
-
-		public float getMasaAcumuladaKg() {
-			return masaAcumuladaKg;
-		}
-
-		public void setMasaAcumuladaKg(float masaAcumuladaKg) {
-			this.masaAcumuladaKg = masaAcumuladaKg;
-		}
-
-		public float getDensidadProductoKilogramoLitro() {
-			return densidadProductoKilogramoLitro;
-		}
-
-		public void setDensidadProductoKilogramoLitro(float densidadProductoKilogramoLitro) {
-			this.densidadProductoKilogramoLitro = densidadProductoKilogramoLitro;
-		}
-
-		public float getTemperaturaProductoCelcius() {
-			return temperaturaProductoCelcius;
-		}
-
-		public void setTemperaturaProductoCelcius(float temperaturaProductoCelcius) {
-			this.temperaturaProductoCelcius = temperaturaProductoCelcius;
-		}
-
-		public float getCaudalLitroSegundo() {
-			return caudalLitroSegundo;
-		}
-
-		public void setCaudalLitroSegundo(float caudalLitroSegundo) {
-			this.caudalLitroSegundo = caudalLitroSegundo;
-		}
-		
-		
-		
-	}
 }
 
 

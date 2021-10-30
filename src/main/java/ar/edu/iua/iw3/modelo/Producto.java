@@ -2,11 +2,7 @@ package ar.edu.iua.iw3.modelo;
 
 import java.io.Serializable;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "producto")
@@ -17,10 +13,11 @@ public class Producto implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
-	
-	
+
+	@Column(length = 50, nullable = false, unique = true)
 	private String nombre;
-	
+
+	@Column(length = 100, nullable = true, unique = false)
 	private String descripcion;
 
 	public long getId() {

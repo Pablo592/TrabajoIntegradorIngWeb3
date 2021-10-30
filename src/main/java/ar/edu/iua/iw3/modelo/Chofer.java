@@ -2,12 +2,7 @@ package ar.edu.iua.iw3.modelo;
 
 import java.io.Serializable;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "chofer")
@@ -27,6 +22,10 @@ public class Chofer implements Serializable {
 	
 	@Column(length = 8, nullable = false, unique = true)
 	private Long documento;
+
+	@ManyToOne(cascade=CascadeType.ALL)
+	@JoinColumn(name = "id_chofer")
+	private Orden orden;
 
 	public long getId() {
 		return id;
