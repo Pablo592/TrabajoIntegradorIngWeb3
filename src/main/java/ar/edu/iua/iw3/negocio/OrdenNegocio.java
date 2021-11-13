@@ -62,7 +62,7 @@ public class OrdenNegocio implements IOrdenNegocio{
         }
     }
 
-    private Orden findByNumeroDeOrden( long numeroOrden) {
+    private Orden findByNumeroDeOrden( String numeroOrden) {
         return ordenDAO.findByNumeroDeOrden(numeroOrden).orElse(null);
     }
 

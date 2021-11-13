@@ -17,9 +17,8 @@ public class Orden implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
-	
-	
-	private long numeroDeOrden;
+
+	private String numeroDeOrden;
 
 	@OneToOne(cascade =  CascadeType.ALL)
 	@JoinColumn(name = "id_camion")
@@ -59,11 +58,11 @@ public class Orden implements Serializable{
 		this.id = id;
 	}
 
-	public long getNumeroDeOrden() {
+	public String getNumeroDeOrden() {
 		return numeroDeOrden;
 	}
 
-	public void setNumeroDeOrden(long numeroDeOrden) {
+	public void setNumeroDeOrden(String numeroDeOrden) {
 		this.numeroDeOrden = numeroDeOrden;
 	}
 

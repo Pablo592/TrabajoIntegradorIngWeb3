@@ -18,6 +18,7 @@ public class Camion  implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
+
 	
 	@Column(length = 7, nullable = false, unique = true)
 	private String patente;
@@ -27,6 +28,9 @@ public class Camion  implements Serializable {
 	
 	@Column(columnDefinition = "DOUBLE", nullable = false)
 	private double cisternadoLitros;
+
+	@Column(columnDefinition = "DOUBLE", nullable = false)
+	private double preset;
 
 	public long getId() {
 		return id;
@@ -59,6 +63,12 @@ public class Camion  implements Serializable {
 	public void setCisternadoLitros(double cisternadoLitros) {
 		this.cisternadoLitros = cisternadoLitros;
 	}
-	
-	
+
+	public double getPreset() {
+		return preset;
+	}
+
+	public void setPreset(double preset) {
+		this.preset = preset;
+	}
 }
