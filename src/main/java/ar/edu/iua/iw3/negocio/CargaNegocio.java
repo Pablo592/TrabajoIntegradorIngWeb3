@@ -24,7 +24,6 @@ public class CargaNegocio implements ICargaNegocio {
     @Override
     public List<Carga> listado() throws NegocioException {
         try {
-            System.out.println(cargaDAO.findAll());
             return cargaDAO.findAll();
         } catch (Exception e) {
             log.error(e.getMessage(), e);

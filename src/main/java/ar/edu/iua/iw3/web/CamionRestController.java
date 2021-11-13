@@ -40,15 +40,6 @@ public class CamionRestController {
 			return new ResponseEntity<List<Camion>>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-
-	@GetMapping(value="/depurarCamion")
-	public String prueba() {
-		System.out.println("Ejecuto el test con el postman");
-		return "Estoy hablando con el back";
-	}
-
-
-
 	
 	
 	@PostMapping(value="/camiones")

@@ -23,6 +23,7 @@ public class Chofer implements Serializable {
 	@Column(length = 8, nullable = false, unique = true)
 	private Long documento;
 
+
 	public long getId() {
 		return id;
 	}

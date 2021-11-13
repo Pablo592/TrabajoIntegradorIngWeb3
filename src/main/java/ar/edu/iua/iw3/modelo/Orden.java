@@ -26,11 +26,11 @@ public class Orden implements Serializable{
 	private Camion camion;
 
 	@OneToOne(cascade =  CascadeType.ALL)
-	@JoinColumn(name = "id_chofer")
+	@JoinColumn(name = "id_cliente")
 	private Cliente cliente;
 
 	@OneToOne(cascade =  CascadeType.ALL)
-	@JoinColumn(name = "id_cliente")
+	@JoinColumn(name = "id_chofer")
 	private Chofer chofer;
 
 	@OneToOne(cascade =  CascadeType.ALL)
