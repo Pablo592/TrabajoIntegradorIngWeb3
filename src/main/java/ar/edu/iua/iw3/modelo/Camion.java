@@ -19,7 +19,6 @@ public class Camion  implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
-	
 	@Column(length = 7, nullable = false, unique = true)
 	private String patente;
 	
@@ -31,6 +30,9 @@ public class Camion  implements Serializable {
 
 	@Column(columnDefinition = "DOUBLE", nullable = false)
 	private double preset;
+
+	@Column(columnDefinition = "DOUBLE", nullable = false)
+	private double tara;
 
 	public long getId() {
 		return id;
@@ -70,5 +72,13 @@ public class Camion  implements Serializable {
 
 	public void setPreset(double preset) {
 		this.preset = preset;
+	}
+
+	public double getTara() {
+		return tara;
+	}
+
+	public void setTara(double tara) {
+		this.tara = tara;
 	}
 }

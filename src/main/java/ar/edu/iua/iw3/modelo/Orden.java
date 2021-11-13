@@ -46,9 +46,11 @@ public class Orden implements Serializable{
 	
 	private Calendar fechaRecepcionPesajeFinal;
 
-	@OneToOne(cascade =  CascadeType.ALL)
-	@JoinColumn(name = "id_carga")
-	private Carga carga;
+	private String password;
+
+	@OneToMany(targetEntity=Carga.class, mappedBy="order", fetch = FetchType.LAZY)
+	@JsonBackReference
+	private List<Carga> cargaList;
 	
 	public long getId() {
 		return id;
@@ -138,14 +140,21 @@ public class Orden implements Serializable{
 		this.fechaRecepcionPesajeFinal = fechaRecepcionPesajeFinal;
 	}
 
-	public Carga getCarga() {
-		return carga;
+	public List<Carga> getCargaList() {
+		return cargaList;
 	}
 
-	public void setCarga(Carga carga) {
-		this.carga = carga;
+	public void setCargaList(List<Carga> cargaList) {
+		this.cargaList = cargaList;
 	}
 
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
 }
 
 

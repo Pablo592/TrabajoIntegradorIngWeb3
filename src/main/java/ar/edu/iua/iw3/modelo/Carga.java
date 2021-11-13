@@ -13,6 +13,10 @@ public class Carga implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @ManyToOne(cascade=CascadeType.ALL)
+    @JoinColumn(name = "order_id")
+    private Orden order;
+
     private float masaAcumuladaKg;
 
     private float densidadProductoKilogramoMetroCub;
@@ -51,6 +55,14 @@ public class Carga implements Serializable {
 
     public void setTemperaturaProductoCelcius(float temperaturaProductoCelcius) {
         this.temperaturaProductoCelcius = temperaturaProductoCelcius;
+    }
+
+    public Orden getOrder() {
+        return order;
+    }
+
+    public void setOrder(Orden order) {
+        this.order = order;
     }
 
     public float getCaudalLitroSegundo() {
