@@ -26,12 +26,12 @@ public class Orden implements Serializable{
 	private Camion camion;
 
 	@OneToOne(cascade =  CascadeType.ALL)
-	@JoinColumn(name = "id_cliente")
+	@JoinColumn(name = "id_chofer")
 	private Cliente cliente;
 
-	@OneToMany(targetEntity=Chofer.class, mappedBy="orden", fetch = FetchType.LAZY)
-	@JsonBackReference
-	private List<Chofer> choferList;
+	@OneToOne(cascade =  CascadeType.ALL)
+	@JoinColumn(name = "id_cliente")
+	private Chofer chofer;
 
 	@OneToOne(cascade =  CascadeType.ALL)
 	@JoinColumn(name = "id_producto")
@@ -83,12 +83,12 @@ public class Orden implements Serializable{
 		this.cliente = cliente;
 	}
 
-	public List<Chofer> getChoferList() {
-		return choferList;
+	public Chofer getChofer() {
+		return chofer;
 	}
 
-	public void setChoferList(List<Chofer> choferList) {
-		this.choferList = choferList;
+	public void setChofer(Chofer chofer) {
+		this.chofer = chofer;
 	}
 
 	public Producto getProducto() {

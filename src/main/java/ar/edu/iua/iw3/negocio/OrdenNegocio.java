@@ -22,6 +22,7 @@ public class OrdenNegocio implements IOrdenNegocio{
 
     @Override
     public List<Orden> listado() throws NegocioException {
+      //  System.out.println(ordenDAO.findAll().get(0).getNumeroDeOrden());
         try {
             return ordenDAO.findAll();
         } catch (Exception e) {

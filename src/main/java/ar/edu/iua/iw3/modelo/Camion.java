@@ -28,6 +28,17 @@ public class Camion  implements Serializable {
 	@Column(columnDefinition = "DOUBLE", nullable = false)
 	private double cisternadoLitros;
 
+	@Column(columnDefinition = "DOUBLE", nullable = false)
+	private double tara;
+
+	public double getTara() {
+		return tara;
+	}
+
+	public void setTara(double tara) {
+		this.tara = tara;
+	}
+
 	public long getId() {
 		return id;
 	}
@@ -62,3 +73,13 @@ public class Camion  implements Serializable {
 	
 	
 }
+
+
+
+
+
+
+
+
+
+

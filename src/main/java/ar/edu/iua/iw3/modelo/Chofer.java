@@ -23,10 +23,6 @@ public class Chofer implements Serializable {
 	@Column(length = 8, nullable = false, unique = true)
 	private Long documento;
 
-	@ManyToOne(cascade=CascadeType.ALL)
-	@JoinColumn(name = "id_chofer")
-	private Orden orden;
-
 	public long getId() {
 		return id;
 	}
