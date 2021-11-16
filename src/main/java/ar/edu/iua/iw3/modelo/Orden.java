@@ -56,7 +56,7 @@ public class Orden implements Serializable{
 
 	private Double promedioCaudal;
 
-	@OneToMany(targetEntity=Carga.class, mappedBy="order", fetch = FetchType.LAZY)
+	@OneToMany(targetEntity=Carga.class, mappedBy= "order", fetch = FetchType.LAZY)
 	@JsonBackReference
 	private List<Carga> cargaList;
 	
