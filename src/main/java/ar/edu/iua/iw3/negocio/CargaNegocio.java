@@ -1,6 +1,7 @@
 package ar.edu.iua.iw3.negocio;
 
 import ar.edu.iua.iw3.modelo.Carga;
+import ar.edu.iua.iw3.modelo.Orden;
 import ar.edu.iua.iw3.modelo.persistencia.CargaRepository;
 import ar.edu.iua.iw3.negocio.excepciones.EncontradoException;
 import ar.edu.iua.iw3.negocio.excepciones.NegocioException;
@@ -20,6 +21,9 @@ public class CargaNegocio implements ICargaNegocio {
 
     @Autowired
     private CargaRepository cargaDAO;
+
+    @Autowired
+    private IOrdenNegocio ordenNegocio;
 
     @Override
     public List<Carga> listado() throws NegocioException {
@@ -48,8 +52,17 @@ public class CargaNegocio implements ICargaNegocio {
 
     @Override   //cargo todo lo que venga
     public Carga agregar(Carga carga) throws NegocioException, EncontradoException {
+        Optional<Orden> o;
         try {
-            return cargaDAO.save(carga);
+        o = Optional.ofNullable(ordenNegocio.findByNumeroOrden(carga.getOrden().getNumeroDeOrden()));
+        if(!o.isPresent())
+            throw new NegocioException("No existe el numero de orden: " + carga.getOrden().getNumeroDeOrden() + " Falta completar Estado 1" );
+
+        if(o.get().getCamion().getPreset() >= carga.getMasaAcumuladaKg())
+            throw new NegocioException("Tanque lleno");
+
+        return cargaDAO.save(carga);
+
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             throw new NegocioException(e);

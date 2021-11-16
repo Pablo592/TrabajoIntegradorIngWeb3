@@ -28,9 +28,22 @@ public class OrdenRestController {
         try {
             return new ResponseEntity<List<Orden>>(ordenNegocio.listado(), HttpStatus.OK);
         } catch (NegocioException e) {
-            return new ResponseEntity<List<Orden>>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<List<Orden>>(HttpStatus.NOT_FOUND);
         }
     }
+
+    @GetMapping(value= "/ordenes/resumen/{numeroOrden}")
+    public ResponseEntity<Orden> resumen(@PathVariable("numeroOrden") long numeroOrden) {
+        try {
+            return new ResponseEntity<Orden>(ordenNegocio.resumenFinal(numeroOrden), HttpStatus.OK);
+        } catch (NegocioException e) {
+            return new ResponseEntity<Orden>(HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (NoEncontradoException e) {
+            return new ResponseEntity<Orden>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+
 
     @PostMapping(value= "/ordenes")
     public ResponseEntity<String> agregar(@RequestBody Orden orden) {

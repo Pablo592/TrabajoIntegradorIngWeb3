@@ -45,10 +45,29 @@ public class OrdenNegocio implements IOrdenNegocio{
         return o.get();
     }
 
+
+    @Override
+    public Orden resumenFinal(long id) throws NegocioException, NoEncontradoException {
+        Optional<Orden> o;
+        try {
+            o = ordenDAO.findById(id);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            throw new NegocioException(e);
+        }
+        if (!o.isPresent()) {
+            throw new NoEncontradoException("No se encuentra la orden con id=" + id);
+        }
+        return o.get();
+    }
+
+
+
+
     @Override
     public Orden agregar(Orden orden) throws NegocioException, EncontradoException {
         try {
-            if(null!=findByNumeroDeOrden(orden.getNumeroDeOrden()))
+            if(null!=findByNumeroOrden(orden.getNumeroDeOrden()))
                 throw new EncontradoException("Ya existe una orden con el numero =" + orden.getNumeroDeOrden());
             cargar(orden.getId()); 		// tira excepcion sino no lo encuentra
             throw new EncontradoException("Ya existe una orden con id=" + orden.getId());
@@ -62,7 +81,7 @@ public class OrdenNegocio implements IOrdenNegocio{
         }
     }
 
-    private Orden findByNumeroDeOrden( String numeroOrden) {
+    public Orden findByNumeroOrden( String numeroOrden) {
         return ordenDAO.findByNumeroDeOrden(numeroOrden).orElse(null);
     }
 
@@ -70,7 +89,7 @@ public class OrdenNegocio implements IOrdenNegocio{
     @Override
     public Orden modificar(Orden orden) throws NegocioException, NoEncontradoException {
         cargar(orden.getId()); //Paso 1
-        Orden ordenWithNumeroOrden = findByNumeroDeOrden(orden.getNumeroDeOrden());
+        Orden ordenWithNumeroOrden = findByNumeroOrden(orden.getNumeroDeOrden());
 
         if(null!=ordenWithNumeroOrden) { //Paso 2
 

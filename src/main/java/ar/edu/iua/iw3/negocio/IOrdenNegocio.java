@@ -12,10 +12,13 @@ public interface IOrdenNegocio {
 
     Orden cargar(long id) throws NegocioException, NoEncontradoException;
 
+    Orden resumenFinal(long id) throws NegocioException, NoEncontradoException;
+
     Orden agregar(Orden orden) throws NegocioException, EncontradoException;
 
     Orden modificar(Orden orden) throws NegocioException, NoEncontradoException;
 
     void eliminar(long id) throws NegocioException, NoEncontradoException;
 
+    public Orden findByNumeroOrden( String numeroOrden);
 }

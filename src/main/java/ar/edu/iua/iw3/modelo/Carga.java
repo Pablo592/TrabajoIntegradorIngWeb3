@@ -14,8 +14,8 @@ public class Carga implements Serializable {
     private long id;
 
     @ManyToOne(cascade=CascadeType.ALL)
-    @JoinColumn(name = "order_id")
-    private Orden order;
+    @JoinColumn(name = "orden_id")
+    private Orden orden;
 
     private float masaAcumuladaKg;
 
@@ -57,12 +57,12 @@ public class Carga implements Serializable {
         this.temperaturaProductoCelcius = temperaturaProductoCelcius;
     }
 
-    public Orden getOrder() {
-        return order;
+    public Orden getOrden() {
+        return orden;
     }
 
-    public void setOrder(Orden order) {
-        this.order = order;
+    public void setOrden(Orden order) {
+        this.orden = order;
     }
 
     public float getCaudalLitroSegundo() {
