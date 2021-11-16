@@ -23,7 +23,7 @@ public class OrdenRestController {
 
     private Logger log = LoggerFactory.getLogger(OrdenNegocio.class);
 
-    @GetMapping(value="/orden")
+    @GetMapping(value= "/ordenes")
     public ResponseEntity<List<Orden>> listado() {
         try {
             return new ResponseEntity<List<Orden>>(ordenNegocio.listado(), HttpStatus.OK);
@@ -32,7 +32,7 @@ public class OrdenRestController {
         }
     }
 
-    @PostMapping(value="/orden")
+    @PostMapping(value= "/ordenes")
     public ResponseEntity<String> agregar(@RequestBody Orden orden) {
         try {
             Orden respuesta=ordenNegocio.agregar(orden);
@@ -47,7 +47,7 @@ public class OrdenRestController {
         }
     }
 
-    @PutMapping(value="/orden")
+    @PutMapping(value= "/ordenes")
     public ResponseEntity<String> modificar(@RequestBody Orden orden) {
         try {
             ordenNegocio.modificar(orden);
@@ -60,7 +60,7 @@ public class OrdenRestController {
         }
     }
 
-    @DeleteMapping(value="/orden/{id}")
+    @DeleteMapping(value= "/ordenes/{id}")
     public ResponseEntity<String> eliminar(@PathVariable("id") long id) {
         try {
             ordenNegocio.eliminar(id);

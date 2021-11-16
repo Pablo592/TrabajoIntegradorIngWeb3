@@ -24,7 +24,7 @@ public class CargaRestController {
 
     private Logger log = LoggerFactory.getLogger(CargaNegocio.class);
 
-    @GetMapping(value="/carga")
+    @GetMapping(value= "/cargas")
     public ResponseEntity<List<Carga>> listado() {
         try {
             return new ResponseEntity<List<Carga>>(cargaNegocio.listado(), HttpStatus.OK);
@@ -33,7 +33,7 @@ public class CargaRestController {
         }
     }
 
-    @PostMapping(value="/carga")
+    @PostMapping(value= "/cargas")
     public ResponseEntity<String> agregar(@RequestBody Carga carga) {
         try {
             Carga respuesta=cargaNegocio.agregar(carga);
@@ -48,7 +48,7 @@ public class CargaRestController {
         }
     }
 
-    @PutMapping(value="/carga")
+    @PutMapping(value= "/cargas")
     public ResponseEntity<String> modificar(@RequestBody Carga carga) {
         try {
             cargaNegocio.modificar(carga);
@@ -61,7 +61,7 @@ public class CargaRestController {
         }
     }
 
-    @DeleteMapping(value="/carga/{id}")
+    @DeleteMapping(value= "/cargas/{id}")
     public ResponseEntity<String> eliminar(@PathVariable("id") long id) {
         try {
             cargaNegocio.eliminar(id);

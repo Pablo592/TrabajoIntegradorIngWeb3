@@ -48,6 +48,14 @@ public class Orden implements Serializable{
 
 	private String password;
 
+	private Double ultimaMasaAcumulada;
+
+	private Double promedioDensidad;
+
+	private Double promedioTemperatura;
+
+	private Double promedioCaudal;
+
 	@OneToMany(targetEntity=Carga.class, mappedBy="order", fetch = FetchType.LAZY)
 	@JsonBackReference
 	private List<Carga> cargaList;
@@ -66,14 +74,6 @@ public class Orden implements Serializable{
 
 	public void setNumeroDeOrden(String numeroDeOrden) {
 		this.numeroDeOrden = numeroDeOrden;
-	}
-
-	public Camion getCamion() {
-		return camion;
-	}
-
-	public void setCamion(Camion camion) {
-		this.camion = camion;
 	}
 
 	public Cliente getCliente() {
@@ -154,6 +154,46 @@ public class Orden implements Serializable{
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public Double getUltimaMasaAcumulada() {
+		return ultimaMasaAcumulada;
+	}
+
+	public void setUltimaMasaAcumulada(Double ultimaMasaAcumulada) {
+		this.ultimaMasaAcumulada = ultimaMasaAcumulada;
+	}
+
+	public Double getPromedioDensidad() {
+		return promedioDensidad;
+	}
+
+	public void setPromedioDensidad(Double promedioDensidad) {
+		this.promedioDensidad = promedioDensidad;
+	}
+
+	public Double getPromedioTemperatura() {
+		return promedioTemperatura;
+	}
+
+	public void setPromedioTemperatura(Double promedioTemperatura) {
+		this.promedioTemperatura = promedioTemperatura;
+	}
+
+	public Double getPromedioCaudal() {
+		return promedioCaudal;
+	}
+
+	public void setPromedioCaudal(Double promedioCaudal) {
+		this.promedioCaudal = promedioCaudal;
+	}
+
+	public ar.edu.iua.iw3.modelo.Camion getCamion() {
+		return camion;
+	}
+
+	public void setCamion(ar.edu.iua.iw3.modelo.Camion camion) {
+		this.camion = camion;
 	}
 }
 

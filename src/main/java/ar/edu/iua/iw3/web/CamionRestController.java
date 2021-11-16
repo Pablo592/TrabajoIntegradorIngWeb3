@@ -2,6 +2,7 @@ package ar.edu.iua.iw3.web;
 
 import java.util.List;
 
+import ar.edu.iua.iw3.modelo.Camion;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import ar.edu.iua.iw3.modelo.Camion;
 import ar.edu.iua.iw3.negocio.CamionNegocio;
 import ar.edu.iua.iw3.negocio.ICamionNegocio;
 import ar.edu.iua.iw3.negocio.excepciones.EncontradoException;

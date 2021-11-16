@@ -13,72 +13,72 @@ import javax.persistence.Table;
 @Table(name = "camion")
 public class Camion  implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
 
-	@Column(length = 7, nullable = false, unique = true)
-	private String patente;
-	
-	@Column(length = 100, nullable = true)
-	private String descripcion;
-	
-	@Column(columnDefinition = "DOUBLE", nullable = false)
-	private double cisternadoLitros;
+    @Column(length = 7, nullable = false, unique = true)
+    private String patente;
 
-	@Column(columnDefinition = "DOUBLE", nullable = false)
-	private double preset;
+    @Column(length = 100, nullable = true)
+    private String descripcion;
 
-	@Column(columnDefinition = "DOUBLE", nullable = false)
-	private double tara;
+    @Column(columnDefinition = "DOUBLE", nullable = false)
+    private double cisternadoLitros;
 
-	public long getId() {
-		return id;
-	}
+    @Column(columnDefinition = "DOUBLE", nullable = false)
+    private double preset;
 
-	public void setId(long id) {
-		this.id = id;
-	}
+    @Column(columnDefinition = "DOUBLE", nullable = false)
+    private double tara;
 
-	public String getPatente() {
-		return patente;
-	}
+    public long getId() {
+        return id;
+    }
 
-	public void setPatente(String patente) {
-		this.patente = patente;
-	}
+    public void setId(long id) {
+        this.id = id;
+    }
 
-	public String getDescripcion() {
-		return descripcion;
-	}
+    public String getPatente() {
+        return patente;
+    }
 
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
-	}
+    public void setPatente(String patente) {
+        this.patente = patente;
+    }
 
-	public double getCisternadoLitros() {
-		return cisternadoLitros;
-	}
+    public String getDescripcion() {
+        return descripcion;
+    }
 
-	public void setCisternadoLitros(double cisternadoLitros) {
-		this.cisternadoLitros = cisternadoLitros;
-	}
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
 
-	public double getPreset() {
-		return preset;
-	}
+    public double getCisternadoLitros() {
+        return cisternadoLitros;
+    }
 
-	public void setPreset(double preset) {
-		this.preset = preset;
-	}
+    public void setCisternadoLitros(double cisternadoLitros) {
+        this.cisternadoLitros = cisternadoLitros;
+    }
 
-	public double getTara() {
-		return tara;
-	}
+    public double getPreset() {
+        return preset;
+    }
 
-	public void setTara(double tara) {
-		this.tara = tara;
-	}
+    public void setPreset(double preset) {
+        this.preset = preset;
+    }
+
+    public double getTara() {
+        return tara;
+    }
+
+    public void setTara(double tara) {
+        this.tara = tara;
+    }
 }

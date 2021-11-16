@@ -1,9 +1,6 @@
 package ar.edu.iua.iw3.negocio;
 
-import ar.edu.iua.iw3.modelo.Camion;
-import ar.edu.iua.iw3.modelo.Carga;
 import ar.edu.iua.iw3.modelo.Producto;
-import ar.edu.iua.iw3.modelo.persistencia.CargaRepository;
 import ar.edu.iua.iw3.modelo.persistencia.ProductoRepository;
 import ar.edu.iua.iw3.negocio.excepciones.EncontradoException;
 import ar.edu.iua.iw3.negocio.excepciones.NegocioException;
