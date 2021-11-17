@@ -1,6 +1,9 @@
 package ar.edu.iua.iw3.modelo;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.*;
 
@@ -19,6 +22,10 @@ public class Producto implements Serializable {
 
 	@Column(length = 100, nullable = true, unique = false)
 	private String descripcion;
+
+	@OneToMany(targetEntity = Orden.class, mappedBy = "producto", fetch = FetchType.LAZY)
+	@JsonBackReference
+	private List<Orden> ordenList;
 
 	public long getId() {
 		return id;
@@ -43,6 +50,12 @@ public class Producto implements Serializable {
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
 	}
-	
-	
+
+	public List<Orden> getOrdenList() {
+		return ordenList;
+	}
+
+	public void setOrdenList(List<Orden> ordenList) {
+		this.ordenList = ordenList;
+	}
 }

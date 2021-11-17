@@ -1,6 +1,9 @@
 package ar.edu.iua.iw3.modelo;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.*;
 
@@ -22,6 +25,10 @@ public class Chofer implements Serializable {
 	
 	@Column(length = 8, nullable = false, unique = true)
 	private Long documento;
+
+	@OneToMany(targetEntity = Orden.class, mappedBy = "chofer", fetch = FetchType.LAZY)
+	@JsonBackReference
+	private List<Orden> ordenList;
 
 	public long getId() {
 		return id;
@@ -54,7 +61,12 @@ public class Chofer implements Serializable {
 	public void setDocumento(Long documento) {
 		this.documento = documento;
 	}
-	
-	
-	
+
+	public List<Orden> getOrdenList() {
+		return ordenList;
+	}
+
+	public void setOrdenList(List<Orden> ordenList) {
+		this.ordenList = ordenList;
+	}
 }

@@ -1,13 +1,11 @@
 package ar.edu.iua.iw3.modelo;
 
-import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import java.io.Serializable;
+import java.util.List;
+
+import javax.persistence.*;
 
 @Entity
 @Table(name = "camion")
@@ -29,10 +27,16 @@ public class Camion  implements Serializable {
     private double cisternadoLitros;
 
     @Column(columnDefinition = "DOUBLE", nullable = false)
-    private double preset;
+    private double preset;              //Limite a cargar en el camion
 
     @Column(columnDefinition = "DOUBLE", nullable = false)
-    private double tara;
+    private double tara;                //Peso del camion vacio
+
+    private Double pesoFinalCamion;		//Peso del camion tras cargarse
+
+    @OneToMany(targetEntity = Orden.class, mappedBy = "camion", fetch = FetchType.LAZY)
+    @JsonBackReference
+    private List<Orden> ordenList;
 
     public long getId() {
         return id;
@@ -80,5 +84,21 @@ public class Camion  implements Serializable {
 
     public void setTara(double tara) {
         this.tara = tara;
+    }
+
+    public Double getPesoFinalCamion() {
+        return pesoFinalCamion;
+    }
+
+    public void setPesoFinalCamion(Double pesoFinalCamion) {
+        this.pesoFinalCamion = pesoFinalCamion;
+    }
+
+    public List<Orden> getOrdenList() {
+        return ordenList;
+    }
+
+    public void setOrdenList(List<Orden> ordenList) {
+        this.ordenList = ordenList;
     }
 }

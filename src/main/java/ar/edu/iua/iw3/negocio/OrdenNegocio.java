@@ -67,8 +67,8 @@ public class OrdenNegocio implements IOrdenNegocio{
     @Override
     public Orden agregar(Orden orden) throws NegocioException, EncontradoException {
         try {
-            if(null!=findByNumeroOrden(orden.getNumeroDeOrden()))
-                throw new EncontradoException("Ya existe una orden con el numero =" + orden.getNumeroDeOrden());
+            if(null!=findByNumeroOrden(orden.getCodigoExterno()))
+                throw new EncontradoException("Ya existe una orden con el numero =" + orden.getCodigoExterno());
             cargar(orden.getId()); 		// tira excepcion sino no lo encuentra
             throw new EncontradoException("Ya existe una orden con id=" + orden.getId());
         } catch (NoEncontradoException e) {
@@ -82,20 +82,20 @@ public class OrdenNegocio implements IOrdenNegocio{
     }
 
     public Orden findByNumeroOrden( String numeroOrden) {
-        return ordenDAO.findByNumeroDeOrden(numeroOrden).orElse(null);
+        return ordenDAO.findByCodigoExterno(numeroOrden).orElse(null);
     }
 
 
     @Override
     public Orden modificar(Orden orden) throws NegocioException, NoEncontradoException {
         cargar(orden.getId()); //Paso 1
-        Orden ordenWithNumeroOrden = findByNumeroOrden(orden.getNumeroDeOrden());
+        Orden ordenWithNumeroOrden = findByNumeroOrden(orden.getCodigoExterno());
 
         if(null!=ordenWithNumeroOrden) { //Paso 2
 
             if (orden.getId() != ordenWithNumeroOrden.getId())
                 throw new NegocioException("Ya existe la orden " + ordenWithNumeroOrden.getId() + "con el numero ="
-                        + orden.getNumeroDeOrden());	//Paso 3_a
+                        + orden.getCodigoExterno());	//Paso 3_a
 
             return	saveOrden(orden);	//Paso 3_b
         }

@@ -3,12 +3,11 @@ package ar.edu.iua.iw3.modelo;
 import javax.persistence.*;
 import java.io.Serializable;
 
-@Table(name = "carga")
 @Entity
+@Table
 public class Carga implements Serializable {
-
     private static final long serialVersionUID = 1L;
-
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

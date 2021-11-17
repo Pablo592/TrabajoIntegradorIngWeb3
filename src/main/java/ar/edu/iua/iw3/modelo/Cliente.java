@@ -1,16 +1,13 @@
 package ar.edu.iua.iw3.modelo;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
+import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @ApiModel(description = "Class representing a client in the application.")
 @Entity
@@ -32,6 +29,10 @@ public class Cliente implements Serializable {
 			example = "20", required = false, allowableValues = "range[3500000000, 35499999999]")
 	@Column(length = 100, nullable = true)
 	private Long contacto;
+
+	@OneToMany(targetEntity = Orden.class, mappedBy = "cliente", fetch = FetchType.LAZY)
+	@JsonBackReference
+	private List<Orden> ordenList;
 
 	public long getId() {
 		return id;
@@ -56,7 +57,12 @@ public class Cliente implements Serializable {
 	public void setContacto(Long contacto) {
 		this.contacto = contacto;
 	}
-	
-	
-	
+
+	public List<Orden> getOrdenList() {
+		return ordenList;
+	}
+
+	public void setOrdenList(List<Orden> ordenList) {
+		this.ordenList = ordenList;
+	}
 }

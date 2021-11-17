@@ -54,9 +54,9 @@ public class CargaNegocio implements ICargaNegocio {
     public Carga agregar(Carga carga) throws NegocioException, EncontradoException {
         Optional<Orden> o;
         try {
-        o = Optional.ofNullable(ordenNegocio.findByNumeroOrden(carga.getOrden().getNumeroDeOrden()));
+        o = Optional.ofNullable(ordenNegocio.findByNumeroOrden(carga.getOrden().getCodigoExterno()));
         if(!o.isPresent())
-            throw new NegocioException("No existe el numero de orden: " + carga.getOrden().getNumeroDeOrden() + " Falta completar Estado 1" );
+            throw new NegocioException("No existe el numero de orden: " + carga.getOrden().getCodigoExterno() + " Falta completar Estado 1" );
 
         if(o.get().getCamion().getPreset() >= carga.getMasaAcumuladaKg())
             throw new NegocioException("Tanque lleno");

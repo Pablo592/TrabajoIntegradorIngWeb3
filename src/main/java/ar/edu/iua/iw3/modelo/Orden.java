@@ -18,43 +18,39 @@ public class Orden implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
-	private String numeroDeOrden;
+	private String codigoExterno;
 
-	@OneToOne(cascade =  CascadeType.ALL)
-	@JoinColumn(name = "id_camion")
-	private Camion camion;
+	private Calendar fechaRecepcion;			//Fecha/Hora en la que el camion tiene turno
 
-	@OneToOne(cascade =  CascadeType.ALL)
-	@JoinColumn(name = "id_cliente")
-	private Cliente cliente;
+	private Calendar fechaPesajeInicial;		//Fecha/Hora en que se llevo acabo el pesaje inicial con el camion vacio
 
-	@OneToOne(cascade =  CascadeType.ALL)
-	@JoinColumn(name = "id_chofer")
-	private Chofer chofer;
+	private Calendar fechaInicioProcesoCarga;	//Fecha/Hora en que se comienza a carga el camion
 
-	@OneToOne(cascade =  CascadeType.ALL)
-	@JoinColumn(name = "id_producto")
-	private Producto producto;
-	
-	private Calendar fechaRecepcion;
-	
-	private Calendar fechaPesajeInicial;
-	
-	private Calendar fechaInicioProcesoCarga;
-	
-	private Calendar fechaFinProcesoCarga;
-	
-	private Calendar fechaRecepcionPesajeFinal;
+	private Calendar fechaFinProcesoCarga;		//Fecha/Hora en la cual dejo de cargarse el camion
+
+	private Calendar fechaRecepcionPesajeFinal;	//Fecha/Hora en la cual se peso el camion tras finalizar la carga
+
+	private int estado = 0;			//estado del proceso en la que se encuentra la orden
 
 	private String password;
 
-	private Double ultimaMasaAcumulada;
+	private int frecuencia =10;					//la frecuencia deberia de variar segun la orden
 
-	private Double promedioDensidad;
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "id_camion")
+	private Camion camion;						//Vehiculo a cargar
 
-	private Double promedioTemperatura;
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "id_cliente")
+	private Cliente cliente;					//Cliente que paga el servicio
 
-	private Double promedioCaudal;
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "id_chofer")
+	private Chofer chofer;						//Conductor del camion
+
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "id_producto")
+	private Producto producto;
 
 	@OneToMany(targetEntity=Carga.class, mappedBy= "orden", fetch = FetchType.LAZY)
 	@JsonBackReference
@@ -68,12 +64,12 @@ public class Orden implements Serializable{
 		this.id = id;
 	}
 
-	public String getNumeroDeOrden() {
-		return numeroDeOrden;
+	public String getCodigoExterno() {
+		return codigoExterno;
 	}
 
-	public void setNumeroDeOrden(String numeroDeOrden) {
-		this.numeroDeOrden = numeroDeOrden;
+	public void setCodigoExterno(String numeroDeOrden) {
+		this.codigoExterno = numeroDeOrden;
 	}
 
 	public Cliente getCliente() {
@@ -156,38 +152,6 @@ public class Orden implements Serializable{
 		this.password = password;
 	}
 
-	public Double getUltimaMasaAcumulada() {
-		return ultimaMasaAcumulada;
-	}
-
-	public void setUltimaMasaAcumulada(Double ultimaMasaAcumulada) {
-		this.ultimaMasaAcumulada = ultimaMasaAcumulada;
-	}
-
-	public Double getPromedioDensidad() {
-		return promedioDensidad;
-	}
-
-	public void setPromedioDensidad(Double promedioDensidad) {
-		this.promedioDensidad = promedioDensidad;
-	}
-
-	public Double getPromedioTemperatura() {
-		return promedioTemperatura;
-	}
-
-	public void setPromedioTemperatura(Double promedioTemperatura) {
-		this.promedioTemperatura = promedioTemperatura;
-	}
-
-	public Double getPromedioCaudal() {
-		return promedioCaudal;
-	}
-
-	public void setPromedioCaudal(Double promedioCaudal) {
-		this.promedioCaudal = promedioCaudal;
-	}
-
 	public ar.edu.iua.iw3.modelo.Camion getCamion() {
 		return camion;
 	}
@@ -195,6 +159,25 @@ public class Orden implements Serializable{
 	public void setCamion(ar.edu.iua.iw3.modelo.Camion camion) {
 		this.camion = camion;
 	}
+
+	public int getEstado() {
+		return estado;
+	}
+
+	public void setEstado(int estado) {
+		this.estado = estado;
+	}
+
+	public int getFrecuencia() {
+		return frecuencia;
+	}
+
+	public void setFrecuencia(int frecuencia) {
+		this.frecuencia = frecuencia;
+	}
+
+	//aca tengo que hacer un metodo que chequee basicamente el contenido de los valores que me llegan en el json
+	// tanto para el insert como en el update
 }
 
 
