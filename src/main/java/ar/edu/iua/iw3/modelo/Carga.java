@@ -5,16 +5,13 @@ import java.io.Serializable;
 
 @Entity
 @Table
+@Inheritance(strategy=InheritanceType.JOINED)   //obligo a que las clases que hereden de esta clase creen sus propias tablas
 public class Carga implements Serializable {
     private static final long serialVersionUID = 1L;
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
-    @ManyToOne(cascade=CascadeType.ALL)
-    @JoinColumn(name = "orden_id")
-    private Orden orden;
 
     private float masaAcumuladaKg;
 
@@ -23,6 +20,16 @@ public class Carga implements Serializable {
     private float temperaturaProductoCelcius;
 
     private float caudalLitroSegundo;
+
+    public Carga() {
+    }
+
+    public Carga(float masaAcumuladaKg, float densidadProductoKilogramoMetroCub, float temperaturaProductoCelcius, float caudalLitroSegundo) {
+        this.masaAcumuladaKg = masaAcumuladaKg;
+        this.densidadProductoKilogramoMetroCub = densidadProductoKilogramoMetroCub;
+        this.temperaturaProductoCelcius = temperaturaProductoCelcius;
+        this.caudalLitroSegundo = caudalLitroSegundo;
+    }
 
     public long getId() {
         return id;
@@ -54,14 +61,6 @@ public class Carga implements Serializable {
 
     public void setTemperaturaProductoCelcius(float temperaturaProductoCelcius) {
         this.temperaturaProductoCelcius = temperaturaProductoCelcius;
-    }
-
-    public Orden getOrden() {
-        return orden;
-    }
-
-    public void setOrden(Orden order) {
-        this.orden = order;
     }
 
     public float getCaudalLitroSegundo() {

@@ -52,9 +52,11 @@ public class Orden implements Serializable{
 	@JoinColumn(name = "id_producto")
 	private Producto producto;
 
-	@OneToMany(targetEntity=Carga.class, mappedBy= "orden", fetch = FetchType.LAZY)
-	@JsonBackReference
-	private List<Carga> cargaList;
+	@OneToOne(cascade =  CascadeType.ALL)
+	private UltimaCarga ultimaCarga;
+
+	@OneToOne(cascade =  CascadeType.ALL)
+	private PromedioCarga promedioCarga;
 
 	public long getId() {
 		return id;
@@ -136,13 +138,6 @@ public class Orden implements Serializable{
 		this.fechaRecepcionPesajeFinal = fechaRecepcionPesajeFinal;
 	}
 
-	public List<Carga> getCargaList() {
-		return cargaList;
-	}
-
-	public void setCargaList(List<Carga> cargaList) {
-		this.cargaList = cargaList;
-	}
 
 	public String getPassword() {
 		return password;
@@ -174,6 +169,22 @@ public class Orden implements Serializable{
 
 	public void setFrecuencia(int frecuencia) {
 		this.frecuencia = frecuencia;
+	}
+
+	public UltimaCarga getUltimaCarga() {
+		return ultimaCarga;
+	}
+
+	public void setUltimaCarga(UltimaCarga ultimaCarga) {
+		this.ultimaCarga = ultimaCarga;
+	}
+
+	public PromedioCarga getPromedioCarga() {
+		return promedioCarga;
+	}
+
+	public void setPromedioCarga(PromedioCarga promedioCarga) {
+		this.promedioCarga = promedioCarga;
 	}
 
 	//aca tengo que hacer un metodo que chequee basicamente el contenido de los valores que me llegan en el json

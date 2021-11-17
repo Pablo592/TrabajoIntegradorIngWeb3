@@ -53,6 +53,7 @@ public class CargaNegocio implements ICargaNegocio {
     @Override   //cargo todo lo que venga
     public Carga agregar(Carga carga) throws NegocioException, EncontradoException {
         Optional<Orden> o;
+        /*
         try {
         o = Optional.ofNullable(ordenNegocio.findByNumeroOrden(carga.getOrden().getCodigoExterno()));
         if(!o.isPresent())
@@ -66,7 +67,8 @@ public class CargaNegocio implements ICargaNegocio {
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             throw new NegocioException(e);
-        }
+        }*/
+        return null;
     }
 
     @Override

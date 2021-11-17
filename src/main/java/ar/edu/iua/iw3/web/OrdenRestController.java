@@ -35,7 +35,7 @@ public class OrdenRestController {
     @GetMapping(value= "/ordenes/resumen/{numeroOrden}")
     public ResponseEntity<Orden> resumen(@PathVariable("numeroOrden") long numeroOrden) {
         try {
-            return new ResponseEntity<Orden>(ordenNegocio.resumenFinal(numeroOrden), HttpStatus.OK);
+            return new ResponseEntity<Orden>(ordenNegocio.cargar(numeroOrden), HttpStatus.OK);
         } catch (NegocioException e) {
             return new ResponseEntity<Orden>(HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (NoEncontradoException e) {
