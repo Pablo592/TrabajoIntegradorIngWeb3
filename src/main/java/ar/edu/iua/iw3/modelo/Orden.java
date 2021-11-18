@@ -30,6 +30,34 @@ public class Orden implements Serializable{
 
 	private Calendar fechaRecepcionPesajeFinal;	//Fecha/Hora en la cual se peso el camion tras finalizar la carga
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	private int estado = 0;			//estado del proceso en la que se encuentra la orden
 
 	private String password;
