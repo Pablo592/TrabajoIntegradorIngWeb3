@@ -41,10 +41,8 @@ public class CargaRestController {
             responseHeaders.set("location", "/carga/"+respuesta.getId());
             return new ResponseEntity<String>(responseHeaders, HttpStatus.CREATED);
         } catch (NegocioException e) {
-            return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
-        } catch (EncontradoException e) {
             log.error(e.getMessage(), e);
-            return new ResponseEntity<String>(HttpStatus.FOUND);
+            return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

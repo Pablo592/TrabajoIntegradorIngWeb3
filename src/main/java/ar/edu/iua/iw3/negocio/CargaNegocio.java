@@ -23,7 +23,7 @@ public class CargaNegocio implements ICargaNegocio {
     private CargaRepository cargaDAO;
 
     @Autowired
-    private IOrdenNegocio ordenNegocio;
+    private OrdenNegocio ordenNegocio;
 
     @Override
     public List<Carga> listado() throws NegocioException {
@@ -51,24 +51,22 @@ public class CargaNegocio implements ICargaNegocio {
     }
 
     @Override   //cargo todo lo que venga
-    public Carga agregar(Carga carga) throws NegocioException, EncontradoException {
-        Optional<Orden> o;
-        /*
+    public Carga agregar(Carga carga) throws NegocioException {
+
+        Orden orden = ordenNegocio.findByCodigoExterno(carga.getOrden().getCodigoExterno());
         try {
-        o = Optional.ofNullable(ordenNegocio.findByNumeroOrden(carga.getOrden().getCodigoExterno()));
-        if(!o.isPresent())
-            throw new NegocioException("No existe el numero de orden: " + carga.getOrden().getCodigoExterno() + " Falta completar Estado 1" );
-
-        if(o.get().getCamion().getPreset() >= carga.getMasaAcumuladaKg())
-            throw new NegocioException("Tanque lleno");
-
-        return cargaDAO.save(carga);
-
+            //tengo que validar que el estado de la orden sea 2 tambien
+            if(null == orden)
+                throw new NegocioException("No existe el numero de orden: " + carga.getOrden().getCodigoExterno() );
+            if(orden.getCamion().getPreset() < carga.getMasaAcumuladaKg())
+                throw new NegocioException("Tanque lleno");
+            carga.setOrden(orden);
+            //orden.getCargaList().add(carga);
+            return cargaDAO.save(carga);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             throw new NegocioException(e);
-        }*/
-        return null;
+        }
     }
 
     @Override

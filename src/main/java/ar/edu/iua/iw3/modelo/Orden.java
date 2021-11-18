@@ -17,7 +17,7 @@ public class Orden implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
-
+	@Column(unique = true, nullable = false)
 	private String codigoExterno;
 
 	private Calendar fechaRecepcion;			//Fecha/Hora en la que el camion tiene turno
@@ -30,39 +30,25 @@ public class Orden implements Serializable{
 
 	private Calendar fechaRecepcionPesajeFinal;	//Fecha/Hora en la cual se peso el camion tras finalizar la carga
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	private int estado = 0;			//estado del proceso en la que se encuentra la orden
+	private int estado = 0;						//estado del proceso en la que se encuentra la orden
 
 	private String password;
 
 	private int frecuencia =10;					//la frecuencia deberia de variar segun la orden
+
+	private float promedioMasaAcumuladaKg;
+
+	private float promedDensidadProductoKilogramoMetroCub;
+
+	private float promedioTemperaturaProductoCelcius;
+
+	private float promedioCaudalLitroSegundo;
+
+	private float ultimaDensidadProductoKilogramoMetroCub;
+
+	private float ultimaTemperaturaProductoCelcius;
+
+	private float ultimoCaudalLitroSegundo;
 
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_camion")
@@ -80,11 +66,10 @@ public class Orden implements Serializable{
 	@JoinColumn(name = "id_producto")
 	private Producto producto;
 
-	@OneToOne(cascade =  CascadeType.ALL)
-	private UltimaCarga ultimaCarga;
 
-	@OneToOne(cascade =  CascadeType.ALL)
-	private PromedioCarga promedioCarga;
+	@OneToMany(targetEntity=Carga.class, mappedBy= "orden", fetch = FetchType.LAZY)
+	@JsonBackReference
+	private List<Carga> cargaList;
 
 	public long getId() {
 		return id;
@@ -166,7 +151,6 @@ public class Orden implements Serializable{
 		this.fechaRecepcionPesajeFinal = fechaRecepcionPesajeFinal;
 	}
 
-
 	public String getPassword() {
 		return password;
 	}
@@ -199,23 +183,71 @@ public class Orden implements Serializable{
 		this.frecuencia = frecuencia;
 	}
 
-	public UltimaCarga getUltimaCarga() {
-		return ultimaCarga;
+	public float getPromedioMasaAcumuladaKg() {
+		return promedioMasaAcumuladaKg;
 	}
 
-	public void setUltimaCarga(UltimaCarga ultimaCarga) {
-		this.ultimaCarga = ultimaCarga;
+	public void setPromedioMasaAcumuladaKg(float promedioMasaAcumuladaKg) {
+		this.promedioMasaAcumuladaKg = promedioMasaAcumuladaKg;
 	}
 
-	public PromedioCarga getPromedioCarga() {
-		return promedioCarga;
+	public float getPromedDensidadProductoKilogramoMetroCub() {
+		return promedDensidadProductoKilogramoMetroCub;
 	}
 
-	public void setPromedioCarga(PromedioCarga promedioCarga) {
-		this.promedioCarga = promedioCarga;
+	public void setPromedDensidadProductoKilogramoMetroCub(float promedDensidadProductoKilogramoMetroCub) {
+		this.promedDensidadProductoKilogramoMetroCub = promedDensidadProductoKilogramoMetroCub;
 	}
 
-	//aca tengo que hacer un metodo que chequee basicamente el contenido de los valores que me llegan en el json
+	public float getPromedioTemperaturaProductoCelcius() {
+		return promedioTemperaturaProductoCelcius;
+	}
+
+	public void setPromedioTemperaturaProductoCelcius(float promedioTemperaturaProductoCelcius) {
+		this.promedioTemperaturaProductoCelcius = promedioTemperaturaProductoCelcius;
+	}
+
+	public float getPromedioCaudalLitroSegundo() {
+		return promedioCaudalLitroSegundo;
+	}
+
+	public void setPromedioCaudalLitroSegundo(float promedioCaudalLitroSegundo) {
+		this.promedioCaudalLitroSegundo = promedioCaudalLitroSegundo;
+	}
+
+	public float getUltimaDensidadProductoKilogramoMetroCub() {
+		return ultimaDensidadProductoKilogramoMetroCub;
+	}
+
+	public void setUltimaDensidadProductoKilogramoMetroCub(float ultimaDensidadProductoKilogramoMetroCub) {
+		this.ultimaDensidadProductoKilogramoMetroCub = ultimaDensidadProductoKilogramoMetroCub;
+	}
+
+	public float getUltimaTemperaturaProductoCelcius() {
+		return ultimaTemperaturaProductoCelcius;
+	}
+
+	public void setUltimaTemperaturaProductoCelcius(float ultimaTemperaturaProductoCelcius) {
+		this.ultimaTemperaturaProductoCelcius = ultimaTemperaturaProductoCelcius;
+	}
+
+	public float getUltimoCaudalLitroSegundo() {
+		return ultimoCaudalLitroSegundo;
+	}
+
+	public void setUltimoCaudalLitroSegundo(float ultimoCaudalLitroSegundo) {
+		this.ultimoCaudalLitroSegundo = ultimoCaudalLitroSegundo;
+	}
+
+	public List<Carga> getCargaList() {
+		return cargaList;
+	}
+
+	public void setCargaList(List<Carga> cargaList) {
+		this.cargaList = cargaList;
+	}
+
+//aca tengo que hacer un metodo que chequee basicamente el contenido de los valores que me llegan en el json
 	// tanto para el insert como en el update
 }
 
