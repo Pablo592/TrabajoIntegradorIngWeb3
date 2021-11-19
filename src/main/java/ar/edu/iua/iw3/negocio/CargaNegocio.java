@@ -2,6 +2,7 @@ package ar.edu.iua.iw3.negocio;
 
 import ar.edu.iua.iw3.modelo.Carga;
 import ar.edu.iua.iw3.modelo.Orden;
+import ar.edu.iua.iw3.modelo.dto.CargaDTO;
 import ar.edu.iua.iw3.modelo.persistencia.CargaRepository;
 import ar.edu.iua.iw3.negocio.excepciones.EncontradoException;
 import ar.edu.iua.iw3.negocio.excepciones.NegocioException;
@@ -52,21 +53,38 @@ public class CargaNegocio implements ICargaNegocio {
 
     @Override   //cargo todo lo que venga
     public Carga agregar(Carga carga) throws NegocioException {
-
         Orden orden = ordenNegocio.findByCodigoExterno(carga.getOrden().getCodigoExterno());
         try {
             //tengo que validar que el estado de la orden sea 2 tambien
             if(null == orden)
-                throw new NegocioException("No existe el numero de orden: " + carga.getOrden().getCodigoExterno() );
-            if(orden.getCamion().getPreset() < carga.getMasaAcumuladaKg())
+                throw new NegocioException("No existe el numero de orden: "
+                        + carga.getOrden().getCodigoExterno() );
+
+            float masaAcumuladaPostCarga = carga.getMasaAcumuladaKg()+carga.getMasaAcumuladaKg();
+            if(orden.getCamion().getPreset() < masaAcumuladaPostCarga)
                 throw new NegocioException("Tanque lleno");
+
             carga.setOrden(orden);
-            //orden.getCargaList().add(carga);
             return cargaDAO.save(carga);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             throw new NegocioException(e);
         }
+    }
+
+    @Override
+    public CargaDTO getAcumulacionAndPromedioCargas(String codigoExterno) throws NegocioException, NoEncontradoException {
+        Orden orden = ordenNegocio.findByCodigoExterno(codigoExterno);
+        ordenNegocio.cargar(orden.getId());
+        try{
+            //calculo los datos de la orden y luego los actualizo
+            return cargaDAO.getMasaAcuAndPromedioDensidadAndTemperaturaAndCaudal(orden.getId());
+        }catch (Exception e){
+            log.error(e.getMessage(), e);
+            throw new NegocioException(e);
+        }
+
+
     }
 
     @Override

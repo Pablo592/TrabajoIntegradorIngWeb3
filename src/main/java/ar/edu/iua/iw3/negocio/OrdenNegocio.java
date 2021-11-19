@@ -1,5 +1,6 @@
 package ar.edu.iua.iw3.negocio;
 
+import ar.edu.iua.iw3.modelo.Carga;
 import ar.edu.iua.iw3.modelo.Orden;
 import ar.edu.iua.iw3.modelo.persistencia.OrdenRepository;
 import ar.edu.iua.iw3.negocio.excepciones.EncontradoException;

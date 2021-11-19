@@ -1,6 +1,7 @@
 package ar.edu.iua.iw3.web;
 
 import ar.edu.iua.iw3.modelo.Carga;
+import ar.edu.iua.iw3.modelo.dto.CargaDTO;
 import ar.edu.iua.iw3.negocio.CargaNegocio;
 import ar.edu.iua.iw3.negocio.ICargaNegocio;
 import ar.edu.iua.iw3.negocio.excepciones.EncontradoException;
@@ -30,6 +31,17 @@ public class CargaRestController {
             return new ResponseEntity<List<Carga>>(cargaNegocio.listado(), HttpStatus.OK);
         } catch (NegocioException e) {
             return new ResponseEntity<List<Carga>>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping(value= "/promedio-cargas-por-codigo-externo")
+    public ResponseEntity<CargaDTO> ResumenCargaPorId(@RequestParam("codigoExterno") String codigoExterno) {
+        try {
+            return new ResponseEntity<CargaDTO>(cargaNegocio.getAcumulacionAndPromedioCargas(codigoExterno), HttpStatus.OK);
+        } catch (NegocioException e) {
+            return new ResponseEntity<CargaDTO>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }catch (NoEncontradoException e) {
+        return new ResponseEntity<CargaDTO>(HttpStatus.NOT_FOUND);
         }
     }
 

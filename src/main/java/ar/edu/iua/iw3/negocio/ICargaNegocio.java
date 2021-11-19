@@ -1,6 +1,7 @@
 package ar.edu.iua.iw3.negocio;
 
 import ar.edu.iua.iw3.modelo.Carga;
+import ar.edu.iua.iw3.modelo.dto.CargaDTO;
 import ar.edu.iua.iw3.negocio.excepciones.EncontradoException;
 import ar.edu.iua.iw3.negocio.excepciones.NegocioException;
 import ar.edu.iua.iw3.negocio.excepciones.NoEncontradoException;
@@ -18,4 +19,6 @@ public interface ICargaNegocio {
     Carga modificar(Carga carga) throws NegocioException, NoEncontradoException;
 
     void eliminar(long id) throws NegocioException, NoEncontradoException;
+
+    CargaDTO getAcumulacionAndPromedioCargas(String codigoExterno) throws NegocioException,NoEncontradoException;
 }

@@ -1,10 +1,39 @@
 package ar.edu.iua.iw3.modelo;
 
+import ar.edu.iua.iw3.modelo.dto.CargaDTO;
+
 import javax.persistence.*;
 import java.io.Serializable;
+@NamedNativeQueries({
+
+        @NamedNativeQuery(name = "Carga.getMasaAcuAndPromedioDensidadAndTemperaturaAndCaudal",
+                query = "SELECT  sum(c.masa_acumulada_kg)  as masaAcumuladaKg, \n" +
+                        "\t avg(c.caudal_litro_segundo) as promedioCaudalLitroSegundo, \n" +
+                        "\t avg(c.densidad_producto_kilogramo_metro_cub) as promedioDensidadProductoKilogramoMetroCub , \n" +
+                        "\t avg(c.temperatura_producto_celcius) as promedioTemperaturaProductoCelcius \n" +
+                        "\t from carga c \n" +
+                "\t where c.orden_id = ?1", resultSetMapping = "cargamap")
+
+})
+
+@SqlResultSetMapping(
+        name="cargamap",
+        classes = {
+                @ConstructorResult(
+                        columns = {
+                                @ColumnResult(name = "masaAcumuladaKg", type = float.class),
+                                @ColumnResult(name = "promedioCaudalLitroSegundo", type = float.class),
+                                @ColumnResult(name = "promedioDensidadProductoKilogramoMetroCub", type = float.class),
+                                @ColumnResult(name = "promedioTemperaturaProductoCelcius", type = float.class)
+                        },
+                        targetClass = CargaDTO.class
+                )
+        }
+)
+
 
 @Entity
-@Table
+@Table(name = "carga")
 public class Carga implements Serializable {
     private static final long serialVersionUID = 1L;
 
