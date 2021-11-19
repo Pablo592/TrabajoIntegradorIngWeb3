@@ -4,7 +4,6 @@ import ar.edu.iua.iw3.modelo.Carga;
 import ar.edu.iua.iw3.modelo.Orden;
 import ar.edu.iua.iw3.modelo.dto.CargaDTO;
 import ar.edu.iua.iw3.modelo.persistencia.CargaRepository;
-import ar.edu.iua.iw3.negocio.excepciones.EncontradoException;
 import ar.edu.iua.iw3.negocio.excepciones.NegocioException;
 import ar.edu.iua.iw3.negocio.excepciones.NoEncontradoException;
 import org.slf4j.Logger;
@@ -53,19 +52,21 @@ public class CargaNegocio implements ICargaNegocio {
 
     @Override   //cargo todo lo que venga
     public Carga agregar(Carga carga) throws NegocioException {
-        Orden orden = ordenNegocio.findByCodigoExterno(carga.getOrden().getCodigoExterno());
+
         try {
-            //tengo que validar que el estado de la orden sea 2 tambien
-            if(null == orden)
-                throw new NegocioException("No existe el numero de orden: "
-                        + carga.getOrden().getCodigoExterno() );
+            Orden orden = existeOrden(carga.getOrden().getCodigoExterno());//sino existe una orden asociado al codigo externo largo un negocioException
+            if (orden.getEstado() == 2) {
+                float masaAcumuladaPostCarga = carga.getMasaAcumuladaKg()+getAcumulacionAndPromedioCargas(orden.getCodigoExterno()).getMasaAcumuladaKg();
+                if(orden.getCamion().getPreset() < masaAcumuladaPostCarga)
+                    throw new NegocioException("Tanque lleno");
 
-            float masaAcumuladaPostCarga = carga.getMasaAcumuladaKg()+carga.getMasaAcumuladaKg();
-            if(orden.getCamion().getPreset() < masaAcumuladaPostCarga)
-                throw new NegocioException("Tanque lleno");
+                carga.setOrden(orden);  //seteo la orden a la carga para que una orden pueda tener muchas cargas asociadas
+                return cargaDAO.save(carga);
+            }else{
+                throw new NegocioException("La orden : "
+                        + orden.getCodigoExterno()+" no esta en estado 2, por lo que no puede realizar la carga");
+            }
 
-            carga.setOrden(orden);
-            return cargaDAO.save(carga);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             throw new NegocioException(e);
@@ -74,8 +75,7 @@ public class CargaNegocio implements ICargaNegocio {
 
     @Override
     public CargaDTO getAcumulacionAndPromedioCargas(String codigoExterno) throws NegocioException, NoEncontradoException {
-        Orden orden = ordenNegocio.findByCodigoExterno(codigoExterno);
-        ordenNegocio.cargar(orden.getId());
+        Orden orden = existeOrden(codigoExterno);
         try{
             //calculo los datos de la orden y luego los actualizo
             return cargaDAO.getMasaAcuAndPromedioDensidadAndTemperaturaAndCaudal(orden.getId());
@@ -83,10 +83,15 @@ public class CargaNegocio implements ICargaNegocio {
             log.error(e.getMessage(), e);
             throw new NegocioException(e);
         }
-
-
     }
 
+    private Orden existeOrden(String codigoExterno) throws NoEncontradoException {
+        Orden orden = ordenNegocio.findByCodigoExterno(codigoExterno);
+        if(null == orden )
+            throw new NoEncontradoException("No existe una orden con codigo externo: "
+                    + codigoExterno );
+        return orden;
+    }
     @Override
     public Carga modificar(Carga carga) throws NegocioException, NoEncontradoException {
         cargar(carga.getId());

@@ -39,8 +39,10 @@ public class CargaRestController {
         try {
             return new ResponseEntity<CargaDTO>(cargaNegocio.getAcumulacionAndPromedioCargas(codigoExterno), HttpStatus.OK);
         } catch (NegocioException e) {
+            log.error(e.getMessage(), e);
             return new ResponseEntity<CargaDTO>(HttpStatus.INTERNAL_SERVER_ERROR);
         }catch (NoEncontradoException e) {
+            log.error(e.getMessage(), e);
         return new ResponseEntity<CargaDTO>(HttpStatus.NOT_FOUND);
         }
     }

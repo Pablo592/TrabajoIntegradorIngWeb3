@@ -1,24 +1,24 @@
 package ar.edu.iua.iw3.modelo.dto;
 
 public class CargaDTO {
-    private float promedioMasaAcumuladaKg;
+    private float masaAcumuladaKg;
     private float promedDensidadProductoKilogramoMetroCub;
     private float promedioTemperaturaProductoCelcius;
     private float promedioCaudalLitroSegundo;
 
     public CargaDTO(float promedioMasaAcumuladaKg, float promedDensidadProductoKilogramoMetroCub, float promedioTemperaturaProductoCelcius, float promedioCaudalLitroSegundo) {
-        this.promedioMasaAcumuladaKg = promedioMasaAcumuladaKg;
+        this.masaAcumuladaKg = promedioMasaAcumuladaKg;
         this.promedDensidadProductoKilogramoMetroCub = promedDensidadProductoKilogramoMetroCub;
         this.promedioTemperaturaProductoCelcius = promedioTemperaturaProductoCelcius;
         this.promedioCaudalLitroSegundo = promedioCaudalLitroSegundo;
     }
 
-    public float getPromedioMasaAcumuladaKg() {
-        return promedioMasaAcumuladaKg;
+    public float getMasaAcumuladaKg() {
+        return masaAcumuladaKg;
     }
 
-    public void setPromedioMasaAcumuladaKg(float promedioMasaAcumuladaKg) {
-        this.promedioMasaAcumuladaKg = promedioMasaAcumuladaKg;
+    public void setMasaAcumuladaKg(float masaAcumuladaKg) {
+        this.masaAcumuladaKg = masaAcumuladaKg;
     }
 
     public float getPromedDensidadProductoKilogramoMetroCub() {
