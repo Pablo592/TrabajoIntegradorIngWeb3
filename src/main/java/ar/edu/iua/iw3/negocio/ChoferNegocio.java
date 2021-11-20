@@ -51,7 +51,7 @@ public class ChoferNegocio implements IChoferNegocio{
 		@Override
 		public Chofer agregar(Chofer chofer) throws NegocioException, EncontradoException {
 			try {
-				   if(null!=findComponentByDocumento(chofer.getDocumento())) 
+				   if(null!=findByDocumento(chofer.getDocumento()))
 				        throw new EncontradoException("Ya existe un chofer con el documento =" + chofer.getDocumento());
 					cargar(chofer.getId()); 									// tira excepcion sino no lo encuentra
 					throw new EncontradoException("Ya existe un chofer con id=" + chofer.getId());
@@ -65,7 +65,7 @@ public class ChoferNegocio implements IChoferNegocio{
 				}
 		}
 		
-		private Chofer findComponentByDocumento(Long documento) {
+		public Chofer findByDocumento(long documento) {
 			return choferDAO.findByDocumento(documento).orElse(null);
 		}
 		
@@ -80,7 +80,7 @@ public class ChoferNegocio implements IChoferNegocio{
 					//Paso 4: Si ningun chofer tiene asignado el documento se lo debe de modiicar sin problemas
 					
 					cargar(chofer.getId()); //Paso 1
-					Chofer choferWithDocumento = findComponentByDocumento(chofer.getDocumento());		
+					Chofer choferWithDocumento = findByDocumento(chofer.getDocumento());
 					
 					if(null!=choferWithDocumento) { //Paso 2 
 						

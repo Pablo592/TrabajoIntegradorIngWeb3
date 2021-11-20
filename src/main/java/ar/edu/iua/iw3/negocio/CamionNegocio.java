@@ -4,8 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import ar.edu.iua.iw3.modelo.Camion;
-import ar.edu.iua.iw3.modelo.Orden;
-import ar.edu.iua.iw3.modelo.persistencia.OrdenRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,10 +22,7 @@ public class CamionNegocio implements ICamionNegocio{
 
 	@Autowired
 	private CamionRepository camionDAO;
-
-	@Autowired
-	private OrdenNegocio ordenNegocio;
-
+	
 	@Override
 	public List<Camion> listado() throws NegocioException {
 		try {
@@ -38,7 +33,7 @@ public class CamionNegocio implements ICamionNegocio{
 		}
 	}
 
-	
+
 	@Override
 	public Camion cargar(long id) throws NegocioException, NoEncontradoException {
 		Optional<Camion> o;
@@ -58,7 +53,7 @@ public class CamionNegocio implements ICamionNegocio{
 	@Override
 	public Camion agregar(Camion camion) throws NegocioException, EncontradoException {
 		try {
-			   if(null!=findCamionByPatente(camion.getPatente())) 
+			   if(null!=findCamionByPatente(camion.getPatente()))
 			        throw new EncontradoException("Ya existe un camion con la patente =" + camion.getPatente());
 				cargar(camion.getId()); 									// tira excepcion sino no lo encuentra
 				throw new EncontradoException("Ya existe un camion con id=" + camion.getId());
@@ -73,7 +68,10 @@ public class CamionNegocio implements ICamionNegocio{
 	}
 	
 	public Camion findCamionByPatente(String patente) {
-		return camionDAO.findByPatente(patente).orElse(null);
+		Optional<Camion> o = camionDAO.findByPatente(patente);
+		if(o.isPresent())
+			return  o.get();
+		return null;
 	}
 
 	
@@ -86,7 +84,7 @@ public class CamionNegocio implements ICamionNegocio{
 				//Paso 4: Si ningun camion tiene asignada la patente se lo debe de modiicar sin problemas
 				
 				cargar(camion.getId()); //Paso 1
-				Camion camionWithPatente = findCamionByPatente(camion.getDescripcion());		
+				Camion camionWithPatente = findCamionByPatente(camion.getPatente());
 				
 				if(null!=camionWithPatente) { //Paso 2 
 					
@@ -99,31 +97,10 @@ public class CamionNegocio implements ICamionNegocio{
 				
 				return saveCamion(camion);	//Paso 4
 	}
-
-	public Camion setearPesoIni(Camion camion) throws NoEncontradoException,NegocioException {
-		Optional<Camion> o;
+	
+	public  Camion saveCamion(Camion componente) throws NegocioException {
 		try {
-			//Verifico que haya registro del camion identificado por la petente recibida
-		o = Optional.ofNullable(findCamionByPatente(camion.getPatente()));
-
-		if(!o.isPresent())
-			throw new NoEncontradoException("No existe registro del camion con la patente = " + camion.getPatente());
-		Camion truck = o.get();
-		truck.setTara(camion.getTara());
-
-		return saveCamion(truck);
-		} catch (Exception e) {
-			log.error(e.getMessage(), e);
-			throw new NegocioException(e);
-		}
-	}
-
-
-
-
-	private  Camion saveCamion(Camion camion) throws NegocioException {
-		try {
-			return camionDAO.save(camion); // sino existe el camion lo cargo
+			return camionDAO.save(componente); // sino existe el camion lo cargo
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 			throw new NegocioException(e);
@@ -140,6 +117,18 @@ public class CamionNegocio implements ICamionNegocio{
 			log.error(e.getMessage(), e);
 			throw new NegocioException(e);
 		}
-		
+
 	}
+
+	@Override
+	public Camion setearPesoIni(Camion camionRecibido, Camion camionBD) throws NoEncontradoException, NegocioException {
+			if(camionBD.getPatente() != camionBD.getPatente())
+				throw new NegocioException("La patente enviada :"+ camionRecibido.getPatente()+" no esta asociada a la orden enviada");
+			if(camionRecibido.getTara()<= 0)
+				throw new NegocioException("La tara no puede ser negativa");
+			camionBD.setTara(camionRecibido.getTara());
+
+			return modificar(camionBD);
+	}
+
 }

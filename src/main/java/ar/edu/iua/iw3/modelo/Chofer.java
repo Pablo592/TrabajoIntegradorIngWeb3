@@ -24,7 +24,7 @@ public class Chofer implements Serializable {
 	private String apellido;
 	
 	@Column(length = 8, nullable = false, unique = true)
-	private Long documento;
+	private long documento;
 
 	@OneToMany(targetEntity = Orden.class, mappedBy = "chofer", fetch = FetchType.LAZY)
 	@JsonBackReference
@@ -54,11 +54,11 @@ public class Chofer implements Serializable {
 		this.apellido = apellido;
 	}
 
-	public Long getDocumento() {
+	public long getDocumento() {
 		return documento;
 	}
 
-	public void setDocumento(Long documento) {
+	public void setDocumento(long documento) {
 		this.documento = documento;
 	}
 

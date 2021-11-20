@@ -11,7 +11,7 @@ import ar.edu.iua.iw3.modelo.Chofer;
 @Repository
 public interface ChoferRepository extends JpaRepository<Chofer, Long> {
 
-	Optional<Chofer> findByDocumento(Long documento);
+	Optional<Chofer> findByDocumento(long documento);
 
 
 }

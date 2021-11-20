@@ -5,7 +5,9 @@ import org.springframework.stereotype.Repository;
 
 import ar.edu.iua.iw3.modelo.Cliente;
 
+import java.util.Optional;
+
 @Repository
 public interface ClienteRepository  extends JpaRepository<Cliente, Long> {
-
+    Optional<Cliente> findByContacto(long contacto);
 }

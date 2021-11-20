@@ -70,7 +70,7 @@ public class CamionRestController {
 			return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
 		}
 	}
-
+	
 	@DeleteMapping(value="/camiones/{id}")
 	public ResponseEntity<String> eliminar(@PathVariable("id") long id) {
 		try {

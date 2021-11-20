@@ -4,8 +4,8 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import java.io.Serializable;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 import javax.persistence.*;
 
@@ -20,35 +20,35 @@ public class Orden implements Serializable{
 	private long id;
 	@Column(unique = true, nullable = false)
 	private String codigoExterno;
+	@Column(nullable = false)
+	private Date fechaTurno;			//Fecha/Hora en la que el camion tiene turno
 
-	private Calendar fechaRecepcion;			//Fecha/Hora en la que el camion tiene turno
+	private Date fechaPesajeInicial;		//Fecha/Hora en que se llevo acabo el pesaje inicial con el camion vacio
 
-	private Calendar fechaPesajeInicial;		//Fecha/Hora en que se llevo acabo el pesaje inicial con el camion vacio
+	private Date fechaInicioProcesoCarga;	//Fecha/Hora en que se comienza a carga el camion
 
-	private Calendar fechaInicioProcesoCarga;	//Fecha/Hora en que se comienza a carga el camion
+	private Date fechaFinProcesoCarga;		//Fecha/Hora en la cual dejo de cargarse el camion
 
-	private Calendar fechaFinProcesoCarga;		//Fecha/Hora en la cual dejo de cargarse el camion
-
-	private Calendar fechaRecepcionPesajeFinal;	//Fecha/Hora en la cual se peso el camion tras finalizar la carga
-
-	private int fase = 0;						//estado del proceso en la que se encuentra la orden
+	private Date fechaRecepcionPesajeFinal;	//Fecha/Hora en la cual se peso el camion tras finalizar la carga
+	@Column(columnDefinition = "int default 0")
+	private int estado = 0;						//estado del proceso en la que se encuentra la orden
 
 	private String password;
-
-	private int frecuencia =10;					//la frecuencia deberia de variar segun la orden
-
+	@Column(nullable = true)
+	private int frecuencia;						//la frecuencia deberia de variar segun la orden
+	@Column(nullable = true)
 	private float promedioMasaAcumuladaKg;
-
+	@Column(nullable = true)
 	private float promedDensidadProductoKilogramoMetroCub;
-
+	@Column(nullable = true)
 	private float promedioTemperaturaProductoCelcius;
-
+	@Column(nullable = true)
 	private float promedioCaudalLitroSegundo;
-
+	@Column(nullable = true)
 	private float ultimaDensidadProductoKilogramoMetroCub;
-
+	@Column(nullable = true)
 	private float ultimaTemperaturaProductoCelcius;
-
+	@Column(nullable = true)
 	private float ultimoCaudalLitroSegundo;
 
 	@ManyToOne(cascade = CascadeType.ALL)
@@ -112,43 +112,43 @@ public class Orden implements Serializable{
 		this.producto = producto;
 	}
 
-	public Calendar getFechaRecepcion() {
-		return fechaRecepcion;
+	public Date getFechaTurno() {
+		return fechaTurno;
 	}
 
-	public void setFechaRecepcion(Calendar fechaRecepcion) {
-		this.fechaRecepcion = fechaRecepcion;
+	public void setFechaTurno(Date fechaRecepcion) {
+		this.fechaTurno = fechaRecepcion;
 	}
 
-	public Calendar getFechaPesajeInicial() {
+	public Date getFechaPesajeInicial() {
 		return fechaPesajeInicial;
 	}
 
-	public void setFechaPesajeInicial(Calendar fechaPesajeInicial) {
+	public void setFechaPesajeInicial(Date fechaPesajeInicial) {
 		this.fechaPesajeInicial = fechaPesajeInicial;
 	}
 
-	public Calendar getFechaInicioProcesoCarga() {
+	public Date getFechaInicioProcesoCarga() {
 		return fechaInicioProcesoCarga;
 	}
 
-	public void setFechaInicioProcesoCarga(Calendar fechaInicioProcesoCarga) {
+	public void setFechaInicioProcesoCarga(Date fechaInicioProcesoCarga) {
 		this.fechaInicioProcesoCarga = fechaInicioProcesoCarga;
 	}
 
-	public Calendar getFechaFinProcesoCarga() {
+	public Date getFechaFinProcesoCarga() {
 		return fechaFinProcesoCarga;
 	}
 
-	public void setFechaFinProcesoCarga(Calendar fechaFinProcesoCarga) {
+	public void setFechaFinProcesoCarga(Date fechaFinProcesoCarga) {
 		this.fechaFinProcesoCarga = fechaFinProcesoCarga;
 	}
 
-	public Calendar getFechaRecepcionPesajeFinal() {
+	public Date getFechaRecepcionPesajeFinal() {
 		return fechaRecepcionPesajeFinal;
 	}
 
-	public void setFechaRecepcionPesajeFinal(Calendar fechaRecepcionPesajeFinal) {
+	public void setFechaRecepcionPesajeFinal(Date fechaRecepcionPesajeFinal) {
 		this.fechaRecepcionPesajeFinal = fechaRecepcionPesajeFinal;
 	}
 
@@ -168,12 +168,12 @@ public class Orden implements Serializable{
 		this.camion = camion;
 	}
 
-	public int getFase() {
-		return fase;
+	public int getEstado() {
+		return estado;
 	}
 
-	public void setFase(int fase) {
-		this.fase = fase;
+	public void setEstado(int estado) {
+		this.estado = estado;
 	}
 
 	public int getFrecuencia() {
@@ -250,14 +250,7 @@ public class Orden implements Serializable{
 
 //aca tengo que hacer un metodo que chequee basicamente el contenido de los valores que me llegan en el json
 	// tanto para el insert como en el update
-
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(id, codigoExterno, fechaRecepcion, fechaPesajeInicial, fechaInicioProcesoCarga, fechaFinProcesoCarga, fechaRecepcionPesajeFinal, fase, password, frecuencia, promedioMasaAcumuladaKg, promedDensidadProductoKilogramoMetroCub, promedioTemperaturaProductoCelcius, promedioCaudalLitroSegundo, ultimaDensidadProductoKilogramoMetroCub, ultimaTemperaturaProductoCelcius, ultimoCaudalLitroSegundo, camion, cliente, chofer, producto, cargaList);
-	}
 }
-
 
 
 
