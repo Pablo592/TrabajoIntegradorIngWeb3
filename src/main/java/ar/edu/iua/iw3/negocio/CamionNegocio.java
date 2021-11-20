@@ -111,26 +111,7 @@ public class CamionNegocio implements ICamionNegocio{
 		Camion truck = o.get();
 		truck.setTara(camion.getTara());
 
-			Optional<Orden> or;
-			try {
-				or = ordenNegocio.buscarPorCamion(camion.getPatente());
-
-			if(!or.isPresent())
-				throw new NoEncontradoException("No existe orden donde se utilice el camion con la patente = " + camion.getPatente());
-
-			Orden orde = or.get();
-			orde.setFase(2); //Establezco que la orden pasa a fase 2
-
-		//	String password =  	String.format("%X", orde.hashCode()); //Genero una password (mejorada pero no cumple los requerimientos)
-				String password = String.valueOf(Math.abs(orde.hashCode()));
-				orde.setPassword(password.substring(0,5)); //Establezco que la password debe tener 5 digitos
-				ordenNegocio.modificar(orde); //Actualizo la orden
-			} catch (Exception e) {
-				log.error(e.getMessage(), e);
-				throw new NegocioException(e);
-			}
-
-		return camionDAO.save(truck); // sino existe el camion lo cargo
+		return camionDAO.save(truck);
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 			throw new NegocioException(e);

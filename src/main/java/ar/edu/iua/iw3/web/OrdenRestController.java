@@ -73,6 +73,18 @@ public class OrdenRestController {
         }
     }
 
+    @PutMapping(value= "/ordenes/tara")
+    public ResponseEntity<String> pesoInicialCamion(@RequestBody Orden orden) {
+        try {
+            ordenNegocio.establecerPesajeInicial(orden);
+            return new ResponseEntity<String>(HttpStatus.OK);
+        } catch (NegocioException e) {
+            log.error(e.getMessage(), e);
+            return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
     @DeleteMapping(value= "/ordenes/{id}")
     public ResponseEntity<String> eliminar(@PathVariable("id") long id) {
         try {

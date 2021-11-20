@@ -20,8 +20,8 @@ public interface IOrdenNegocio {
 
     void eliminar(long id) throws NegocioException, NoEncontradoException;
 
-    Optional<Orden> buscarPorCamion(String patente) throws NegocioException;
-
     Orden findByCodigoExterno( String codigoExterno);
+
+    Orden establecerPesajeInicial(Orden orden) throws NegocioException;
 
 }

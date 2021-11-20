@@ -19,6 +19,10 @@ public class OrdenNegocio implements IOrdenNegocio{
     @Autowired
     private OrdenRepository ordenDAO;
 
+    @Autowired
+    private CamionNegocio camionNegocio;
+
+
     private Logger log = LoggerFactory.getLogger(OrdenNegocio.class);
 
     @Override
@@ -31,13 +35,43 @@ public class OrdenNegocio implements IOrdenNegocio{
         }
     }
 
-    public Optional<Orden> buscarPorCamion(String patente) throws NegocioException{
+public Orden establecerPesajeInicial(Orden orden) throws NegocioException{
+
+    Optional<Orden> o;
+    try {
+        o = verificarExistenciaCamion(orden.getCamion().getPatente());
+        if(!o.isPresent())
+            throw new NoEncontradoException("Camion no registrado");
+
+        Optional<Camion> ocamion;
+        try {
+            ocamion = Optional.ofNullable(camionNegocio.setearPesoIni(orden.getCamion()));
+            if(!o.isPresent())
+                throw new NoEncontradoException("Camion no registrado");
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            throw new NegocioException(e);
+        }
+    } catch (Exception e) {
+        log.error(e.getMessage(), e);
+        throw new NegocioException(e);
+    }
+
+    Orden ordenGuardada = o.get();
+
+    ordenGuardada.setFase(2);
+    ordenGuardada.setFechaPesajeInicial(orden.getFechaPesajeInicial());
+    return saveOrden(orden);
+}
+
+
+
+    private Optional<Orden> verificarExistenciaCamion(String patente) throws NegocioException{
         Optional<Orden> o;
         try {
         o = ordenDAO.findByCamionPatente(patente);
         if(!o.isPresent())
-            throw new NoEncontradoException("En la orden no se encuentra registrado el camion con la patente: " + patente);
-
+            throw new NoEncontradoException("No hay orden que tenga un camion registrado con la patente: " + patente);
             return o;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
