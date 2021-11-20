@@ -27,8 +27,8 @@ public class Cliente implements Serializable {
 
 	@ApiModelProperty(notes = "Numero de telefono del cliente",
 			example = "20", required = false, allowableValues = "range[3500000000, 35499999999]")
-	@Column(length = 100, nullable = true)
-	private Long contacto;
+	@Column(length = 100, nullable = false, unique = true)
+	private long contacto;
 
 	@OneToMany(targetEntity = Orden.class, mappedBy = "cliente", fetch = FetchType.LAZY)
 	@JsonBackReference
@@ -50,11 +50,11 @@ public class Cliente implements Serializable {
 		this.razonSocial = razonSocial;
 	}
 
-	public Long getContacto() {
+	public long getContacto() {
 		return contacto;
 	}
 
-	public void setContacto(Long contacto) {
+	public void setContacto(long contacto) {
 		this.contacto = contacto;
 	}
 

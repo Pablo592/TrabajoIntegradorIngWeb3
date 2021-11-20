@@ -62,7 +62,7 @@ public class ProductoNegocio implements IProductoNegocio{
         }
     }
 
-    private Producto findProductoByNombre(String nombre) {
+    public Producto findProductoByNombre(String nombre) {
         return productoDAO.findByNombre(nombre).orElse(null);
     }
 

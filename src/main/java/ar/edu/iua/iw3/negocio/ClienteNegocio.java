@@ -51,6 +51,14 @@ public class ClienteNegocio implements IClienteNegocio{
 
 	@Override
 	public Cliente agregar(Cliente cliente) throws NegocioException, EncontradoException {
+			try{
+				if(findByContacto(cliente.getContacto())!=null)
+					throw new EncontradoException("Ya existe el cliente con contacto =" + cliente.getContacto());
+				cargar(cliente.getId());
+				throw new EncontradoException("Ya existe una cliente con id=" + cliente.getId());
+			}catch (NoEncontradoException e){
+
+			}
 			try {
 				return clienteDAO.save(cliente);
 			} catch (Exception e) {
@@ -59,7 +67,10 @@ public class ClienteNegocio implements IClienteNegocio{
 			}
 	}
 	
-	
+
+	public Cliente findByContacto(long contacto){
+		return clienteDAO.findByContacto(contacto).orElse(null);
+	}
 
 	@Override
 	public Cliente modificar(Cliente cliente) throws NegocioException, NoEncontradoException {

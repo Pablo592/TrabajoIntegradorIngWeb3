@@ -33,7 +33,7 @@ public class CamionNegocio implements ICamionNegocio{
 		}
 	}
 
-	
+
 	@Override
 	public Camion cargar(long id) throws NegocioException, NoEncontradoException {
 		Optional<Camion> o;
@@ -53,7 +53,7 @@ public class CamionNegocio implements ICamionNegocio{
 	@Override
 	public Camion agregar(Camion camion) throws NegocioException, EncontradoException {
 		try {
-			   if(null!=findCamionByPatente(camion.getPatente())) 
+			   if(null!=findCamionByPatente(camion.getPatente()))
 			        throw new EncontradoException("Ya existe un camion con la patente =" + camion.getPatente());
 				cargar(camion.getId()); 									// tira excepcion sino no lo encuentra
 				throw new EncontradoException("Ya existe un camion con id=" + camion.getId());
@@ -67,8 +67,11 @@ public class CamionNegocio implements ICamionNegocio{
 			}
 	}
 	
-	private Camion findCamionByPatente(String patente) {
-		return camionDAO.findByPatente(patente).orElse(null);
+	public Camion findCamionByPatente(String patente) {
+		Optional<Camion> o = camionDAO.findByPatente(patente);
+		if(o.isPresent())
+			return  o.get();
+		return null;
 	}
 
 	
@@ -81,7 +84,7 @@ public class CamionNegocio implements ICamionNegocio{
 				//Paso 4: Si ningun camion tiene asignada la patente se lo debe de modiicar sin problemas
 				
 				cargar(camion.getId()); //Paso 1
-				Camion camionWithPatente = findCamionByPatente(camion.getDescripcion());		
+				Camion camionWithPatente = findCamionByPatente(camion.getPatente());
 				
 				if(null!=camionWithPatente) { //Paso 2 
 					
@@ -95,7 +98,7 @@ public class CamionNegocio implements ICamionNegocio{
 				return saveCamion(camion);	//Paso 4
 	}
 	
-	private  Camion saveCamion(Camion componente) throws NegocioException {
+	public  Camion saveCamion(Camion componente) throws NegocioException {
 		try {
 			return camionDAO.save(componente); // sino existe el camion lo cargo
 		} catch (Exception e) {
@@ -114,6 +117,7 @@ public class CamionNegocio implements ICamionNegocio{
 			log.error(e.getMessage(), e);
 			throw new NegocioException(e);
 		}
-		
+
 	}
+
 }

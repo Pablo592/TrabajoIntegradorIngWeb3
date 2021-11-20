@@ -1,7 +1,6 @@
 package ar.edu.iua.iw3.negocio;
 
-import ar.edu.iua.iw3.modelo.Carga;
-import ar.edu.iua.iw3.modelo.Orden;
+import ar.edu.iua.iw3.modelo.*;
 import ar.edu.iua.iw3.modelo.persistencia.OrdenRepository;
 import ar.edu.iua.iw3.negocio.excepciones.EncontradoException;
 import ar.edu.iua.iw3.negocio.excepciones.NegocioException;
@@ -18,6 +17,15 @@ public class OrdenNegocio implements IOrdenNegocio{
 
     @Autowired
     private OrdenRepository ordenDAO;
+
+    @Autowired
+    private CamionNegocio camionNegocio;
+    @Autowired
+    private ClienteNegocio clienteNegocio;
+    @Autowired
+    private ProductoNegocio productoNegocio;
+    @Autowired
+    private ChoferNegocio choferNegocio;
 
     private Logger log = LoggerFactory.getLogger(OrdenNegocio.class);
 
@@ -52,11 +60,25 @@ public class OrdenNegocio implements IOrdenNegocio{
         try {
             if(null!=findByCodigoExterno(orden.getCodigoExterno()))
                 throw new EncontradoException("Ya existe en la base de datos una orden con el numero =" + orden.getCodigoExterno());
+            //busco la orden
             cargar(orden.getId()); 		// tira excepcion sino no lo encuentra
             throw new EncontradoException("Ya existe una orden con id=" + orden.getId());
         } catch (NoEncontradoException e) {
         }
         try {
+            Camion camion = camionNegocio.findCamionByPatente(orden.getCamion().getPatente());
+            Cliente cliente = clienteNegocio.findByContacto(orden.getCliente().getContacto());
+            Chofer chofer = choferNegocio.findByDocumento(orden.getChofer().getDocumento());
+            Producto producto = productoNegocio.findProductoByNombre(orden.getProducto().getNombre());
+            //si es nulo implica que es un camion, cliente, chofer o producto nuevo
+            if(camion!= null)
+                orden.setCamion(camion);
+            if(cliente!= null)
+                orden.setCliente(cliente);
+            if(chofer!= null)
+                orden.setChofer(chofer);
+            if(producto != null)
+                orden.setProducto(producto);
             return ordenDAO.save(orden);
         } catch (Exception e) {
             log.error(e.getMessage(), e);

@@ -19,7 +19,7 @@ public class Orden implements Serializable{
 	private long id;
 	@Column(unique = true, nullable = false)
 	private String codigoExterno;
-
+	@Column(nullable = false)
 	private Calendar fechaRecepcion;			//Fecha/Hora en la que el camion tiene turno
 
 	private Calendar fechaPesajeInicial;		//Fecha/Hora en que se llevo acabo el pesaje inicial con el camion vacio
@@ -29,25 +29,25 @@ public class Orden implements Serializable{
 	private Calendar fechaFinProcesoCarga;		//Fecha/Hora en la cual dejo de cargarse el camion
 
 	private Calendar fechaRecepcionPesajeFinal;	//Fecha/Hora en la cual se peso el camion tras finalizar la carga
-
+	@Column(columnDefinition = "int default 0")
 	private int estado = 0;						//estado del proceso en la que se encuentra la orden
 
 	private String password;
-
-	private int frecuencia =10;					//la frecuencia deberia de variar segun la orden
-
+	@Column(nullable = true)
+	private int frecuencia;						//la frecuencia deberia de variar segun la orden
+	@Column(nullable = true)
 	private float promedioMasaAcumuladaKg;
-
+	@Column(nullable = true)
 	private float promedDensidadProductoKilogramoMetroCub;
-
+	@Column(nullable = true)
 	private float promedioTemperaturaProductoCelcius;
-
+	@Column(nullable = true)
 	private float promedioCaudalLitroSegundo;
-
+	@Column(nullable = true)
 	private float ultimaDensidadProductoKilogramoMetroCub;
-
+	@Column(nullable = true)
 	private float ultimaTemperaturaProductoCelcius;
-
+	@Column(nullable = true)
 	private float ultimoCaudalLitroSegundo;
 
 	@ManyToOne(cascade = CascadeType.ALL)
