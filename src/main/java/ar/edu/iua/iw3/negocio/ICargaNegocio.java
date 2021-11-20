@@ -14,7 +14,7 @@ public interface ICargaNegocio {
 
     Carga cargar(long id) throws NegocioException, NoEncontradoException;
 
-    Carga agregar(Carga carga) throws NegocioException;
+    Carga agregar(Carga carga) throws NegocioException, NoEncontradoException;
 
     Carga modificar(Carga carga) throws NegocioException, NoEncontradoException;
 

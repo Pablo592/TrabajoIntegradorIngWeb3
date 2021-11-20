@@ -7,8 +7,7 @@ import java.io.Serializable;
 @NamedNativeQueries({
 
         @NamedNativeQuery(name = "Carga.getMasaAcuAndPromedioDensidadAndTemperaturaAndCaudal",
-                query = "SELECT  sum(c.masa_acumulada_kg)  as masaAcumuladaKg, \n" +
-                        "\t avg(c.caudal_litro_segundo) as promedioCaudalLitroSegundo, \n" +
+                query = "SELECT  avg(c.caudal_litro_segundo) as promedioCaudalLitroSegundo, \n" +
                         "\t avg(c.densidad_producto_kilogramo_metro_cub) as promedioDensidadProductoKilogramoMetroCub , \n" +
                         "\t avg(c.temperatura_producto_celcius) as promedioTemperaturaProductoCelcius \n" +
                         "\t from carga c \n" +
@@ -21,7 +20,6 @@ import java.io.Serializable;
         classes = {
                 @ConstructorResult(
                         columns = {
-                                @ColumnResult(name = "masaAcumuladaKg", type = float.class),
                                 @ColumnResult(name = "promedioCaudalLitroSegundo", type = float.class),
                                 @ColumnResult(name = "promedioDensidadProductoKilogramoMetroCub", type = float.class),
                                 @ColumnResult(name = "promedioTemperaturaProductoCelcius", type = float.class)

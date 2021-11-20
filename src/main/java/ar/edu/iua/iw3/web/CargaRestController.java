@@ -57,6 +57,9 @@ public class CargaRestController {
         } catch (NegocioException e) {
             log.error(e.getMessage(), e);
             return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }catch (NoEncontradoException e) {
+            log.error(e.getMessage(), e);
+            return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
         }
     }
 
