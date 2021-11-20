@@ -26,7 +26,7 @@ public class CamionNegocio implements ICamionNegocio{
 	private CamionRepository camionDAO;
 
 	@Autowired
-	private OrdenRepository ordenDAO;
+	private OrdenNegocio ordenNegocio;
 
 	@Override
 	public List<Camion> listado() throws NegocioException {
@@ -72,7 +72,7 @@ public class CamionNegocio implements ICamionNegocio{
 			}
 	}
 	
-	private Camion findCamionByPatente(String patente) {
+	public Camion findCamionByPatente(String patente) {
 		return camionDAO.findByPatente(patente).orElse(null);
 	}
 
@@ -113,7 +113,7 @@ public class CamionNegocio implements ICamionNegocio{
 
 			Optional<Orden> or;
 			try {
-			or = ordenDAO.findByCamionPatente(camion.getPatente());
+				or = ordenNegocio.buscarPorCamion(camion.getPatente());
 
 			if(!or.isPresent())
 				throw new NoEncontradoException("No existe orden donde se utilice el camion con la patente = " + camion.getPatente());
@@ -122,10 +122,9 @@ public class CamionNegocio implements ICamionNegocio{
 			orde.setFase(2); //Establezco que la orden pasa a fase 2
 
 		//	String password =  	String.format("%X", orde.hashCode()); //Genero una password (mejorada pero no cumple los requerimientos)
-				String password = String.valueOf(orde.hashCode());
+				String password = String.valueOf(Math.abs(orde.hashCode()));
 				orde.setPassword(password.substring(0,5)); //Establezco que la password debe tener 5 digitos
-
-			ordenDAO.save(orde); //Actualizo la orden
+				ordenNegocio.modificar(orde); //Actualizo la orden
 			} catch (Exception e) {
 				log.error(e.getMessage(), e);
 				throw new NegocioException(e);

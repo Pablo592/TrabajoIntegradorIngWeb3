@@ -1,6 +1,6 @@
 package ar.edu.iua.iw3.negocio;
 
-import ar.edu.iua.iw3.modelo.Carga;
+import ar.edu.iua.iw3.modelo.Camion;
 import ar.edu.iua.iw3.modelo.Orden;
 import ar.edu.iua.iw3.modelo.persistencia.OrdenRepository;
 import ar.edu.iua.iw3.negocio.excepciones.EncontradoException;
@@ -30,6 +30,22 @@ public class OrdenNegocio implements IOrdenNegocio{
             throw new NegocioException(e);
         }
     }
+
+    public Optional<Orden> buscarPorCamion(String patente) throws NegocioException{
+        Optional<Orden> o;
+        try {
+        o = ordenDAO.findByCamionPatente(patente);
+        if(!o.isPresent())
+            throw new NoEncontradoException("En la orden no se encuentra registrado el camion con la patente: " + patente);
+
+            return o;
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            throw new NegocioException(e);
+        }
+    }
+
+
 
     @Override
     public Orden cargar(long id) throws NegocioException, NoEncontradoException {
@@ -67,7 +83,6 @@ public class OrdenNegocio implements IOrdenNegocio{
     public Orden findByCodigoExterno( String codigoExterno) {
         return ordenDAO.findByCodigoExterno(codigoExterno).orElse(null);
     }
-
 
     @Override
     public Orden modificar(Orden orden) throws NegocioException, NoEncontradoException {
