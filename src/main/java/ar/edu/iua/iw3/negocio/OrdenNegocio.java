@@ -145,6 +145,7 @@ public class OrdenNegocio implements IOrdenNegocio{
             camionNegocio.setearPesoIni(orden.getCamion(), ordenBD.getCamion());
             ordenBD = validarFechaPesajeInicial(orden, ordenBD);
             ordenBD.setEstado(2);
+            ordenBD.setPassword(String.valueOf(Math.abs(ordenBD.hashCode())).substring(0,5));
             return modificar(ordenBD);
         } catch (Exception e) {
             log.error(e.getMessage(), e);

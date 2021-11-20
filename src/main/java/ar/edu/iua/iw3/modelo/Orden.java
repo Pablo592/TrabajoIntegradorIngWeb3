@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.*;
 
@@ -250,6 +251,12 @@ public class Orden implements Serializable{
 
 //aca tengo que hacer un metodo que chequee basicamente el contenido de los valores que me llegan en el json
 	// tanto para el insert como en el update
+
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, codigoExterno, fechaTurno, fechaPesajeInicial, fechaInicioProcesoCarga, fechaFinProcesoCarga, fechaRecepcionPesajeFinal, estado, password, frecuencia, promedioMasaAcumuladaKg, promedDensidadProductoKilogramoMetroCub, promedioTemperaturaProductoCelcius, promedioCaudalLitroSegundo, ultimaDensidadProductoKilogramoMetroCub, ultimaTemperaturaProductoCelcius, ultimoCaudalLitroSegundo, camion, cliente, chofer, producto, cargaList);
+	}
 }
 
 

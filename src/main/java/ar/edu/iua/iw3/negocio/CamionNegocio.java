@@ -122,7 +122,7 @@ public class CamionNegocio implements ICamionNegocio{
 
 	@Override
 	public Camion setearPesoIni(Camion camionRecibido, Camion camionBD) throws NoEncontradoException, NegocioException {
-			if(camionBD.getPatente() != camionBD.getPatente())
+			if(!camionBD.getPatente().equals(camionRecibido.getPatente()))
 				throw new NegocioException("La patente enviada :"+ camionRecibido.getPatente()+" no esta asociada a la orden enviada");
 			if(camionRecibido.getTara()<= 0)
 				throw new NegocioException("La tara no puede ser negativa");
