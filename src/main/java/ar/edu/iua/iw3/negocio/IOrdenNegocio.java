@@ -22,6 +22,6 @@ public interface IOrdenNegocio {
 
     Orden findByCodigoExterno( String codigoExterno);
 
-    Orden establecerPesajeInicial(Orden orden) throws NegocioException;
+    Orden establecerPesajeInicial(Orden orden) throws NegocioException, NoEncontradoException;
 
 }

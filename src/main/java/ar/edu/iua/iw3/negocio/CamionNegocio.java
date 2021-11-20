@@ -111,7 +111,7 @@ public class CamionNegocio implements ICamionNegocio{
 		Camion truck = o.get();
 		truck.setTara(camion.getTara());
 
-		return camionDAO.save(truck);
+		return saveCamion(truck);
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 			throw new NegocioException(e);

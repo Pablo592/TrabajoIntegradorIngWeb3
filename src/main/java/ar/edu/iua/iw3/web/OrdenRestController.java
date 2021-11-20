@@ -78,7 +78,7 @@ public class OrdenRestController {
         try {
             ordenNegocio.establecerPesajeInicial(orden);
             return new ResponseEntity<String>(HttpStatus.OK);
-        } catch (NegocioException e) {
+        } catch (NegocioException | NoEncontradoException e) {
             log.error(e.getMessage(), e);
             return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
