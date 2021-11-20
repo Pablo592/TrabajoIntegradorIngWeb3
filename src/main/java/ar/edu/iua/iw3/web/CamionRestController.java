@@ -70,6 +70,24 @@ public class CamionRestController {
 			return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
 		}
 	}
+
+	@PutMapping(value="/camiones/tara")
+	public ResponseEntity<String> establecerPesoIni(@RequestBody Camion camion) {
+		try {
+			camionNegocio.setearPesoIni(camion);
+			return new ResponseEntity<String>(HttpStatus.OK);
+		} catch (NegocioException e) {
+			log.error(e.getMessage(), e);
+			return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
+		} catch (NoEncontradoException e) {
+			return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
+		}
+	}
+
+
+
+
+
 	
 	@DeleteMapping(value="/camiones/{id}")
 	public ResponseEntity<String> eliminar(@PathVariable("id") long id) {
