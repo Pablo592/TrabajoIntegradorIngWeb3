@@ -79,6 +79,7 @@ public class OrdenNegocio implements IOrdenNegocio{
                 orden.setChofer(chofer);
             if(producto != null)
                 orden.setProducto(producto);
+            orden.setEstado(1);
             return ordenDAO.save(orden);
         } catch (Exception e) {
             log.error(e.getMessage(), e);

@@ -20,7 +20,7 @@ public class Orden implements Serializable{
 	@Column(unique = true, nullable = false)
 	private String codigoExterno;
 	@Column(nullable = false)
-	private Calendar fechaRecepcion;			//Fecha/Hora en la que el camion tiene turno
+	private Calendar fechaTurno;			//Fecha/Hora en la que el camion tiene turno
 
 	private Calendar fechaPesajeInicial;		//Fecha/Hora en que se llevo acabo el pesaje inicial con el camion vacio
 
@@ -111,12 +111,12 @@ public class Orden implements Serializable{
 		this.producto = producto;
 	}
 
-	public Calendar getFechaRecepcion() {
-		return fechaRecepcion;
+	public Calendar getFechaTurno() {
+		return fechaTurno;
 	}
 
-	public void setFechaRecepcion(Calendar fechaRecepcion) {
-		this.fechaRecepcion = fechaRecepcion;
+	public void setFechaTurno(Calendar fechaRecepcion) {
+		this.fechaTurno = fechaRecepcion;
 	}
 
 	public Calendar getFechaPesajeInicial() {

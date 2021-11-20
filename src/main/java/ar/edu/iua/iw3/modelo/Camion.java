@@ -20,7 +20,7 @@ public class Camion  implements Serializable {
     @Column(length = 7, nullable = false, unique = true)
     private String patente;
 
-    @Column(length = 100, nullable = true)
+    @Column(length = 100)
     private String descripcion;
 
     @Column(columnDefinition = "DOUBLE", nullable = false)
@@ -29,10 +29,10 @@ public class Camion  implements Serializable {
     @Column(columnDefinition = "DOUBLE", nullable = false)
     private double preset;              //Limite a cargar en el camion
 
-    @Column(columnDefinition = "DOUBLE", nullable = false)
+    @Column(columnDefinition = "DOUBLE default 0")
     private double tara;                //Peso del camion vacio
-
-    private Double pesoFinalCamion;		//Peso del camion tras cargarse
+    @Column(columnDefinition = "DOUBLE default 0")
+    private double pesoFinalCamion;		//Peso del camion tras cargarse
 
     @OneToMany(targetEntity = Orden.class, mappedBy = "camion", fetch = FetchType.LAZY)
     @JsonBackReference
@@ -86,11 +86,11 @@ public class Camion  implements Serializable {
         this.tara = tara;
     }
 
-    public Double getPesoFinalCamion() {
+    public double getPesoFinalCamion() {
         return pesoFinalCamion;
     }
 
-    public void setPesoFinalCamion(Double pesoFinalCamion) {
+    public void setPesoFinalCamion(double pesoFinalCamion) {
         this.pesoFinalCamion = pesoFinalCamion;
     }
 

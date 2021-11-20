@@ -60,6 +60,21 @@ public class OrdenRestController {
         }
     }
 
+    @PostMapping(value= "/ordenes-primerEnvio")
+    public ResponseEntity<String> agregarPrimerRequest(@RequestBody Orden orden) {
+        try {
+            Orden respuesta=ordenNegocio.agregar(orden);
+            HttpHeaders responseHeaders=new HttpHeaders();
+            responseHeaders.set("location", "/orden/"+respuesta.getId());
+            return new ResponseEntity<String>(responseHeaders, HttpStatus.CREATED);
+        } catch (NegocioException e) {
+            return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (EncontradoException e) {
+            log.error(e.getMessage(), e);
+            return new ResponseEntity<String>(HttpStatus.FOUND);
+        }
+    }
+
     @PutMapping(value= "/ordenes")
     public ResponseEntity<String> modificar(@RequestBody Orden orden) {
         try {
