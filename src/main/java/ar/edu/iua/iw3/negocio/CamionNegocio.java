@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import ar.edu.iua.iw3.modelo.Camion;
+import ar.edu.iua.iw3.modelo.Orden;
+import ar.edu.iua.iw3.modelo.persistencia.OrdenRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +24,10 @@ public class CamionNegocio implements ICamionNegocio{
 
 	@Autowired
 	private CamionRepository camionDAO;
-	
+
+	@Autowired
+	private OrdenNegocio ordenNegocio;
+
 	@Override
 	public List<Camion> listado() throws NegocioException {
 		try {
@@ -67,7 +72,7 @@ public class CamionNegocio implements ICamionNegocio{
 			}
 	}
 	
-	private Camion findCamionByPatente(String patente) {
+	public Camion findCamionByPatente(String patente) {
 		return camionDAO.findByPatente(patente).orElse(null);
 	}
 
@@ -94,10 +99,31 @@ public class CamionNegocio implements ICamionNegocio{
 				
 				return saveCamion(camion);	//Paso 4
 	}
-	
-	private  Camion saveCamion(Camion componente) throws NegocioException {
+
+	public Camion setearPesoIni(Camion camion) throws NoEncontradoException,NegocioException {
+		Optional<Camion> o;
 		try {
-			return camionDAO.save(componente); // sino existe el camion lo cargo
+			//Verifico que haya registro del camion identificado por la petente recibida
+		o = Optional.ofNullable(findCamionByPatente(camion.getPatente()));
+
+		if(!o.isPresent())
+			throw new NoEncontradoException("No existe registro del camion con la patente = " + camion.getPatente());
+		Camion truck = o.get();
+		truck.setTara(camion.getTara());
+
+		return saveCamion(truck);
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			throw new NegocioException(e);
+		}
+	}
+
+
+
+
+	private  Camion saveCamion(Camion camion) throws NegocioException {
+		try {
+			return camionDAO.save(camion); // sino existe el camion lo cargo
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 			throw new NegocioException(e);

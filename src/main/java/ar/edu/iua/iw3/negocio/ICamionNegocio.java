@@ -17,6 +17,8 @@ public interface ICamionNegocio {
 
 	Camion modificar(Camion camion) throws NegocioException, NoEncontradoException;
 
+//	Camion setearPesoIni(Camion camion) throws NoEncontradoException,NegocioException;
+
 	void eliminar(long id) throws NegocioException, NoEncontradoException;
 
 }

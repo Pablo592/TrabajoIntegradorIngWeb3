@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.*;
 
@@ -30,7 +31,7 @@ public class Orden implements Serializable{
 
 	private Calendar fechaRecepcionPesajeFinal;	//Fecha/Hora en la cual se peso el camion tras finalizar la carga
 
-	private int estado = 0;						//estado del proceso en la que se encuentra la orden
+	private int fase = 0;						//estado del proceso en la que se encuentra la orden
 
 	private String password;
 
@@ -167,12 +168,12 @@ public class Orden implements Serializable{
 		this.camion = camion;
 	}
 
-	public int getEstado() {
-		return estado;
+	public int getFase() {
+		return fase;
 	}
 
-	public void setEstado(int estado) {
-		this.estado = estado;
+	public void setFase(int fase) {
+		this.fase = fase;
 	}
 
 	public int getFrecuencia() {
@@ -249,7 +250,14 @@ public class Orden implements Serializable{
 
 //aca tengo que hacer un metodo que chequee basicamente el contenido de los valores que me llegan en el json
 	// tanto para el insert como en el update
+
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, codigoExterno, fechaRecepcion, fechaPesajeInicial, fechaInicioProcesoCarga, fechaFinProcesoCarga, fechaRecepcionPesajeFinal, fase, password, frecuencia, promedioMasaAcumuladaKg, promedDensidadProductoKilogramoMetroCub, promedioTemperaturaProductoCelcius, promedioCaudalLitroSegundo, ultimaDensidadProductoKilogramoMetroCub, ultimaTemperaturaProductoCelcius, ultimoCaudalLitroSegundo, camion, cliente, chofer, producto, cargaList);
+	}
 }
+
 
 
 

@@ -1,6 +1,6 @@
 package ar.edu.iua.iw3.negocio;
 
-import ar.edu.iua.iw3.modelo.Carga;
+import ar.edu.iua.iw3.modelo.Camion;
 import ar.edu.iua.iw3.modelo.Orden;
 import ar.edu.iua.iw3.modelo.persistencia.OrdenRepository;
 import ar.edu.iua.iw3.negocio.excepciones.EncontradoException;
@@ -19,6 +19,10 @@ public class OrdenNegocio implements IOrdenNegocio{
     @Autowired
     private OrdenRepository ordenDAO;
 
+    @Autowired
+    private CamionNegocio camionNegocio;
+
+
     private Logger log = LoggerFactory.getLogger(OrdenNegocio.class);
 
     @Override
@@ -30,6 +34,39 @@ public class OrdenNegocio implements IOrdenNegocio{
             throw new NegocioException(e);
         }
     }
+
+public Orden establecerPesajeInicial(Orden orden) throws NegocioException, NoEncontradoException {
+    try {
+    Optional<Orden> o;
+    o = verificarExistenciaCamion(orden.getCamion().getPatente());
+    Optional<Camion> ocamion;
+    ocamion = Optional.ofNullable(camionNegocio.setearPesoIni(orden.getCamion()));
+    Orden ordenGuardada = o.get();
+    ordenGuardada.setFase(2);
+    ordenGuardada.setFechaPesajeInicial(orden.getFechaPesajeInicial());
+    return saveOrden(orden);
+    } catch (Exception e) {
+        log.error(e.getMessage(), e);
+        throw new NegocioException(e);
+    }
+}
+
+
+
+    private Optional<Orden> verificarExistenciaCamion(String patente) throws NegocioException{
+        Optional<Orden> o;
+        try {
+        o = ordenDAO.findByCamionPatente(patente);
+        if(!o.isPresent())
+            throw new NoEncontradoException("No hay orden que tenga un camion registrado con la patente: " + patente);
+            return o;
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            throw new NegocioException(e);
+        }
+    }
+
+
 
     @Override
     public Orden cargar(long id) throws NegocioException, NoEncontradoException {
@@ -67,7 +104,6 @@ public class OrdenNegocio implements IOrdenNegocio{
     public Orden findByCodigoExterno( String codigoExterno) {
         return ordenDAO.findByCodigoExterno(codigoExterno).orElse(null);
     }
-
 
     @Override
     public Orden modificar(Orden orden) throws NegocioException, NoEncontradoException {

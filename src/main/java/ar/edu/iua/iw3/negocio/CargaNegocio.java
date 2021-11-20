@@ -54,7 +54,7 @@ public class CargaNegocio implements ICargaNegocio {
     public Carga agregar(Carga carga) throws NegocioException, NoEncontradoException {
         Orden orden = existeOrden(carga.getOrden().getCodigoExterno());
         try {
-            if (orden.getEstado() == 2) {
+            if (orden.getFase() == 2) {
                 if (orden.getCamion().getPreset() <= carga.getMasaAcumuladaKg())
                     throw new NegocioException("Tanque lleno");
                 carga.setOrden(orden);
