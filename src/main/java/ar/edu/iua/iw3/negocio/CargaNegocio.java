@@ -35,6 +35,21 @@ public class CargaNegocio implements ICargaNegocio {
         }
     }
 
+
+    @Override
+    public Carga traerUltimaCarga(String codigoExterno) throws NegocioException, NoEncontradoException {
+        Orden orden = ordenNegocio.findByCodigoExterno(codigoExterno);
+        if(null==orden)
+            throw new NoEncontradoException("El codigo externo no pertenece a ninguna orden");
+        try {
+            return cargaDAO.findTheLastCarga(orden.getId());
+
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            throw new NegocioException(e);
+        }
+
+    }
     @Override
     public Carga cargar(long id) throws NegocioException, NoEncontradoException {
         Optional<Carga> o;

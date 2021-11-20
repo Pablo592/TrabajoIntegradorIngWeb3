@@ -1,5 +1,6 @@
 package ar.edu.iua.iw3.web;
 
+import ar.edu.iua.iw3.modelo.Carga;
 import ar.edu.iua.iw3.modelo.Orden;
 import ar.edu.iua.iw3.negocio.IOrdenNegocio;
 import ar.edu.iua.iw3.negocio.OrdenNegocio;
@@ -42,6 +43,18 @@ public class OrdenRestController {
             return new ResponseEntity<Orden>(HttpStatus.NOT_FOUND);
         }
     }
+
+    @GetMapping(value= "/ordenes/ultimaCarga/{codigoExterno}")
+    public ResponseEntity<Orden> ultimaCarga(@PathVariable("codigoExterno") String codigoExterno) {
+        try {
+            return new ResponseEntity<Orden>(ordenNegocio.traerUltimaCarga(codigoExterno), HttpStatus.OK);
+        } catch (NegocioException e) {
+            return new ResponseEntity<Orden>(HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (NoEncontradoException e) {
+            return new ResponseEntity<Orden>(HttpStatus.NOT_FOUND);
+        }
+    }
+
 
 
 

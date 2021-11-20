@@ -5,6 +5,7 @@ import ar.edu.iua.iw3.modelo.persistencia.OrdenRepository;
 import ar.edu.iua.iw3.negocio.excepciones.EncontradoException;
 import ar.edu.iua.iw3.negocio.excepciones.NegocioException;
 import ar.edu.iua.iw3.negocio.excepciones.NoEncontradoException;
+import javassist.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,9 @@ public class OrdenNegocio implements IOrdenNegocio{
     @Autowired
     private ChoferNegocio choferNegocio;
 
+    @Autowired
+    private CargaNegocio cargaNegocio;
+
     private Logger log = LoggerFactory.getLogger(OrdenNegocio.class);
 
     @Override
@@ -41,6 +45,21 @@ public class OrdenNegocio implements IOrdenNegocio{
             throw new NegocioException(e);
         }
     }
+
+    @Override
+    public Orden traerUltimaCarga(String codigoExterno) throws NegocioException, NoEncontradoException {
+
+     Carga car =   cargaNegocio.traerUltimaCarga(codigoExterno);
+     car.getOrden().setUltimaTemperaturaProductoCelcius(car.getTemperaturaProductoCelcius());
+     car.getOrden().setUltimaDensidadProductoKilogramoMetroCub(car.getDensidadProductoKilogramoMetroCub());
+     car.getOrden().setUltimoCaudalLitroSegundo(car.getCaudalLitroSegundo());
+
+        Orden ord = car.getOrden();
+        ord.setCargaList(null);
+
+        return ord;
+    }
+
 
     @Override
     public Orden cargar(long id) throws NegocioException, NoEncontradoException {

@@ -12,6 +12,8 @@ public interface ICargaNegocio {
 
     List<Carga> listado() throws NegocioException;
 
+    Carga traerUltimaCarga(String codigoExterno) throws NegocioException, NoEncontradoException;
+
     Carga cargar(long id) throws NegocioException, NoEncontradoException;
 
     Carga agregar(Carga carga) throws NegocioException, NoEncontradoException;
