@@ -20,7 +20,6 @@ public class OrdenNegocio implements IOrdenNegocio{
 
     @Autowired
     private OrdenRepository ordenDAO;
-
     @Autowired
     private CamionNegocio camionNegocio;
     @Autowired
@@ -137,10 +136,9 @@ public class OrdenNegocio implements IOrdenNegocio{
         Orden ordenBD = findByCodigoExterno(orden.getCodigoExterno());
         if(null==ordenBD)
             throw new NoEncontradoException("No existe la orden con codigo externo =" + orden.getCodigoExterno());
-
+        if(ordenBD.getEstado()>1)
+            throw new NegocioException("Orden en estado :" + ordenBD.getEstado()+ "solo se pueden pesar los camiones orden esten en 1");
         try {
-            if(null== ordenBD)
-                throw new NoEncontradoException("La orden "+orden.getCodigoExterno()+" no existe");
 
             camionNegocio.setearPesoIni(orden.getCamion(), ordenBD.getCamion());
             ordenBD = validarFechaPesajeInicial(orden, ordenBD);
@@ -151,6 +149,24 @@ public class OrdenNegocio implements IOrdenNegocio{
             log.error(e.getMessage(), e);
             throw new NegocioException(e);
         }
+    }
+
+    @Override
+    public Orden frenarCargar(String codigoExterno) throws NegocioException, NoEncontradoException {
+        Orden ordenBD = findByCodigoExterno(codigoExterno);
+        if(null==ordenBD)
+            throw new NoEncontradoException("No existe la orden con codigo externo =" + codigoExterno);
+        if(ordenBD.getEstado()!=2)
+            throw new NegocioException("Solo se pueden parar ordes cuyo estado sea 2");
+        try{
+            ordenBD.setEstado(3);
+            return modificar(ordenBD);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            throw new NegocioException(e);
+        }
+
+
     }
 
     private Orden validarFechaPesajeInicial(Orden orden, Orden ordenDB) throws NegocioException {

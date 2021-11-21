@@ -11,6 +11,4 @@ import java.util.Optional;
 @Repository
 public interface OrdenRepository extends JpaRepository<Orden, Long> {
     Optional<Orden> findByCodigoExterno(String numeroOrden);
-
-    Optional<Orden> findByCamionPatente(String patente);
 }

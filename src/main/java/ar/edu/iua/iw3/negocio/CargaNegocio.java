@@ -55,8 +55,12 @@ public class CargaNegocio implements ICargaNegocio {
         Orden orden = existeOrden(carga.getOrden().getCodigoExterno());
         try {
             if (orden.getEstado() == 2) {
-                if (orden.getCamion().getPreset() <= carga.getMasaAcumuladaKg())
+                if (orden.getCamion().getPreset() <= carga.getMasaAcumuladaKg()) {
+                    orden.setEstado(3);
+                    ordenNegocio.modificar(orden);
                     throw new NegocioException("Tanque lleno");
+                }
+
                 carga.setOrden(orden);
                 //transaccion para que se setee la ultima masa acumulada de orden
                 return cargaDAO.save(carga);
@@ -87,8 +91,6 @@ public class CargaNegocio implements ICargaNegocio {
             log.error(e.getMessage(), e);
             throw new NegocioException(e);
         }
-
-
     }
 
     @Override

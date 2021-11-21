@@ -19,4 +19,6 @@ public interface IOrdenNegocio {
     void eliminar(long id) throws NegocioException, NoEncontradoException;
 
     Orden establecerPesajeInicial(Orden orden) throws NegocioException, NoEncontradoException;
+
+    Orden frenarCargar(String codigoExterno)  throws NegocioException, NoEncontradoException;
 }
