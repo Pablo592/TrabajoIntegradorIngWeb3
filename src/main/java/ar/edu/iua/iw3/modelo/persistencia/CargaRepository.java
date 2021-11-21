@@ -19,7 +19,7 @@ public interface CargaRepository extends JpaRepository<Carga, Long> {
     public Carga getPromedioCaudal(@Param("id") long id);
 
     @Query(nativeQuery = true)
-    CargaDTO getMasaAcuAndPromedioDensidadAndTemperaturaAndCaudal(long orden_id);
+    CargaDTO getPromedioDensidadAndTemperaturaAndCaudal(long orden_id);
 
 
     @Query(value ="SELECT * FROM carga where orden_id =:id order by id desc limit 1", nativeQuery = true)

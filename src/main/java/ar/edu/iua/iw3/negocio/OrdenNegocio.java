@@ -50,14 +50,26 @@ public class OrdenNegocio implements IOrdenNegocio{
     public Orden traerUltimaCarga(String codigoExterno) throws NegocioException, NoEncontradoException {
 
      Carga car =   cargaNegocio.traerUltimaCarga(codigoExterno);
-     car.getOrden().setUltimaTemperaturaProductoCelcius(car.getTemperaturaProductoCelcius());
-     car.getOrden().setUltimaDensidadProductoKilogramoMetroCub(car.getDensidadProductoKilogramoMetroCub());
-     car.getOrden().setUltimoCaudalLitroSegundo(car.getCaudalLitroSegundo());
-     car.getOrden().setMasaAcumuladaKg(car.getMasaAcumuladaKg());
-        Orden ord = car.getOrden();
-        ord.setCargaList(null);
+     Orden ord = car.getOrden();
+     ord.setCargaList(null);
 
         return ord;
+    }
+
+    @Override
+    public Orden frenarCargar(String codigoExterno) throws NegocioException, NoEncontradoException {
+        Orden ordenBD = findByCodigoExterno(codigoExterno);
+        if(null==ordenBD)
+            throw new NoEncontradoException("No existe la orden con codigo externo =" + codigoExterno);
+        if(ordenBD.getEstado()!=2)
+            throw new NegocioException("Solo se pueden parar ordes cuyo estado sea 2");
+        try{
+            ordenBD.setEstado(3);
+            return modificar(ordenBD);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            throw new NegocioException(e);
+        }
     }
 
 

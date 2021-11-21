@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 @NamedNativeQueries({
 
-        @NamedNativeQuery(name = "Carga.getMasaAcuAndPromedioDensidadAndTemperaturaAndCaudal",
+        @NamedNativeQuery(name = "Carga.getPromedioDensidadAndTemperaturaAndCaudal",
                 query = "SELECT  avg(c.caudal_litro_segundo) as promedioCaudalLitroSegundo, \n" +
                         "\t avg(c.densidad_producto_kilogramo_metro_cub) as promedioDensidadProductoKilogramoMetroCub , \n" +
                         "\t avg(c.temperatura_producto_celcius) as promedioTemperaturaProductoCelcius \n" +

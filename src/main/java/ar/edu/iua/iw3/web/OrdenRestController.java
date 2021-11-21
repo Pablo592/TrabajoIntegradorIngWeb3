@@ -102,6 +102,20 @@ public class OrdenRestController {
         }
     }
 
+    @PutMapping(value= "/ordenes/frenarCarga")
+    public ResponseEntity<String> frenarCargar(@RequestParam("codigoExterno") String codigoExterno) {
+        try {
+            ordenNegocio.frenarCargar(codigoExterno);
+            return new ResponseEntity<String>(HttpStatus.OK);
+        } catch (NegocioException e) {
+            log.error(e.getMessage(), e);
+            return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (NoEncontradoException e) {
+            log.error(e.getMessage(), e);
+            return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
+        }
+    }
+
     @PutMapping(value= "/ordenes")
     public ResponseEntity<String> modificar(@RequestBody Orden orden) {
         try {

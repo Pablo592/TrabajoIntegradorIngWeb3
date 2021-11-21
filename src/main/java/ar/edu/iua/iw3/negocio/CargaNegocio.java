@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -70,9 +71,22 @@ public class CargaNegocio implements ICargaNegocio {
         Orden orden = existeOrden(carga.getOrden().getCodigoExterno());
         try {
             if (orden.getEstado() == 2) {
-                if (orden.getCamion().getPreset() <= carga.getMasaAcumuladaKg())
+                if (orden.getCamion().getPreset() <= carga.getMasaAcumuladaKg()){
+                    orden.setEstado(3);
+                    ordenNegocio.modificar(orden);
                     throw new NegocioException("Tanque lleno");
+                }
                 carga.setOrden(orden);
+                orden.setMasaAcumuladaKg(carga.getMasaAcumuladaKg());
+                orden.setUltimoCaudalLitroSegundo(carga.getCaudalLitroSegundo());
+                orden.setUltimaDensidadProductoKilogramoMetroCub(carga.getDensidadProductoKilogramoMetroCub());
+                orden.setUltimaTemperaturaProductoCelcius(carga.getTemperaturaProductoCelcius());
+                orden.setFechaFinProcesoCarga(new Date());
+
+                if(orden.getFechaInicioProcesoCarga() == null)
+                    orden.setFechaInicioProcesoCarga(new Date());
+
+                ordenNegocio.modificar(orden);
                 //transaccion para que se setee la ultima masa acumulada de orden
                 return cargaDAO.save(carga);
             }else
@@ -97,7 +111,7 @@ public class CargaNegocio implements ICargaNegocio {
         Orden orden = existeOrden(codigoExterno);
         try{
             //calculo los datos de la orden y luego los actualizo
-            return cargaDAO.getMasaAcuAndPromedioDensidadAndTemperaturaAndCaudal(orden.getId());
+            return cargaDAO.getPromedioDensidadAndTemperaturaAndCaudal(orden.getId());
         }catch (Exception e){
             log.error(e.getMessage(), e);
             throw new NegocioException(e);

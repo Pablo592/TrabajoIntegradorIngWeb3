@@ -34,22 +34,16 @@ public class Orden implements Serializable{
 	private int estado = 0;						//estado del proceso en la que se encuentra la orden
 
 	private String password;
-	@Column(nullable = true)
 	private int frecuencia;						//la frecuencia deberia de variar segun la orden
-	@Column(nullable = true)
 	private float masaAcumuladaKg;
-	@Column(nullable = true)
 	private float promedDensidadProductoKilogramoMetroCub;
-	@Column(nullable = true)
 	private float promedioTemperaturaProductoCelcius;
-	@Column(nullable = true)
 	private float promedioCaudalLitroSegundo;
-	@Column(nullable = true)
 	private float ultimaDensidadProductoKilogramoMetroCub;
-	@Column(nullable = true)
 	private float ultimaTemperaturaProductoCelcius;
-	@Column(nullable = true)
 	private float ultimoCaudalLitroSegundo;
+	private float pesajeFinal;
+
 
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_camion")
@@ -248,7 +242,15 @@ public class Orden implements Serializable{
 		this.cargaList = cargaList;
 	}
 
-//aca tengo que hacer un metodo que chequee basicamente el contenido de los valores que me llegan en el json
+	public float getPesajeFinal() {
+		return pesajeFinal;
+	}
+
+	public void setPesajeFinal(float pesajeFinal) {
+		this.pesajeFinal = pesajeFinal;
+	}
+
+	//aca tengo que hacer un metodo que chequee basicamente el contenido de los valores que me llegan en el json
 	// tanto para el insert como en el update
 
 
