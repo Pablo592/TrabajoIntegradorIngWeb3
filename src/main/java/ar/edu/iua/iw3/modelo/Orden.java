@@ -3,7 +3,6 @@ package ar.edu.iua.iw3.modelo;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import java.io.Serializable;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -38,7 +37,7 @@ public class Orden implements Serializable{
 	@Column(nullable = true)
 	private int frecuencia;						//la frecuencia deberia de variar segun la orden
 	@Column(nullable = true)
-	private float promedioMasaAcumuladaKg;
+	private float masaAcumuladaKg;
 	@Column(nullable = true)
 	private float promedDensidadProductoKilogramoMetroCub;
 	@Column(nullable = true)
@@ -185,12 +184,12 @@ public class Orden implements Serializable{
 		this.frecuencia = frecuencia;
 	}
 
-	public float getPromedioMasaAcumuladaKg() {
-		return promedioMasaAcumuladaKg;
+	public float getMasaAcumuladaKg() {
+		return masaAcumuladaKg;
 	}
 
-	public void setPromedioMasaAcumuladaKg(float promedioMasaAcumuladaKg) {
-		this.promedioMasaAcumuladaKg = promedioMasaAcumuladaKg;
+	public void setMasaAcumuladaKg(float promedioMasaAcumuladaKg) {
+		this.masaAcumuladaKg = promedioMasaAcumuladaKg;
 	}
 
 	public float getPromedDensidadProductoKilogramoMetroCub() {
@@ -255,7 +254,7 @@ public class Orden implements Serializable{
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, codigoExterno, fechaTurno, fechaPesajeInicial, fechaInicioProcesoCarga, fechaFinProcesoCarga, fechaRecepcionPesajeFinal, estado, password, frecuencia, promedioMasaAcumuladaKg, promedDensidadProductoKilogramoMetroCub, promedioTemperaturaProductoCelcius, promedioCaudalLitroSegundo, ultimaDensidadProductoKilogramoMetroCub, ultimaTemperaturaProductoCelcius, ultimoCaudalLitroSegundo, camion, cliente, chofer, producto, cargaList);
+		return Objects.hash(id, codigoExterno, fechaTurno, fechaPesajeInicial, fechaInicioProcesoCarga, fechaFinProcesoCarga, fechaRecepcionPesajeFinal, estado, password, frecuencia, masaAcumuladaKg, promedDensidadProductoKilogramoMetroCub, promedioTemperaturaProductoCelcius, promedioCaudalLitroSegundo, ultimaDensidadProductoKilogramoMetroCub, ultimaTemperaturaProductoCelcius, ultimoCaudalLitroSegundo, camion, cliente, chofer, producto, cargaList);
 	}
 }
 
