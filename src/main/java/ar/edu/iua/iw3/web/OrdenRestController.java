@@ -176,6 +176,26 @@ public class OrdenRestController {
         }
     }
 
+    @ApiOperation("Señal para setear el pesaje final y pasar al estado 4")
+    @ApiResponses( value = {
+            @ApiResponse(code = 200 , message = "Orden actualizada correctamente"),
+            @ApiResponse(code = 404 , message = "No es posible localizar la orden"),
+            @ApiResponse(code = 500 , message = "Información incorrecta recibida")
+    })
+    @PutMapping(value= "/ordenes/peso-final")
+    public ResponseEntity<Orden> pesoFinalCamion(@RequestBody Orden orden) {
+        try {
+            return new ResponseEntity<Orden>(ordenNegocio.establecerPesajeFinal(orden), HttpStatus.OK);
+        } catch (NegocioException e) {
+            log.error(e.getMessage(), e);
+            return new ResponseEntity<Orden>(HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (NoEncontradoException e) {
+            log.error(e.getMessage(), e);
+            return new ResponseEntity<Orden>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+
     @ApiOperation("Modificar una orden registrada")
     @ApiResponses( value = {
             @ApiResponse(code = 200 , message = "Orden modificada correctamente"),

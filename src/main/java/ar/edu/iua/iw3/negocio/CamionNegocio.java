@@ -137,10 +137,8 @@ public class CamionNegocio implements ICamionNegocio{
 	}
 
 	public Camion setearPesoFinalCamion(Orden orden) throws NoEncontradoException, NegocioException {
-		Camion camionBD = cargar( orden.getCamion().getId());	//validarlo sino colocar que busque por dni
-		double pesoInicial = camionBD.getTara();
-		double pesoFinal = cargaNegocio.traerUltimaCarga(orden.getCodigoExterno()).getMasaAcumuladaKg();
-		camionBD.setPesoFinalCamion(pesoInicial+pesoFinal);
+		Camion camionBD = findCamionByPatente(orden.getCamion().getPatente());	//validarlo sino colocar que busque por dni
+		camionBD.setPesoFinalCamion(orden.getCamion().getPesoFinalCamion());
 		return modificar(camionBD);
 	}
 

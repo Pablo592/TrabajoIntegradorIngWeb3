@@ -63,8 +63,24 @@ public class OrdenNegocio implements IOrdenNegocio{
         if(ordenBD.getEstado()!=2)
             throw new NegocioException("Solo se pueden parar ordes cuyo estado sea 2");
         try{
-            camionNegocio.setearPesoFinalCamion(ordenBD);
             ordenBD.setEstado(3);
+            return modificar(ordenBD);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            throw new NegocioException(e);
+        }
+    }
+
+    @Override
+    public Orden establecerPesajeFinal(Orden orden) throws NegocioException, NoEncontradoException {
+        Orden ordenBD = findByCodigoExterno(orden.getCodigoExterno());
+        if(null==ordenBD)
+            throw new NoEncontradoException("No existe la orden con codigo externo =" + orden.getCodigoExterno());
+        if(ordenBD.getEstado()!=3)
+            throw new NegocioException("Solo se puede establecer el pesaje final solo si el estado es 3");
+        try{
+            camionNegocio.setearPesoFinalCamion(orden);
+            ordenBD.setEstado(4);
             ordenBD.setFechaRecepcionPesajeFinal(new Date());
             return modificar(ordenBD);
         } catch (Exception e) {
@@ -78,10 +94,9 @@ public class OrdenNegocio implements IOrdenNegocio{
         Orden ordenBD = findByCodigoExterno(codigoExterno);
         if(null==ordenBD)
             throw new NoEncontradoException("No existe la orden con codigo externo =" + codigoExterno);
-        if(ordenBD.getEstado()!=3)
-            throw new NegocioException("Solo se pueden parar ordes cuyo estado sea 3");
+        if(ordenBD.getEstado()!=4)
+            throw new NegocioException("Solo se pueden parar ordes cuyo estado sea 4");
         try{
-            ordenBD.setEstado(4);
             return ordenDAO.getPesoInicialAndPesoFinalAndMasaAcumuladaKgAndDiferenciaMasaAcu_DeltaPeso(ordenBD.getId());
         } catch (Exception e) {
             log.error(e.getMessage(), e);

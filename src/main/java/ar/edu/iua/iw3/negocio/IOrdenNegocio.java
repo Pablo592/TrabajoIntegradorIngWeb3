@@ -26,6 +26,8 @@ public interface IOrdenNegocio {
 
     Orden frenarCargar(String codigoExterno)  throws NegocioException, NoEncontradoException;
 
+    Orden establecerPesajeFinal(Orden orden) throws NegocioException, NoEncontradoException;
+
     ConciliacionDTO obtenerConciliacion(String codigoExterno)  throws NegocioException, NoEncontradoException;
 }
 
