@@ -2,6 +2,7 @@ package ar.edu.iua.iw3.web;
 
 import ar.edu.iua.iw3.modelo.Carga;
 import ar.edu.iua.iw3.modelo.Orden;
+import ar.edu.iua.iw3.modelo.dto.ConciliacionDTO;
 import ar.edu.iua.iw3.negocio.IOrdenNegocio;
 import ar.edu.iua.iw3.negocio.OrdenNegocio;
 import ar.edu.iua.iw3.negocio.excepciones.EncontradoException;
@@ -41,13 +42,24 @@ public class OrdenRestController {
         }
     }
 
+    @GetMapping(value= "/ordenes/conciliacion/{codigoExterno}")
+    public ResponseEntity<ConciliacionDTO> getConciliacion(@PathVariable("codigoExterno") String codigoExterno) {
+        try {
+            return new ResponseEntity<ConciliacionDTO>(ordenNegocio.obtenerConciliacion(codigoExterno), HttpStatus.OK);
+        } catch (NegocioException e) {
+            return new ResponseEntity<ConciliacionDTO>(HttpStatus.NOT_FOUND);
+        }catch (NoEncontradoException e) {
+            return new ResponseEntity<ConciliacionDTO>(HttpStatus.NOT_FOUND);
+        }
+    }
+
     @ApiOperation("Busca una orden en especifico")
     @ApiResponses( value = {
             @ApiResponse(code = 200 , message = "Orden enviada correctamente"),
             @ApiResponse(code = 500 , message = "Información incorrecta recibida"),
             @ApiResponse(code = 404 , message = "No es posible localizar la orden")
     })
-    @GetMapping(value= "/ordenes/resumen/{numeroOrden}")
+    @GetMapping(value= "/ordenes/resumen/{numeroOrden}")    //es el id de orden
     public ResponseEntity<Orden> resumen(@PathVariable("numeroOrden") long numeroOrden) {
         try {
             return new ResponseEntity<Orden>(ordenNegocio.cargar(numeroOrden), HttpStatus.OK);
@@ -124,16 +136,15 @@ public class OrdenRestController {
             @ApiResponse(code = 500 , message = "Información incorrecta recibida")
     })
     @PutMapping(value= "/ordenes/tara")
-    public ResponseEntity<String> pesoInicialCamion(@RequestBody Orden orden) {
+    public ResponseEntity<Orden> pesoInicialCamion(@RequestBody Orden orden) {
         try {
-            ordenNegocio.establecerPesajeInicial(orden);
-            return new ResponseEntity<String>(HttpStatus.OK);
+            return new ResponseEntity<Orden>( ordenNegocio.establecerPesajeInicial(orden),HttpStatus.OK);
         } catch (NegocioException e) {
             log.error(e.getMessage(), e);
-            return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<Orden>(HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (NoEncontradoException e) {
             log.error(e.getMessage(), e);
-            return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<Orden>(HttpStatus.NOT_FOUND);
         }
     }
 
@@ -144,16 +155,15 @@ public class OrdenRestController {
             @ApiResponse(code = 500 , message = "Información incorrecta recibida")
     })
     @PutMapping(value= "/ordenes/frenarCarga")
-    public ResponseEntity<String> frenarCargar(@RequestParam("codigoExterno") String codigoExterno) {
+    public ResponseEntity<Orden> frenarCargar(@RequestParam("codigoExterno") String codigoExterno) {
         try {
-            ordenNegocio.frenarCargar(codigoExterno);
-            return new ResponseEntity<String>(HttpStatus.OK);
+            return new ResponseEntity<Orden>(ordenNegocio.frenarCargar(codigoExterno), HttpStatus.OK);
         } catch (NegocioException e) {
             log.error(e.getMessage(), e);
-            return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<Orden>(HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (NoEncontradoException e) {
             log.error(e.getMessage(), e);
-            return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<Orden>(HttpStatus.NOT_FOUND);
         }
     }
 
@@ -164,15 +174,14 @@ public class OrdenRestController {
             @ApiResponse(code = 500 , message = "Información incorrecta recibida")
     })
     @PutMapping(value= "/ordenes")
-    public ResponseEntity<String> modificar(@RequestBody Orden orden) {
+    public ResponseEntity<Orden> modificar(@RequestBody Orden orden) {
         try {
-            ordenNegocio.modificar(orden);
-            return new ResponseEntity<String>(HttpStatus.OK);
+           return new ResponseEntity<Orden>( ordenNegocio.modificar(orden),HttpStatus.OK);
         } catch (NegocioException e) {
             log.error(e.getMessage(), e);
-            return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<Orden>(HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (NoEncontradoException e) {
-            return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<Orden>(HttpStatus.NOT_FOUND);
         }
     }
     @ApiOperation("Eliminar una orden")

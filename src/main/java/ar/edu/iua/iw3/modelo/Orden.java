@@ -1,15 +1,46 @@
 package ar.edu.iua.iw3.modelo;
 
+import ar.edu.iua.iw3.modelo.dto.CargaDTO;
+import ar.edu.iua.iw3.modelo.dto.ConciliacionDTO;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
-
 import javax.persistence.*;
+@NamedNativeQueries({
+
+		@NamedNativeQuery(name = "Orden.getPesoInicialAndPesoFinalAndMasaAcumuladaKgAndDiferenciaMasaAcu_DeltaPeso",
+				query = "SELECT c.tara as pesajeInicial , \n" +
+						"\t c.peso_final_camion as pesajeFinal, \n" +
+						"\t masa_acumulada_kg, \n" +
+						"\t (c.peso_final_camion - c.tara) as netoPorBalanza, \n" +
+						"\t  ((c.peso_final_camion - c.tara) - masa_acumulada_kg ) as diferenciaNetoPorBalanza_masaAcumuludada \n" +
+						"\t from orden o \n" +
+						"\t inner join camion c on c.id = o.id_camion \n" +
+						"\t where o.id = ?1", resultSetMapping = "ordenmap")
+
+})
+
+@SqlResultSetMapping(
+		name="ordenmap",
+		classes = {
+				@ConstructorResult(
+						columns = {
+								@ColumnResult(name = "pesajeInicial", type = float.class),
+								@ColumnResult(name = "pesajeFinal", type = float.class),
+								@ColumnResult(name = "masa_acumulada_kg", type = float.class),
+								@ColumnResult(name = "netoPorBalanza", type = float.class),
+								@ColumnResult(name = "diferenciaNetoPorBalanza_masaAcumuludada", type = float.class)
+						},
+						targetClass = ConciliacionDTO.class
+				)
+		}
+)
+
+
 
 @ApiModel(description = "Esta clase representa a la orden encargada de registrar la carga de combustible.")
 @Entity
@@ -72,9 +103,6 @@ public class Orden implements Serializable{
 
 	@ApiModelProperty(notes = "Ultimo caudal registrado (litro/segundo).", example = "0,16")
 	private float ultimoCaudalLitroSegundo;
-
-	@ApiModelProperty(notes = "Peso del camión vacío mas el peso final de la carga (kg).", example = "6000")
-	private float pesajeFinal;
 
 	@ApiModelProperty(notes = "El camión que sera cargado con combustible")
 	@ManyToOne(cascade = CascadeType.ALL)
@@ -277,13 +305,6 @@ public class Orden implements Serializable{
 		this.cargaList = cargaList;
 	}
 
-	public float getPesajeFinal() {
-		return pesajeFinal;
-	}
-
-	public void setPesajeFinal(float pesajeFinal) {
-		this.pesajeFinal = pesajeFinal;
-	}
 
 	//aca tengo que hacer un metodo que chequee basicamente el contenido de los valores que me llegan en el json
 	// tanto para el insert como en el update

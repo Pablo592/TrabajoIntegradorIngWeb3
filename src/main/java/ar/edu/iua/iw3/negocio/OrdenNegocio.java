@@ -1,17 +1,15 @@
 package ar.edu.iua.iw3.negocio;
 
 import ar.edu.iua.iw3.modelo.*;
+import ar.edu.iua.iw3.modelo.dto.ConciliacionDTO;
 import ar.edu.iua.iw3.modelo.persistencia.OrdenRepository;
 import ar.edu.iua.iw3.negocio.excepciones.EncontradoException;
 import ar.edu.iua.iw3.negocio.excepciones.NegocioException;
 import ar.edu.iua.iw3.negocio.excepciones.NoEncontradoException;
-import javassist.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -30,6 +28,7 @@ public class OrdenNegocio implements IOrdenNegocio{
     private ProductoNegocio productoNegocio;
     @Autowired
     private ChoferNegocio choferNegocio;
+
 
     @Autowired
     private CargaNegocio cargaNegocio;
@@ -64,8 +63,26 @@ public class OrdenNegocio implements IOrdenNegocio{
         if(ordenBD.getEstado()!=2)
             throw new NegocioException("Solo se pueden parar ordes cuyo estado sea 2");
         try{
+            camionNegocio.setearPesoFinalCamion(ordenBD);
             ordenBD.setEstado(3);
+            ordenBD.setFechaRecepcionPesajeFinal(new Date());
             return modificar(ordenBD);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            throw new NegocioException(e);
+        }
+    }
+
+    @Override
+    public ConciliacionDTO obtenerConciliacion(String codigoExterno) throws NegocioException, NoEncontradoException {
+        Orden ordenBD = findByCodigoExterno(codigoExterno);
+        if(null==ordenBD)
+            throw new NoEncontradoException("No existe la orden con codigo externo =" + codigoExterno);
+        if(ordenBD.getEstado()!=3)
+            throw new NegocioException("Solo se pueden parar ordes cuyo estado sea 2");
+        try{
+            ordenBD.setEstado(4);
+            return ordenDAO.getPesoInicialAndPesoFinalAndMasaAcumuladaKgAndDiferenciaMasaAcu_DeltaPeso(ordenBD.getId());
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             throw new NegocioException(e);

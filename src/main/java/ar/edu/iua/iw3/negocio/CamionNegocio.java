@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import ar.edu.iua.iw3.modelo.Camion;
+import ar.edu.iua.iw3.modelo.Orden;
+import ar.edu.iua.iw3.modelo.persistencia.OrdenRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,9 @@ public class CamionNegocio implements ICamionNegocio{
 
 	@Autowired
 	private CamionRepository camionDAO;
+
+	@Autowired
+	private CargaNegocio cargaNegocio;
 	
 	@Override
 	public List<Camion> listado() throws NegocioException {
@@ -129,6 +134,14 @@ public class CamionNegocio implements ICamionNegocio{
 			camionBD.setTara(camionRecibido.getTara());
 
 			return modificar(camionBD);
+	}
+
+	public Camion setearPesoFinalCamion(Orden orden) throws NoEncontradoException, NegocioException {
+		Camion camionBD = cargar( orden.getCamion().getId());	//validarlo sino colocar que busque por dni
+		double pesoInicial = camionBD.getTara();
+		double pesoFinal = cargaNegocio.traerUltimaCarga(orden.getCodigoExterno()).getMasaAcumuladaKg();
+		camionBD.setPesoFinalCamion(pesoInicial+pesoFinal);
+		return modificar(camionBD);
 	}
 
 }

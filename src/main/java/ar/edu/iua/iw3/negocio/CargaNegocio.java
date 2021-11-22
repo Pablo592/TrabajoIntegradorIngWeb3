@@ -25,6 +25,8 @@ public class CargaNegocio implements ICargaNegocio {
 
     @Autowired
     private OrdenNegocio ordenNegocio;
+    @Autowired
+    private CamionNegocio camionNegocio;
 
     @Override
     public List<Carga> listado() throws NegocioException {
@@ -73,6 +75,8 @@ public class CargaNegocio implements ICargaNegocio {
             if (orden.getEstado() == 2) {
                 if (orden.getCamion().getPreset() <= carga.getMasaAcumuladaKg()){
                     orden.setEstado(3);
+                    camionNegocio.setearPesoFinalCamion(orden);
+                    orden.setFechaRecepcionPesajeFinal(new Date());
                     ordenNegocio.modificar(orden);
                     throw new NegocioException("Tanque lleno");
                 }
