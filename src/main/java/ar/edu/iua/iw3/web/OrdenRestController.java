@@ -62,8 +62,8 @@ public class OrdenRestController {
             @ApiResponse(code = 500 , message = "Información incorrecta recibida"),
             @ApiResponse(code = 404 , message = "No es posible localizar la orden")
     })
-    @GetMapping(value= "/ordenes/resumen/{id}")    //es el id de orden
-    public ResponseEntity<Orden> resumen(@PathVariable("id") long id) {
+    @GetMapping(value= "/ordenes/buscar-una/{id}")    //es el id de orden
+    public ResponseEntity<Orden> buscarOrden(@PathVariable("id") long id) {
         try {
             return new ResponseEntity<Orden>(ordenNegocio.cargar(id), HttpStatus.OK);
         } catch (NegocioException e) {
@@ -81,7 +81,7 @@ public class OrdenRestController {
             @ApiResponse(code = 500 , message = "Información incorrecta recibida"),
             @ApiResponse(code = 404 , message = "No es posible localizar la orden")
     })
-    @GetMapping(value= "/ordenes/ultimaCarga/{codigoExterno}")
+    @GetMapping(value= "/ordenes/ultima-carga/{codigoExterno}")
     public ResponseEntity<Orden> ultimaCarga(@PathVariable("codigoExterno") String codigoExterno) {
         try {
             return new ResponseEntity<Orden>(ordenNegocio.traerUltimaCarga(codigoExterno), HttpStatus.OK);
@@ -122,7 +122,7 @@ public class OrdenRestController {
             @ApiResponse(code = 302 , message = "La orden ya se encuentra registrada"),
             @ApiResponse(code = 500 , message = "Información incorrecta recibida")
     })
-    @PostMapping(value= "/ordenes-primerEnvio")
+    @PostMapping(value= "/ordenes/primer-envio")
     public ResponseEntity<String> agregarPrimerRequest(@RequestBody Orden orden) {
         try {
             Orden respuesta=ordenNegocio.agregar(orden);
@@ -163,7 +163,7 @@ public class OrdenRestController {
             @ApiResponse(code = 404 , message = "No es posible localizar la orden"),
             @ApiResponse(code = 500 , message = "Información incorrecta recibida")
     })
-    @PutMapping(value= "/ordenes/frenarCarga")
+    @PutMapping(value= "/ordenes/frenar-carga")
     public ResponseEntity<Orden> frenarCargar(@RequestParam("codigoExterno") String codigoExterno) {
         try {
             return new ResponseEntity<Orden>(ordenNegocio.frenarCargar(codigoExterno), HttpStatus.OK);
