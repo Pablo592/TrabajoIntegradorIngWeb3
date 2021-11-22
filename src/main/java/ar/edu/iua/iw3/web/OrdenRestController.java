@@ -59,10 +59,10 @@ public class OrdenRestController {
             @ApiResponse(code = 500 , message = "Información incorrecta recibida"),
             @ApiResponse(code = 404 , message = "No es posible localizar la orden")
     })
-    @GetMapping(value= "/ordenes/resumen/{numeroOrden}")    //es el id de orden
-    public ResponseEntity<Orden> resumen(@PathVariable("numeroOrden") long numeroOrden) {
+    @GetMapping(value= "/ordenes/resumen/{id}")    //es el id de orden
+    public ResponseEntity<Orden> resumen(@PathVariable("id") long id) {
         try {
-            return new ResponseEntity<Orden>(ordenNegocio.cargar(numeroOrden), HttpStatus.OK);
+            return new ResponseEntity<Orden>(ordenNegocio.cargar(id), HttpStatus.OK);
         } catch (NegocioException e) {
             return new ResponseEntity<Orden>(HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (NoEncontradoException e) {

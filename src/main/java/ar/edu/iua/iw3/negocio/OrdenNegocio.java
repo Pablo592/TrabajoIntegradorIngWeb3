@@ -79,7 +79,7 @@ public class OrdenNegocio implements IOrdenNegocio{
         if(null==ordenBD)
             throw new NoEncontradoException("No existe la orden con codigo externo =" + codigoExterno);
         if(ordenBD.getEstado()!=3)
-            throw new NegocioException("Solo se pueden parar ordes cuyo estado sea 2");
+            throw new NegocioException("Solo se pueden parar ordes cuyo estado sea 3");
         try{
             ordenBD.setEstado(4);
             return ordenDAO.getPesoInicialAndPesoFinalAndMasaAcumuladaKgAndDiferenciaMasaAcu_DeltaPeso(ordenBD.getId());

@@ -3,6 +3,7 @@ package ar.edu.iua.iw3.modelo.dto;
 import io.swagger.annotations.ApiModelProperty;
 
 public class ConciliacionDTO {
+
     @ApiModelProperty(notes = "Peso del camión vacío mas el peso final de la carga (kg).", example = "6000")
     private float pesajeInicial;
     @ApiModelProperty(notes = "Peso del camión vacío mas el peso final de la carga (kg).", example = "6000")

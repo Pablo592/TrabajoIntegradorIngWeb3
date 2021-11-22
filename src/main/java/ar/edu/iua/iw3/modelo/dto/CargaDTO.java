@@ -10,6 +10,7 @@ public class CargaDTO {
     @ApiModelProperty(notes = "Cantidad promedio de combustible cargado por segundo (litro/segundo).", example = "0,16")
     private float promedioCaudalLitroSegundo;
 
+    public CargaDTO(){}
 
     public CargaDTO(float promedDensidadProductoKilogramoMetroCub, float promedioTemperaturaProductoCelcius, float promedioCaudalLitroSegundo) {
         this.promedDensidadProductoKilogramoMetroCub = promedDensidadProductoKilogramoMetroCub;

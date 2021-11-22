@@ -70,22 +70,35 @@ public class CargaNegocio implements ICargaNegocio {
 
     @Override   //cargo todo lo que venga
     public Carga agregar(Carga carga) throws NegocioException, NoEncontradoException {
-        Orden orden = existeOrden(carga.getOrden().getCodigoExterno());
+        String codigoExterno = carga.getOrden().getCodigoExterno();
+        Orden orden = existeOrden(codigoExterno);
         try {
             if (orden.getEstado() == 2) {
                 if (orden.getCamion().getPreset() <= carga.getMasaAcumuladaKg()){
                     orden.setEstado(3);
-                    camionNegocio.setearPesoFinalCamion(orden);
+                    camionNegocio.setearPesoFinalCamion(orden); //aca da null si no hay cargas
                     orden.setFechaRecepcionPesajeFinal(new Date());
                     ordenNegocio.modificar(orden);
                     throw new NegocioException("Tanque lleno");
                 }
                 carga.setOrden(orden);
+                //obtengo y guardo los promedios de las cargas lo tengo que pones porque sino hay cargas cargadas entonces no hay promedio
+                try {
+                    CargaDTO cargaDTO = getAcumulacionAndPromedioCargas(codigoExterno);
+                    orden.setPromedDensidadProductoKilogramoMetroCub(cargaDTO.getPromedDensidadProductoKilogramoMetroCub());
+                    orden.setPromedioCaudalLitroSegundo(cargaDTO.getPromedioCaudalLitroSegundo());
+                    orden.setPromedioTemperaturaProductoCelcius(cargaDTO.getPromedioTemperaturaProductoCelcius());
+
+                }catch (Exception e){
+                    log.error(e.getMessage(), e);
+                }
+                //seteo la masa acumulada
                 orden.setMasaAcumuladaKg(carga.getMasaAcumuladaKg());
                 orden.setUltimoCaudalLitroSegundo(carga.getCaudalLitroSegundo());
                 orden.setUltimaDensidadProductoKilogramoMetroCub(carga.getDensidadProductoKilogramoMetroCub());
                 orden.setUltimaTemperaturaProductoCelcius(carga.getTemperaturaProductoCelcius());
                 orden.setFechaFinProcesoCarga(new Date());
+
 
                 if(orden.getFechaInicioProcesoCarga() == null)
                     orden.setFechaInicioProcesoCarga(new Date());
