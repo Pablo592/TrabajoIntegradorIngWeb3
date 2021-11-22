@@ -2,6 +2,9 @@ package ar.edu.iua.iw3.web;
 
 import java.util.List;
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +35,11 @@ public class ClienteRestController {
 	
 	private Logger log = LoggerFactory.getLogger(ClienteNegocio.class);
 
+	@ApiOperation("Busca todos los clientes registrados")
+	@ApiResponses( value = {
+			@ApiResponse(code = 200 , message = "Clientes enviados correctamente"),
+			@ApiResponse(code = 500 , message = "Información incorrecta recibida")
+	})
 	@GetMapping(value="/clientes")
 	public ResponseEntity<List<Cliente>> listado() {
 		try {
@@ -40,8 +48,13 @@ public class ClienteRestController {
 			return new ResponseEntity<List<Cliente>>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
-	
+
+	@ApiOperation("Registrar un nuevo chófer")
+	@ApiResponses( value = {
+			@ApiResponse(code = 201 , message = "Cliente registrado correctamente"),
+			@ApiResponse(code = 500 , message = "Información incorrecta recibida"),
+			@ApiResponse(code = 302 , message = "El cliente ya se encuentra registrado")
+	})
 	@PostMapping(value="/clientes")
 	public ResponseEntity<String> agregar(@RequestBody Cliente cliente) {
 		try {
@@ -56,8 +69,13 @@ public class ClienteRestController {
 			return new ResponseEntity<String>(HttpStatus.FOUND);
 		}
 	}
-	
-	
+
+	@ApiOperation("Modificar un cliente")
+	@ApiResponses( value = {
+			@ApiResponse(code = 200 , message = "Cliente modificado correctamente"),
+			@ApiResponse(code = 500 , message = "Información incorrecta recibida"),
+			@ApiResponse(code = 404 , message = "No es posible localizar al cliente")
+	})
 	@PutMapping(value="/clientes")
 	public ResponseEntity<String> modificar(@RequestBody Cliente cliente) {
 		try {
@@ -70,7 +88,13 @@ public class ClienteRestController {
 			return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
 		}
 	}
-	
+
+	@ApiOperation("Eliminar un cliente")
+	@ApiResponses( value = {
+			@ApiResponse(code = 200 , message = "Cliente eliminado correctamente"),
+			@ApiResponse(code = 500 , message = "Información incorrecta recibida"),
+			@ApiResponse(code = 404 , message = "No es posible localizar al cliente")
+	})
 	@DeleteMapping(value="/clientes/{id}")
 	public ResponseEntity<String> eliminar(@PathVariable("id") long id) {
 		try {

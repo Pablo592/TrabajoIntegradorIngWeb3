@@ -7,6 +7,9 @@ import ar.edu.iua.iw3.negocio.OrdenNegocio;
 import ar.edu.iua.iw3.negocio.excepciones.EncontradoException;
 import ar.edu.iua.iw3.negocio.excepciones.NegocioException;
 import ar.edu.iua.iw3.negocio.excepciones.NoEncontradoException;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +27,11 @@ public class OrdenRestController {
 
     private Logger log = LoggerFactory.getLogger(OrdenNegocio.class);
 
+    @ApiOperation("Busca todas las ordenes registradas")
+    @ApiResponses( value = {
+            @ApiResponse(code = 200 , message = "Ordenes enviadas correctamente"),
+            @ApiResponse(code = 500 , message = "Información incorrecta recibida")
+    })
     @GetMapping(value= "/ordenes")
     public ResponseEntity<List<Orden>> listado() {
         try {
@@ -33,6 +41,12 @@ public class OrdenRestController {
         }
     }
 
+    @ApiOperation("Busca una orden en especifico")
+    @ApiResponses( value = {
+            @ApiResponse(code = 200 , message = "Orden enviada correctamente"),
+            @ApiResponse(code = 500 , message = "Información incorrecta recibida"),
+            @ApiResponse(code = 404 , message = "No es posible localizar la orden")
+    })
     @GetMapping(value= "/ordenes/resumen/{numeroOrden}")
     public ResponseEntity<Orden> resumen(@PathVariable("numeroOrden") long numeroOrden) {
         try {
@@ -44,6 +58,12 @@ public class OrdenRestController {
         }
     }
 
+    @ApiOperation("Busca la ultima carga de la orden")
+    @ApiResponses( value = {
+            @ApiResponse(code = 200 , message = "Carga enviada correctamente"),
+            @ApiResponse(code = 500 , message = "Información incorrecta recibida"),
+            @ApiResponse(code = 404 , message = "No es posible localizar la orden")
+    })
     @GetMapping(value= "/ordenes/ultimaCarga/{codigoExterno}")
     public ResponseEntity<Orden> ultimaCarga(@PathVariable("codigoExterno") String codigoExterno) {
         try {
@@ -55,9 +75,12 @@ public class OrdenRestController {
         }
     }
 
-
-
-
+    @ApiOperation("Registrar una nueva orden")
+    @ApiResponses( value = {
+            @ApiResponse(code = 201 , message = "Orden registrada correctamente"),
+            @ApiResponse(code = 302 , message = "La orden ya se encuentra registrada"),
+            @ApiResponse(code = 500 , message = "Información incorrecta recibida")
+    })
     @PostMapping(value= "/ordenes")
     public ResponseEntity<String> agregar(@RequestBody Orden orden) {
         try {
@@ -73,6 +96,12 @@ public class OrdenRestController {
         }
     }
 
+    @ApiOperation("Datos necesarios para iniciar la etapa 1")
+    @ApiResponses( value = {
+            @ApiResponse(code = 201 , message = "Orden registrada correctamente"),
+            @ApiResponse(code = 302 , message = "La orden ya se encuentra registrada"),
+            @ApiResponse(code = 500 , message = "Información incorrecta recibida")
+    })
     @PostMapping(value= "/ordenes-primerEnvio")
     public ResponseEntity<String> agregarPrimerRequest(@RequestBody Orden orden) {
         try {
@@ -88,6 +117,12 @@ public class OrdenRestController {
         }
     }
 
+    @ApiOperation("Datos necesarios para iniciar la etapa 2")
+    @ApiResponses( value = {
+            @ApiResponse(code = 200 , message = "Orden actualizada correctamente"),
+            @ApiResponse(code = 404 , message = "No es posible localizar la orden"),
+            @ApiResponse(code = 500 , message = "Información incorrecta recibida")
+    })
     @PutMapping(value= "/ordenes/tara")
     public ResponseEntity<String> pesoInicialCamion(@RequestBody Orden orden) {
         try {
@@ -102,6 +137,12 @@ public class OrdenRestController {
         }
     }
 
+    @ApiOperation("Señal para frenar las cargas y pasar al estado 3")
+    @ApiResponses( value = {
+            @ApiResponse(code = 200 , message = "Orden actualizada correctamente"),
+            @ApiResponse(code = 404 , message = "No es posible localizar la orden"),
+            @ApiResponse(code = 500 , message = "Información incorrecta recibida")
+    })
     @PutMapping(value= "/ordenes/frenarCarga")
     public ResponseEntity<String> frenarCargar(@RequestParam("codigoExterno") String codigoExterno) {
         try {
@@ -116,6 +157,12 @@ public class OrdenRestController {
         }
     }
 
+    @ApiOperation("Modificar una orden registrada")
+    @ApiResponses( value = {
+            @ApiResponse(code = 200 , message = "Orden modificada correctamente"),
+            @ApiResponse(code = 404 , message = "No es posible localizar la orden"),
+            @ApiResponse(code = 500 , message = "Información incorrecta recibida")
+    })
     @PutMapping(value= "/ordenes")
     public ResponseEntity<String> modificar(@RequestBody Orden orden) {
         try {
@@ -128,7 +175,12 @@ public class OrdenRestController {
             return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
         }
     }
-
+    @ApiOperation("Eliminar una orden")
+    @ApiResponses( value = {
+            @ApiResponse(code = 200 , message = "Orden eliminada correctamente"),
+            @ApiResponse(code = 404 , message = "No es posible localizar la orden"),
+            @ApiResponse(code = 500 , message = "Información incorrecta recibida")
+    })
     @DeleteMapping(value= "/ordenes/{id}")
     public ResponseEntity<String> eliminar(@PathVariable("id") long id) {
         try {

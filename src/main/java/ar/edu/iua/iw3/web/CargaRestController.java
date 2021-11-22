@@ -7,6 +7,9 @@ import ar.edu.iua.iw3.negocio.ICargaNegocio;
 import ar.edu.iua.iw3.negocio.excepciones.EncontradoException;
 import ar.edu.iua.iw3.negocio.excepciones.NegocioException;
 import ar.edu.iua.iw3.negocio.excepciones.NoEncontradoException;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +28,11 @@ public class CargaRestController {
 
     private Logger log = LoggerFactory.getLogger(CargaNegocio.class);
 
+    @ApiOperation("Busca todos las cargas registradas")
+    @ApiResponses( value = {
+            @ApiResponse(code = 200 , message = "Cargas enviadas correctamente"),
+            @ApiResponse(code = 500 , message = "Información incorrecta recibida")
+    })
     @GetMapping(value= "/cargas")
     public ResponseEntity<List<Carga>> listado() {
         try {
@@ -34,6 +42,12 @@ public class CargaRestController {
         }
     }
 
+    @ApiOperation("Busca los valores promedio de las cargas pertenecientes a una orden en especifico")
+    @ApiResponses( value = {
+            @ApiResponse(code = 200 , message = "Promedios de cargas enviados correctamente"),
+            @ApiResponse(code = 500 , message = "Información incorrecta recibida"),
+            @ApiResponse(code = 404 , message = "No es posible localizar la carga")
+    })
     @GetMapping(value= "/promedio-cargas-por-codigo-externo")
     public ResponseEntity<CargaDTO> ResumenCargaPorId(@RequestParam("codigoExterno") String codigoExterno) {
         try {
@@ -47,6 +61,12 @@ public class CargaRestController {
         }
     }
 
+    @ApiOperation("Registrar una nueva carga")
+    @ApiResponses( value = {
+            @ApiResponse(code = 201 , message = "Carga registrada correctamente"),
+            @ApiResponse(code = 500 , message = "Información incorrecta recibida"),
+            @ApiResponse(code = 404 , message = "No es posible localizar la orden")
+    })
     @PostMapping(value= "/cargas")
     public ResponseEntity<String> agregar(@RequestBody Carga carga) {
         try {
@@ -63,6 +83,12 @@ public class CargaRestController {
         }
     }
 
+    @ApiOperation("Modificar una carga registrada")
+    @ApiResponses( value = {
+            @ApiResponse(code = 200 , message = "Carga modificada correctamente"),
+            @ApiResponse(code = 500 , message = "Información incorrecta recibida"),
+            @ApiResponse(code = 404 , message = "No es posible localizar la carga")
+    })
     @PutMapping(value= "/cargas")
     public ResponseEntity<String> modificar(@RequestBody Carga carga) {
         try {
@@ -76,6 +102,12 @@ public class CargaRestController {
         }
     }
 
+    @ApiOperation("Eliminar una carga registrada")
+    @ApiResponses( value = {
+            @ApiResponse(code = 200 , message = "Carga eliminada correctamente"),
+            @ApiResponse(code = 500 , message = "Información incorrecta recibida"),
+            @ApiResponse(code = 404 , message = "No es posible localizar la carga")
+    })
     @DeleteMapping(value= "/cargas/{id}")
     public ResponseEntity<String> eliminar(@PathVariable("id") long id) {
         try {

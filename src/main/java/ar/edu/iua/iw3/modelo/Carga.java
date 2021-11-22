@@ -1,6 +1,8 @@
 package ar.edu.iua.iw3.modelo;
 
 import ar.edu.iua.iw3.modelo.dto.CargaDTO;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -29,7 +31,7 @@ import java.io.Serializable;
         }
 )
 
-
+@ApiModel(description = "Esta clase representa la carga continua de combustible en el camión.")
 @Entity
 @Table(name = "carga")
 public class Carga implements Serializable {
@@ -39,15 +41,19 @@ public class Carga implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @ApiModelProperty(notes = "Peso del combustible (kg) ya cargado.", example = "30", required = true)
     private float masaAcumuladaKg;
 
+    @ApiModelProperty(notes = "Densidad del combustible (kg/m^3).", example = "0,874", required = true)
     private float densidadProductoKilogramoMetroCub;
 
+    @ApiModelProperty(notes = "Temperatura del combustible (°C).", example = "16", required = true)
     private float temperaturaProductoCelcius;
 
+    @ApiModelProperty(notes = "Cantidad de combustible cargado por segundo (litro/segundo).", example = "0,16", required = true)
     private float caudalLitroSegundo;
 
-
+    @ApiModelProperty(notes = "Pueden haber muchas cargas en una orden.")
     @ManyToOne(cascade=CascadeType.ALL)
     @JoinColumn(name = "orden_id")
     private Orden orden;

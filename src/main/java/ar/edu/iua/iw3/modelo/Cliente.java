@@ -9,7 +9,8 @@ import java.util.List;
 
 import javax.persistence.*;
 
-@ApiModel(description = "Class representing a client in the application.")
+
+@ApiModel(description = "Esta clase representa al cliente que sera abastecido de combustible.")
 @Entity
 @Table(name = "cliente")
 public class Cliente implements Serializable {

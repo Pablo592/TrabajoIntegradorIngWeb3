@@ -1,12 +1,15 @@
 package ar.edu.iua.iw3.modelo;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.*;
 
+@ApiModel(description = "Esta clase representa el camión que se abastecerá de combustible.")
 @Entity
 @Table(name = "camion")
 public class Camion  implements Serializable {
@@ -17,23 +20,31 @@ public class Camion  implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @ApiModelProperty(notes = "Patente del camión.", example = "AB123CD", required = true)
     @Column(length = 7, nullable = false, unique = true)
     private String patente;
 
+    @ApiModelProperty(notes = "Descripción del camión.", example = "Camión Cisterna")
     @Column(length = 100)
     private String descripcion;
 
+    @ApiModelProperty(notes = "Capacidad de almacenamiento de combustible (litros).", example = "150", required = true)
     @Column(columnDefinition = "DOUBLE", nullable = false)
     private double cisternadoLitros;
 
+    @ApiModelProperty(notes = "Peso máximo de carga soportado por el camión (kg).", example = "2000", required = true)
     @Column(columnDefinition = "DOUBLE", nullable = false)
     private double preset;              //Limite a cargar en el camion
 
+    @ApiModelProperty(notes = "Peso del camión sin carga (kg).", example = "4000")
     @Column(columnDefinition = "DOUBLE default 0")
     private double tara;                //Peso del camion vacio
+
+    @ApiModelProperty(notes = "Peso del camión vacío mas el peso de la carga (kg).", example = "6000")
     @Column(columnDefinition = "DOUBLE default 0")
     private double pesoFinalCamion;		//Peso del camion tras cargarse
 
+    @ApiModelProperty(notes = "El camión puede generar varias ordenes al abastecerse continuamente.")
     @OneToMany(targetEntity = Orden.class, mappedBy = "camion", fetch = FetchType.LAZY)
     @JsonBackReference
     private List<Orden> ordenList;

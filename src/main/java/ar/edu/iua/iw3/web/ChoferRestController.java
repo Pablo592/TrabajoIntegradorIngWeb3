@@ -2,6 +2,9 @@ package ar.edu.iua.iw3.web;
 
 import java.util.List;
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +34,11 @@ public class ChoferRestController {
 	
 	private Logger log = LoggerFactory.getLogger(ChoferNegocio.class);
 
+	@ApiOperation("Busca todos los choferes registrados")
+	@ApiResponses( value = {
+			@ApiResponse(code = 200 , message = "Choferes enviados correctamente"),
+			@ApiResponse(code = 500 , message = "Información incorrecta recibida")
+	})
 	@GetMapping(value="/choferes")
 	public ResponseEntity<List<Chofer>> listado() {
 		try {
@@ -39,8 +47,13 @@ public class ChoferRestController {
 			return new ResponseEntity<List<Chofer>>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
-	
+
+	@ApiOperation("Registrar un nuevo chófer")
+	@ApiResponses( value = {
+			@ApiResponse(code = 201 , message = "Chófer registrado correctamente"),
+			@ApiResponse(code = 500 , message = "Información incorrecta recibida"),
+			@ApiResponse(code = 302 , message = "El chófer ya se encuentra registrado")
+	})
 	@PostMapping(value="/choferes")
 	public ResponseEntity<String> agregar(@RequestBody Chofer chofer) {
 		try {
@@ -55,8 +68,13 @@ public class ChoferRestController {
 			return new ResponseEntity<String>(HttpStatus.FOUND);
 		}
 	}
-	
-	
+
+	@ApiOperation("Modificar un chófer")
+	@ApiResponses( value = {
+			@ApiResponse(code = 200 , message = "Chófer modificado correctamente"),
+			@ApiResponse(code = 500 , message = "Información incorrecta recibida"),
+			@ApiResponse(code = 404 , message = "No es posible localizar al chófer")
+	})
 	@PutMapping(value="/choferes")
 	public ResponseEntity<String> modificar(@RequestBody Chofer chofer) {
 		try {
@@ -69,7 +87,13 @@ public class ChoferRestController {
 			return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
 		}
 	}
-	
+
+	@ApiOperation("Eliminar un chófer")
+	@ApiResponses( value = {
+			@ApiResponse(code = 200 , message = "Chófer eliminado correctamente"),
+			@ApiResponse(code = 500 , message = "Información incorrecta recibida"),
+			@ApiResponse(code = 404 , message = "No es posible localizar al chófer")
+	})
 	@DeleteMapping(value="/choferes/{id}")
 	public ResponseEntity<String> eliminar(@PathVariable("id") long id) {
 		try {

@@ -1,6 +1,8 @@
 package ar.edu.iua.iw3.modelo;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -9,6 +11,7 @@ import java.util.Objects;
 
 import javax.persistence.*;
 
+@ApiModel(description = "Esta clase representa a la orden encargada de registrar la carga de combustible.")
 @Entity
 @Table(name = "orden")
 public class Orden implements Serializable{
@@ -18,50 +21,82 @@ public class Orden implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
+
+	@ApiModelProperty(notes = "Clave principal del sistema externo.", example = "5", required = true)
 	@Column(unique = true, nullable = false)
 	private String codigoExterno;
+
+	@ApiModelProperty(notes = "Fecha prevista de la carga de combustible.", example = "2021-01-01", required = true)
 	@Column(nullable = false)
-	private Date fechaTurno;			//Fecha/Hora en la que el camion tiene turno
+	private Date fechaTurno;
 
-	private Date fechaPesajeInicial;		//Fecha/Hora en que se llevo acabo el pesaje inicial con el camion vacio
+	@ApiModelProperty(notes = "Fecha del pesaje del camión sin carga.", example = "2021-01-01")
+	private Date fechaPesajeInicial;
 
-	private Date fechaInicioProcesoCarga;	//Fecha/Hora en que se comienza a carga el camion
+	@ApiModelProperty(notes = "Fecha del inicio del proceso de carga.", example = "2021-01-01")
+	private Date fechaInicioProcesoCarga;
 
-	private Date fechaFinProcesoCarga;		//Fecha/Hora en la cual dejo de cargarse el camion
+	@ApiModelProperty(notes = "Fecha del fin del proceso de carga.", example = "2021-01-01")
+	private Date fechaFinProcesoCarga;
 
-	private Date fechaRecepcionPesajeFinal;	//Fecha/Hora en la cual se peso el camion tras finalizar la carga
+	@ApiModelProperty(notes = "Fecha del pesaje final del camión.", example = "2021-01-01")
+	private Date fechaRecepcionPesajeFinal;
+
+	@ApiModelProperty(notes = "Estado actual de la orden.", example = "2")
 	@Column(columnDefinition = "int default 0")
-	private int estado = 0;						//estado del proceso en la que se encuentra la orden
+	private int estado = 0;
 
+	@ApiModelProperty(notes = "Contraseña generada al registrar el pesaje inicial del camión.", example = "65485")
 	private String password;
-	private int frecuencia;						//la frecuencia deberia de variar segun la orden
+
+	@ApiModelProperty(notes = "Frecuencia de registro de carga del camión.(cargas/minuto) ", example = "60")
+	private int frecuencia;
+
+	@ApiModelProperty(notes = "Peso del combustible (kG) ya cargado.", example = "30")
 	private float masaAcumuladaKg;
+
+	@ApiModelProperty(notes = "Densidad promedio del combustible (kg/m^3).", example = "0,874")
 	private float promedDensidadProductoKilogramoMetroCub;
+
+	@ApiModelProperty(notes = "Temperatura promedio del combustible (°C).", example = "16")
 	private float promedioTemperaturaProductoCelcius;
+
+	@ApiModelProperty(notes = "Cantidad promedio de combustible cargado por segundo (litro/segundo).", example = "0,16")
 	private float promedioCaudalLitroSegundo;
+
+	@ApiModelProperty(notes = "Ultima densidad registrada del combustible (kg/m^3).", example = "0,874")
 	private float ultimaDensidadProductoKilogramoMetroCub;
+
+	@ApiModelProperty(notes = "Ultima temperatura registrada del combustible (°C).", example = "16")
 	private float ultimaTemperaturaProductoCelcius;
+
+	@ApiModelProperty(notes = "Ultimo caudal registrado (litro/segundo).", example = "0,16")
 	private float ultimoCaudalLitroSegundo;
+
+	@ApiModelProperty(notes = "Peso del camión vacío mas el peso final de la carga (kg).", example = "6000")
 	private float pesajeFinal;
 
-
+	@ApiModelProperty(notes = "El camión que sera cargado con combustible")
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_camion")
-	private Camion camion;						//Vehiculo a cargar
+	private Camion camion;
 
+	@ApiModelProperty(notes = "El cliente al que se le entregara el combustible")
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_cliente")
-	private Cliente cliente;					//Cliente que paga el servicio
+	private Cliente cliente;
 
+	@ApiModelProperty(notes = "El chofer al que se le entregara el combustible")
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_chofer")
-	private Chofer chofer;						//Conductor del camion
+	private Chofer chofer;
 
+	@ApiModelProperty(notes = "El combustible introducido en el camión")
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_producto")
 	private Producto producto;
 
-
+	@ApiModelProperty(notes = "Las cargas de combustible introducidas en el camión")
 	@OneToMany(targetEntity=Carga.class, mappedBy= "orden", fetch = FetchType.LAZY)
 	@JsonBackReference
 	private List<Carga> cargaList;
