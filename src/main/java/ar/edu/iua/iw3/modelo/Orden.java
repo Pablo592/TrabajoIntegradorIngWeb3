@@ -17,7 +17,10 @@ import javax.persistence.*;
 						"\t c.peso_final_camion as pesajeFinal, \n" +
 						"\t masa_acumulada_kg, \n" +
 						"\t (c.peso_final_camion - c.tara) as netoPorBalanza, \n" +
-						"\t  ((c.peso_final_camion - c.tara) - masa_acumulada_kg ) as diferenciaNetoPorBalanza_masaAcumuludada \n" +
+						"\t  ((c.peso_final_camion - c.tara) - masa_acumulada_kg ) as diferenciaNetoPorBalanza_masaAcumuludada, \n" +
+						"\t  o.promedio_temperatura_producto_celcius, \n" +
+						"\t  o.promedio_caudal_litro_segundo,\n" +
+						"\t  o.promed_densidad_producto_kilogramo_metro_cub\n" +
 						"\t from orden o \n" +
 						"\t inner join camion c on c.id = o.id_camion \n" +
 						"\t where o.id = ?1", resultSetMapping = "ordenmap")
@@ -33,7 +36,10 @@ import javax.persistence.*;
 								@ColumnResult(name = "pesajeFinal", type = float.class),
 								@ColumnResult(name = "masa_acumulada_kg", type = float.class),
 								@ColumnResult(name = "netoPorBalanza", type = float.class),
-								@ColumnResult(name = "diferenciaNetoPorBalanza_masaAcumuludada", type = float.class)
+								@ColumnResult(name = "diferenciaNetoPorBalanza_masaAcumuludada", type = float.class),
+								@ColumnResult(name = "promedio_temperatura_producto_celcius", type = float.class),
+								@ColumnResult(name = "promedio_caudal_litro_segundo", type = float.class),
+								@ColumnResult(name = "promed_densidad_producto_kilogramo_metro_cub", type = float.class)
 						},
 						targetClass = ConciliacionDTO.class
 				)

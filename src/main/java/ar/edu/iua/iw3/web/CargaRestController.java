@@ -38,6 +38,7 @@ public class CargaRestController {
         try {
             return new ResponseEntity<List<Carga>>(cargaNegocio.listado(), HttpStatus.OK);
         } catch (NegocioException e) {
+            log.error(e.getMessage(), e);
             return new ResponseEntity<List<Carga>>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -98,6 +99,7 @@ public class CargaRestController {
             log.error(e.getMessage(), e);
             return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (NoEncontradoException e) {
+            log.error(e.getMessage(), e);
             return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
         }
     }
@@ -114,8 +116,10 @@ public class CargaRestController {
             cargaNegocio.eliminar(id);
             return new ResponseEntity<String>(HttpStatus.OK);
         } catch (NegocioException e) {
+            log.error(e.getMessage(), e);
             return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (NoEncontradoException e) {
+            log.error(e.getMessage(), e);
             return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
         }
     }

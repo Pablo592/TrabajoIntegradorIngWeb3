@@ -38,6 +38,7 @@ public class OrdenRestController {
         try {
             return new ResponseEntity<List<Orden>>(ordenNegocio.listado(), HttpStatus.OK);
         } catch (NegocioException e) {
+            log.error(e.getMessage(), e);
             return new ResponseEntity<List<Orden>>(HttpStatus.NOT_FOUND);
         }
     }
@@ -47,8 +48,10 @@ public class OrdenRestController {
         try {
             return new ResponseEntity<ConciliacionDTO>(ordenNegocio.obtenerConciliacion(codigoExterno), HttpStatus.OK);
         } catch (NegocioException e) {
-            return new ResponseEntity<ConciliacionDTO>(HttpStatus.NOT_FOUND);
+            log.error(e.getMessage(), e);
+            return new ResponseEntity<ConciliacionDTO>(HttpStatus.INTERNAL_SERVER_ERROR);
         }catch (NoEncontradoException e) {
+            log.error(e.getMessage(), e);
             return new ResponseEntity<ConciliacionDTO>(HttpStatus.NOT_FOUND);
         }
     }
@@ -64,8 +67,10 @@ public class OrdenRestController {
         try {
             return new ResponseEntity<Orden>(ordenNegocio.cargar(id), HttpStatus.OK);
         } catch (NegocioException e) {
+            log.error(e.getMessage(), e);
             return new ResponseEntity<Orden>(HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (NoEncontradoException e) {
+            log.error(e.getMessage(), e);
             return new ResponseEntity<Orden>(HttpStatus.NOT_FOUND);
         }
     }
@@ -81,8 +86,10 @@ public class OrdenRestController {
         try {
             return new ResponseEntity<Orden>(ordenNegocio.traerUltimaCarga(codigoExterno), HttpStatus.OK);
         } catch (NegocioException e) {
+            log.error(e.getMessage(), e);
             return new ResponseEntity<Orden>(HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (NoEncontradoException e) {
+            log.error(e.getMessage(), e);
             return new ResponseEntity<Orden>(HttpStatus.NOT_FOUND);
         }
     }
@@ -101,6 +108,7 @@ public class OrdenRestController {
             responseHeaders.set("location", "/orden/"+respuesta.getId());
             return new ResponseEntity<String>(responseHeaders, HttpStatus.CREATED);
         } catch (NegocioException e) {
+            log.error(e.getMessage(), e);
             return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (EncontradoException e) {
             log.error(e.getMessage(), e);
@@ -122,6 +130,7 @@ public class OrdenRestController {
             responseHeaders.set("location", "/orden/"+respuesta.getId());
             return new ResponseEntity<String>(responseHeaders, HttpStatus.CREATED);
         } catch (NegocioException e) {
+            log.error(e.getMessage(), e);
             return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (EncontradoException e) {
             log.error(e.getMessage(), e);
@@ -196,8 +205,10 @@ public class OrdenRestController {
             ordenNegocio.eliminar(id);
             return new ResponseEntity<String>(HttpStatus.OK);
         } catch (NegocioException e) {
+            log.error(e.getMessage(), e);
             return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (NoEncontradoException e) {
+            log.error(e.getMessage(), e);
             return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
         }
     }
