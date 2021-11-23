@@ -76,8 +76,6 @@ public class CargaNegocio implements ICargaNegocio {
             if (orden.getEstado() == 2) {
                 if (orden.getCamion().getPreset() <= carga.getMasaAcumuladaKg()){
                     orden.setEstado(3);
-                    camionNegocio.setearPesoFinalCamion(orden); //aca da null si no hay cargas
-                    orden.setFechaRecepcionPesajeFinal(new Date());
                     ordenNegocio.modificar(orden);
                     throw new NegocioException("Tanque lleno");
                 }
@@ -126,6 +124,9 @@ public class CargaNegocio implements ICargaNegocio {
     @Override
     public CargaDTO getAcumulacionAndPromedioCargas(String codigoExterno) throws NegocioException, NoEncontradoException {
         Orden orden = existeOrden(codigoExterno);
+        if(orden.getCargaList().size() ==0)
+            throw new NegocioException("No hay cargas registradas en esta orden");
+
         try{
             //calculo los datos de la orden y luego los actualizo
             return cargaDAO.getPromedioDensidadAndTemperaturaAndCaudal(orden.getId());
