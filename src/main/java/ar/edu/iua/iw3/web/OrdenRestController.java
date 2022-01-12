@@ -1,13 +1,10 @@
 package ar.edu.iua.iw3.web;
 
-import ar.edu.iua.iw3.modelo.Carga;
 import ar.edu.iua.iw3.modelo.Orden;
 import ar.edu.iua.iw3.modelo.dto.ConciliacionDTO;
 import ar.edu.iua.iw3.negocio.IOrdenNegocio;
 import ar.edu.iua.iw3.negocio.OrdenNegocio;
-import ar.edu.iua.iw3.negocio.excepciones.EncontradoException;
-import ar.edu.iua.iw3.negocio.excepciones.NegocioException;
-import ar.edu.iua.iw3.negocio.excepciones.NoEncontradoException;
+import ar.edu.iua.iw3.negocio.excepciones.*;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -18,10 +15,10 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
+@RequestMapping(Constantes.URL_BASE)
 public class OrdenRestController {
     @Autowired
     private IOrdenNegocio ordenNegocio;
@@ -94,28 +91,6 @@ public class OrdenRestController {
         }
     }
 
-    @ApiOperation("Registrar una nueva orden")
-    @ApiResponses( value = {
-            @ApiResponse(code = 201 , message = "Orden registrada correctamente"),
-            @ApiResponse(code = 302 , message = "La orden ya se encuentra registrada"),
-            @ApiResponse(code = 500 , message = "Información incorrecta recibida")
-    })
-    @PostMapping(value= "/ordenes")
-    public ResponseEntity<String> agregar(@RequestBody Orden orden) {
-        try {
-            Orden respuesta=ordenNegocio.agregar(orden);
-            HttpHeaders responseHeaders=new HttpHeaders();
-            responseHeaders.set("location", "/orden/"+respuesta.getId());
-            return new ResponseEntity<String>(responseHeaders, HttpStatus.CREATED);
-        } catch (NegocioException e) {
-            log.error(e.getMessage(), e);
-            return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
-        } catch (EncontradoException e) {
-            log.error(e.getMessage(), e);
-            return new ResponseEntity<String>(HttpStatus.FOUND);
-        }
-    }
-
     @ApiOperation("Datos necesarios para iniciar la etapa 1")
     @ApiResponses( value = {
             @ApiResponse(code = 201 , message = "Orden registrada correctamente"),
@@ -135,6 +110,9 @@ public class OrdenRestController {
         } catch (EncontradoException e) {
             log.error(e.getMessage(), e);
             return new ResponseEntity<String>(HttpStatus.FOUND);
+        }catch (BadRequest e){
+            log.error(e.getMessage(), e);
+            return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -154,6 +132,12 @@ public class OrdenRestController {
         } catch (NoEncontradoException e) {
             log.error(e.getMessage(), e);
             return new ResponseEntity<Orden>(HttpStatus.NOT_FOUND);
+        } catch (BadRequest e) {
+            log.error(e.getMessage(), e);
+            return new ResponseEntity<Orden>(HttpStatus.BAD_REQUEST);
+        } catch (ConflictException e) {
+            log.error(e.getMessage(), e);
+            return new ResponseEntity<Orden>(HttpStatus.CONFLICT);
         }
     }
 
@@ -164,9 +148,9 @@ public class OrdenRestController {
             @ApiResponse(code = 500 , message = "Información incorrecta recibida")
     })
     @PutMapping(value= "/ordenes/frenar-carga")
-    public ResponseEntity<Orden> frenarCargar(@RequestParam("codigoExterno") String codigoExterno) {
+    public ResponseEntity<Orden> frenarCargar(@RequestBody Orden orden) {
         try {
-            return new ResponseEntity<Orden>(ordenNegocio.frenarCargar(codigoExterno), HttpStatus.OK);
+            return new ResponseEntity<Orden>(ordenNegocio.frenarCargar(orden.getCodigoExterno()), HttpStatus.OK);
         } catch (NegocioException e) {
             log.error(e.getMessage(), e);
             return new ResponseEntity<Orden>(HttpStatus.INTERNAL_SERVER_ERROR);

@@ -4,9 +4,7 @@ import ar.edu.iua.iw3.modelo.Carga;
 import ar.edu.iua.iw3.modelo.dto.CargaDTO;
 import ar.edu.iua.iw3.negocio.CargaNegocio;
 import ar.edu.iua.iw3.negocio.ICargaNegocio;
-import ar.edu.iua.iw3.negocio.excepciones.EncontradoException;
-import ar.edu.iua.iw3.negocio.excepciones.NegocioException;
-import ar.edu.iua.iw3.negocio.excepciones.NoEncontradoException;
+import ar.edu.iua.iw3.negocio.excepciones.*;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -15,12 +13,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import java.util.Date;
 import java.util.List;
 
 @RestController
+@RequestMapping(Constantes.URL_BASE)
 public class CargaRestController {
 
     @Autowired
@@ -52,7 +52,7 @@ public class CargaRestController {
     @GetMapping(value= "/promedio-cargas-por-codigo-externo")
     public ResponseEntity<CargaDTO> ResumenCargaPorId(@RequestParam("codigoExterno") String codigoExterno) {
         try {
-            return new ResponseEntity<CargaDTO>(cargaNegocio.getAcumulacionAndPromedioCargas(codigoExterno), HttpStatus.OK);
+            return new ResponseEntity<CargaDTO>(cargaNegocio.getPromedioDensidadAndTemperaturaAndCaudal(codigoExterno), HttpStatus.OK);
         } catch (NegocioException e) {
             log.error(e.getMessage(), e);
             return new ResponseEntity<CargaDTO>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -68,9 +68,10 @@ public class CargaRestController {
             @ApiResponse(code = 500 , message = "Información incorrecta recibida"),
             @ApiResponse(code = 404 , message = "No es posible localizar la orden")
     })
-    @PostMapping(value= "/cargas")
+    @PostMapping(value= "/cargas",produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> agregar(@RequestBody Carga carga) {
         try {
+            carga.setFechaEntradaBackEnd(new Date());
             Carga respuesta=cargaNegocio.agregar(carga);
             HttpHeaders responseHeaders=new HttpHeaders();
             responseHeaders.set("location", "/carga/"+respuesta.getId());
@@ -81,6 +82,15 @@ public class CargaRestController {
         }catch (NoEncontradoException e) {
             log.error(e.getMessage(), e);
             return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
+        } catch (BadRequest e) {
+            log.error(e.getMessage(), e);
+            return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+        } catch (UnprocessableException e) {
+            log.error(e.getMessage(), e);
+            return new ResponseEntity<String>(HttpStatus.UNPROCESSABLE_ENTITY);
+        } catch (ConflictException e) {
+            log.error(e.getMessage(), e);
+            return new ResponseEntity<String>(HttpStatus.CONFLICT);
         }
     }
 

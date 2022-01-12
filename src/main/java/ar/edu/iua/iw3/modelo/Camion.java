@@ -3,10 +3,8 @@ package ar.edu.iua.iw3.modelo;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
 import java.io.Serializable;
 import java.util.List;
-
 import javax.persistence.*;
 
 @ApiModel(description = "Esta clase representa el camión que se abastecerá de combustible.")
@@ -111,5 +109,43 @@ public class Camion  implements Serializable {
 
     public void setOrdenList(List<Orden> ordenList) {
         this.ordenList = ordenList;
+    }
+
+    public boolean checkPatente(String patente){
+        String primeraParte = patente.substring(0,2).toUpperCase();
+        String segundaParte = patente.substring(2,5);
+        String terceraParte = patente.substring(5).toUpperCase();
+        if(isContainsLetras(primeraParte) && isContainsNumeros(segundaParte) && isContainsLetras(terceraParte))
+            return true;
+        return false;
+    }
+    private boolean isContainsLetras(String palabra){
+        for(int i = 0;i<palabra.length();i++){
+            int codigoAscii=palabra.codePointAt(i);
+            if(65>codigoAscii || 90<codigoAscii)
+                return false;
+        }
+        return true;
+    }
+
+    private boolean isContainsNumeros(String palabra){
+        for(int i = 0;i<palabra.length();i++){
+            int codigoAscii=palabra.codePointAt(i);
+            if(48>codigoAscii || 57<codigoAscii)
+                return false;
+        }
+        return true;
+    }
+
+    public String checkBasicData(){
+        if(getPatente().trim().length()==0)
+            return "El atributo 'patente' es obligatorio";
+        if(!checkPatente(getPatente()))
+            return "El atributo 'patente' tiene un mal formato";
+        if(getCisternadoLitros()<=0)
+            return "El atributo 'cisternadoLitros' tiene que ser mayor a cero";
+        if(getPreset()<=0)
+            return "El atributo 'preset' tiene que ser mayor a cero";
+    return null;
     }
 }

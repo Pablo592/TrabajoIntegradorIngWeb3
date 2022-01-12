@@ -76,4 +76,14 @@ public class Chofer implements Serializable {
 	public void setOrdenList(List<Orden> ordenList) {
 		this.ordenList = ordenList;
 	}
+
+	public String checkBasicData(){
+		if(getNombre().trim().length()==0)
+			return "El atributo 'nombre' es obligatorio";
+		if(getApellido().trim().length()==0)
+			return "El atributo 'apellido' es obligatorio";
+		if(getDocumento() < 4000000 || getDocumento()>100000000)
+			return "El atributo 'documento' tiene que ser entre 4 a 100 millones";
+		return null;
+	}
 }

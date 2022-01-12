@@ -64,4 +64,10 @@ public class Producto implements Serializable {
 	public void setOrdenList(List<Orden> ordenList) {
 		this.ordenList = ordenList;
 	}
+
+	public String checkBasicData(){
+		if(getNombre().trim().length()==0)
+			return "El atributo 'Producto' es obligatorio";
+		return null;
+	}
 }
