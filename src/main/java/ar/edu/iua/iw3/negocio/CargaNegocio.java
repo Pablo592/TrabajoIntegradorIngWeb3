@@ -1,5 +1,6 @@
 package ar.edu.iua.iw3.negocio;
 
+import ar.edu.iua.iw3.eventos.CargaEvent;
 import ar.edu.iua.iw3.modelo.*;
 import ar.edu.iua.iw3.modelo.dto.CargaDTO;
 import ar.edu.iua.iw3.modelo.persistencia.CargaRepository;
@@ -7,6 +8,7 @@ import ar.edu.iua.iw3.negocio.excepciones.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import java.util.Calendar;
 import java.util.Date;
@@ -25,6 +27,9 @@ public class CargaNegocio implements ICargaNegocio {
 
     @Autowired
     private OrdenNegocio ordenNegocio;
+
+    @Autowired
+    private ApplicationEventPublisher appEventPublisher;
 
     @Override
     public List<Carga> listado() throws NegocioException {
@@ -98,6 +103,11 @@ public class CargaNegocio implements ICargaNegocio {
             log.error(e.getMessage(), e);
             orden.setMasaAcumuladaKg(0);      //digo que la carga inicial de la orden es "cero" si es la primera carga de la orden
         }
+
+        if(carga.getTemperaturaProductoCelcius() > 20){
+            generarEvento(carga, CargaEvent.Tipo.SUPERADO_UMBRAL_DE_TEMPERATURA);
+        }
+
         //controlo que la carga acumulada actual sea mayor que la anterior, tirar excepcion
         if (!isValidoMasaAcumuadaActualCargaConLaAnterior(orden, carga))
             throw new UnprocessableException("La masa Acumulada actual debe ser mayor  a la masa acumulada de la carga anterior");
@@ -123,6 +133,11 @@ public class CargaNegocio implements ICargaNegocio {
         }
         System.out.println("No se guarda la carga porque ya paso su frecuencia");
         return carga;
+    }
+
+
+    private void  generarEvento(Carga carga, CargaEvent.Tipo tipo){
+        appEventPublisher.publishEvent(new CargaEvent(carga,tipo));
     }
 
     private Date sumarFrecuenciaConTiempo(int frecuenciaEnSegundos, Date proximoTiempoLimite){
