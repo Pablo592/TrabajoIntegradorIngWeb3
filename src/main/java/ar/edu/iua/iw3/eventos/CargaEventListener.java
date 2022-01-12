@@ -31,7 +31,7 @@ public class CargaEventListener implements ApplicationListener<CargaEvent> {
 
         try {
             SimpleMailMessage message =new SimpleMailMessage();
-            message.setFrom("noreply pgaido524@alumnos.iua.edu.ar");
+            message.setFrom("pgaido524@alumnos.iua.edu.ar");
             message.setTo(to);
             message.setSubject("Precaucion Altas temperaturas en el combustible de la orden " + carga.getOrden().getCodigoExterno());
             message.setText(mensaje);

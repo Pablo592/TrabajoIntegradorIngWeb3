@@ -123,10 +123,10 @@ public class CargaNegocio implements ICargaNegocio {
         ordenNegocio.modificar(orden);
 
         //sino hay cargas en la bd entonces la tiempo inicial es
-        if(listado().size()==0) {
+        if(listado().size()==0 || proximoTiempoLimite == null) { //en caso de que se corte la luz
             cargaDAO.save(carga);
             proximoTiempoLimite = sumarFrecuenciaConTiempo(orden.getFrecuencia(), orden.getFechaInicioProcesoCarga());
-        }
+        }//
         if(proximoTiempoLimite.compareTo(carga.getFechaEntradaBackEnd())<0) {
             cargaDAO.save(carga);
             proximoTiempoLimite = sumarFrecuenciaConTiempo(orden.getFrecuencia(),proximoTiempoLimite);
