@@ -28,7 +28,7 @@ public class CargaEventListener implements ApplicationListener<CargaEvent> {
     private JavaMailSender emailSender;
 
     private void manejaEventoSuperadoUmbralTemperatura(Carga carga){
-        String mensaje = String.format("El combustible abastecido en la orden %s, supero el umbral de temperatura al tener %f grados celcius"
+        String mensaje = String.format("El combustible abastecido en la orden %s, supero el umbral de temperatura al tener %.2f grados celcius"
                 ,carga.getOrden().getCodigoExterno(),carga.getTemperaturaProductoCelcius());
         log.info("Enviando mensaje '{}'",mensaje);
 

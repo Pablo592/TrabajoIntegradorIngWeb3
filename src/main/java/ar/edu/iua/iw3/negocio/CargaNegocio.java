@@ -5,6 +5,8 @@ import ar.edu.iua.iw3.modelo.*;
 import ar.edu.iua.iw3.modelo.dto.CargaDTO;
 import ar.edu.iua.iw3.modelo.persistencia.CargaRepository;
 import ar.edu.iua.iw3.negocio.excepciones.*;
+import ar.edu.iua.iw3.util.MensajeRespuesta;
+import ar.edu.iua.iw3.util.RespuestaGenerica;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,7 +75,11 @@ public class CargaNegocio implements ICargaNegocio {
     }
 
     @Override
-    public Carga agregar(Carga carga) throws NegocioException, NoEncontradoException, BadRequest, UnprocessableException, ConflictException {
+    //public Carga agregar(Carga carga) throws NegocioException, NoEncontradoException, BadRequest, UnprocessableException, ConflictException {
+    public RespuestaGenerica<Carga> agregar(Carga carga) throws NegocioException, NoEncontradoException, BadRequest, UnprocessableException, ConflictException {
+        MensajeRespuesta m=new MensajeRespuesta();
+        RespuestaGenerica<Carga> r = new RespuestaGenerica<Carga>(carga, m);
+
         validarMetadata(carga);
         String codigoExterno = carga.getOrden().getCodigoExterno();
         Orden orden = existeOrden(codigoExterno);
@@ -132,7 +138,8 @@ public class CargaNegocio implements ICargaNegocio {
             proximoTiempoLimite = sumarFrecuenciaConTiempo(orden.getFrecuencia(),proximoTiempoLimite);
         }
         System.out.println("No se guarda la carga porque ya paso su frecuencia");
-        return carga;
+        //return carga;
+        return r;
     }
 
 

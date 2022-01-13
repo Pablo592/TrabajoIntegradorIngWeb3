@@ -5,6 +5,7 @@ import ar.edu.iua.iw3.modelo.dto.CargaDTO;
 import ar.edu.iua.iw3.negocio.CargaNegocio;
 import ar.edu.iua.iw3.negocio.ICargaNegocio;
 import ar.edu.iua.iw3.negocio.excepciones.*;
+import ar.edu.iua.iw3.util.MensajeRespuesta;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -69,28 +70,41 @@ public class CargaRestController {
             @ApiResponse(code = 404 , message = "No es posible localizar la orden")
     })
     @PostMapping(value= "/cargas",produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> agregar(@RequestBody Carga carga) {
+    public ResponseEntity<MensajeRespuesta> agregar(@RequestBody Carga carga) {
         try {
             carga.setFechaEntradaBackEnd(new Date());
-            Carga respuesta=cargaNegocio.agregar(carga);
+            /*Carga respuesta=cargaNegocio.agregar(carga);
             HttpHeaders responseHeaders=new HttpHeaders();
             responseHeaders.set("location", "/carga/"+respuesta.getId());
-            return new ResponseEntity<String>(responseHeaders, HttpStatus.CREATED);
+            return new ResponseEntity<String>(responseHeaders, HttpStatus.CREATED);*/
+            MensajeRespuesta r=cargaNegocio.agregar(carga).getMensaje();
+            return new ResponseEntity<MensajeRespuesta>(r, HttpStatus.OK);
+
         } catch (NegocioException e) {
             log.error(e.getMessage(), e);
-            return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
+            //return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
+            MensajeRespuesta r=new MensajeRespuesta(-1,e.getMessage());
+            return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.INTERNAL_SERVER_ERROR);
         }catch (NoEncontradoException e) {
             log.error(e.getMessage(), e);
-            return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
+            //return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
+            MensajeRespuesta r=new MensajeRespuesta(-1,e.getMessage());
+            return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.NOT_FOUND);
         } catch (BadRequest e) {
             log.error(e.getMessage(), e);
-            return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+            //return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+            MensajeRespuesta r=new MensajeRespuesta(-1,e.getMessage());
+            return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.BAD_REQUEST);
         } catch (UnprocessableException e) {
             log.error(e.getMessage(), e);
-            return new ResponseEntity<String>(HttpStatus.UNPROCESSABLE_ENTITY);
+            //return new ResponseEntity<String>(HttpStatus.UNPROCESSABLE_ENTITY);
+            MensajeRespuesta r=new MensajeRespuesta(-1,e.getMessage());
+            return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.UNPROCESSABLE_ENTITY);
         } catch (ConflictException e) {
             log.error(e.getMessage(), e);
-            return new ResponseEntity<String>(HttpStatus.CONFLICT);
+            //return new ResponseEntity<String>(HttpStatus.CONFLICT);
+            MensajeRespuesta r=new MensajeRespuesta(-1,e.getMessage());
+            return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.CONFLICT);
         }
     }
 
