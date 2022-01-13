@@ -20,20 +20,21 @@ public class CargaEventListener implements ApplicationListener<CargaEvent> {
             manejaEventoSuperadoUmbralTemperatura((Carga) event.getSource());
         }
     }
-    @Autowired
-    private JavaMailSender emailSender;
 
     @Value("${mail.carga.umbralTemperatura.to:pgaido524@alumnos.iua.edu.ar}")
     private String to;
 
+    @Autowired
+    private JavaMailSender emailSender;
+
     private void manejaEventoSuperadoUmbralTemperatura(Carga carga){
-        String mensaje = String.format("El combustible abastecido en la orden $%, supero el umbral de temperatura al tener $% grados celcius"
+        String mensaje = String.format("El combustible abastecido en la orden %s, supero el umbral de temperatura al tener %f grados celcius"
                 ,carga.getOrden().getCodigoExterno(),carga.getTemperaturaProductoCelcius());
         log.info("Enviando mensaje '{}'",mensaje);
 
         try {
             SimpleMailMessage message =new SimpleMailMessage();
-            message.setFrom("pgaido524@alumnos.iua.edu.ar");
+            message.setFrom("spitalevictor@gmail.com");
             message.setTo(to);
             message.setSubject("Precaucion Altas temperaturas en el combustible de la orden " + carga.getOrden().getCodigoExterno());
             message.setText(mensaje);
