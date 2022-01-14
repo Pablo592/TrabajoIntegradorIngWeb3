@@ -68,8 +68,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 		http.cors();
 
-		// http.httpBasic();
-		http.authorizeRequests().antMatchers(HttpMethod.POST, "/login*").permitAll();
+		http.authorizeRequests().antMatchers("/v2/api-docs").permitAll();
+		http.authorizeRequests().antMatchers("/configuration/ui").permitAll();
+		http.authorizeRequests().antMatchers("/swagger-resources/**").permitAll();
+		http.authorizeRequests().antMatchers("/configuration/security").permitAll();
+		http.authorizeRequests().antMatchers("/swagger-ui.html").permitAll();
+		http.authorizeRequests().antMatchers("/swagger-ui/*").permitAll();
+		http.authorizeRequests().antMatchers("/webjars/**").permitAll();
+
+		//http.authorizeRequests().antMatchers(HttpMethod.POST, "/login*").permitAll();
 		http.authorizeRequests().antMatchers("/index.html").permitAll();
 		http.authorizeRequests().antMatchers("/favicon.png").permitAll();
 		http.authorizeRequests().antMatchers("/ui/**").permitAll();
