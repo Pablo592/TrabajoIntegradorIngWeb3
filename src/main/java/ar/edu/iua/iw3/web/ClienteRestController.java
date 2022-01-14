@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import ar.edu.iua.iw3.modelo.Cliente;
@@ -35,6 +36,8 @@ public class ClienteRestController {
 			@ApiResponse(code = 200 , message = "Clientes enviados correctamente"),
 			@ApiResponse(code = 500 , message = "Información incorrecta recibida")
 	})
+
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@GetMapping(value="/clientes")
 	public ResponseEntity<List<Cliente>> listado() {
 		try {
@@ -44,12 +47,15 @@ public class ClienteRestController {
 		}
 	}
 
+
 	@ApiOperation("Registrar un nuevo chófer")
 	@ApiResponses( value = {
 			@ApiResponse(code = 201 , message = "Cliente registrado correctamente"),
 			@ApiResponse(code = 500 , message = "Información incorrecta recibida"),
 			@ApiResponse(code = 302 , message = "El cliente ya se encuentra registrado")
 	})
+
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@PostMapping(value="/clientes")
 	public ResponseEntity<String> agregar(@RequestBody Cliente cliente) {
 		try {
@@ -71,6 +77,8 @@ public class ClienteRestController {
 			@ApiResponse(code = 500 , message = "Información incorrecta recibida"),
 			@ApiResponse(code = 404 , message = "No es posible localizar al cliente")
 	})
+
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@PutMapping(value="/clientes")
 	public ResponseEntity<String> modificar(@RequestBody Cliente cliente) {
 		try {
@@ -90,6 +98,8 @@ public class ClienteRestController {
 			@ApiResponse(code = 500 , message = "Información incorrecta recibida"),
 			@ApiResponse(code = 404 , message = "No es posible localizar al cliente")
 	})
+
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@DeleteMapping(value="/clientes/{id}")
 	public ResponseEntity<String> eliminar(@PathVariable("id") long id) {
 		try {

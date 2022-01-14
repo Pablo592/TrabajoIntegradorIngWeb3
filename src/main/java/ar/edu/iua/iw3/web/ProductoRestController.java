@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -32,6 +33,8 @@ public class ProductoRestController {
             @ApiResponse(code = 200 , message = "Productos enviados correctamente"),
             @ApiResponse(code = 500 , message = "Información incorrecta recibida")
     })
+
+    @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping(value="/productos")
     public ResponseEntity<List<Producto>> listado() {
         try {
@@ -47,6 +50,8 @@ public class ProductoRestController {
             @ApiResponse(code = 500 , message = "Información incorrecta recibida"),
             @ApiResponse(code = 302 , message = "El producto ya se encuentra registrado")
     })
+
+    @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping(value="/productos")
     public ResponseEntity<String> agregar(@RequestBody Producto producto) {
         try {
@@ -68,6 +73,8 @@ public class ProductoRestController {
             @ApiResponse(code = 500 , message = "Información incorrecta recibida"),
             @ApiResponse(code = 404 , message = "No es posible localizar el producto")
     })
+
+    @PreAuthorize("hasRole('ROLE_USER')")
     @PutMapping(value="/productos")
     public ResponseEntity<String> modificar(@RequestBody Producto producto) {
         try {
@@ -87,6 +94,8 @@ public class ProductoRestController {
             @ApiResponse(code = 500 , message = "Información incorrecta recibida"),
             @ApiResponse(code = 404 , message = "No es posible localizar el producto")
     })
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping(value="/productos/{id}")
     public ResponseEntity<String> eliminar(@PathVariable("id") long id) {
         try {

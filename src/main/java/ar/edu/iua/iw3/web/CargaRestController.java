@@ -16,6 +16,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.Date;
 import java.util.List;
@@ -34,6 +35,8 @@ public class CargaRestController {
             @ApiResponse(code = 200 , message = "Cargas enviadas correctamente"),
             @ApiResponse(code = 500 , message = "Información incorrecta recibida")
     })
+
+    @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping(value= "/cargas")
     public ResponseEntity<List<Carga>> listado() {
         try {
@@ -50,6 +53,8 @@ public class CargaRestController {
             @ApiResponse(code = 500 , message = "Información incorrecta recibida"),
             @ApiResponse(code = 404 , message = "No es posible localizar la carga")
     })
+
+    @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping(value= "/promedio-cargas-por-codigo-externo")
     public ResponseEntity<CargaDTO> ResumenCargaPorId(@RequestParam("codigoExterno") String codigoExterno) {
         try {
@@ -69,6 +74,8 @@ public class CargaRestController {
             @ApiResponse(code = 500 , message = "Información incorrecta recibida"),
             @ApiResponse(code = 404 , message = "No es posible localizar la orden")
     })
+
+    @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping(value= "/cargas",produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<MensajeRespuesta> agregar(@RequestBody Carga carga) {
         try {
@@ -114,6 +121,8 @@ public class CargaRestController {
             @ApiResponse(code = 500 , message = "Información incorrecta recibida"),
             @ApiResponse(code = 404 , message = "No es posible localizar la carga")
     })
+
+    @PreAuthorize("hasRole('ROLE_USER')")
     @PutMapping(value= "/cargas")
     public ResponseEntity<String> modificar(@RequestBody Carga carga) {
         try {
@@ -134,6 +143,8 @@ public class CargaRestController {
             @ApiResponse(code = 500 , message = "Información incorrecta recibida"),
             @ApiResponse(code = 404 , message = "No es posible localizar la carga")
     })
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping(value= "/cargas/{id}")
     public ResponseEntity<String> eliminar(@PathVariable("id") long id) {
         try {

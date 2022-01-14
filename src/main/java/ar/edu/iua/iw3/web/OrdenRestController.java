@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -30,6 +31,8 @@ public class OrdenRestController {
             @ApiResponse(code = 200 , message = "Ordenes enviadas correctamente"),
             @ApiResponse(code = 500 , message = "Información incorrecta recibida")
     })
+
+    @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping(value= "/ordenes")
     public ResponseEntity<List<Orden>> listado() {
         try {
@@ -40,6 +43,7 @@ public class OrdenRestController {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping(value= "/ordenes/conciliacion/{codigoExterno}")
     public ResponseEntity<ConciliacionDTO> getConciliacion(@PathVariable("codigoExterno") String codigoExterno) {
         try {
@@ -59,6 +63,8 @@ public class OrdenRestController {
             @ApiResponse(code = 500 , message = "Información incorrecta recibida"),
             @ApiResponse(code = 404 , message = "No es posible localizar la orden")
     })
+
+    @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping(value= "/ordenes/buscar-una/{id}")    //es el id de orden
     public ResponseEntity<Orden> buscarOrden(@PathVariable("id") long id) {
         try {
@@ -78,6 +84,8 @@ public class OrdenRestController {
             @ApiResponse(code = 500 , message = "Información incorrecta recibida"),
             @ApiResponse(code = 404 , message = "No es posible localizar la orden")
     })
+
+    @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping(value= "/ordenes/ultima-carga/{codigoExterno}")
     public ResponseEntity<Orden> ultimaCarga(@PathVariable("codigoExterno") String codigoExterno) {
         try {
@@ -97,6 +105,8 @@ public class OrdenRestController {
             @ApiResponse(code = 302 , message = "La orden ya se encuentra registrada"),
             @ApiResponse(code = 500 , message = "Información incorrecta recibida")
     })
+
+    @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping(value= "/ordenes/primer-envio")
     public ResponseEntity<String> agregarPrimerRequest(@RequestBody Orden orden) {
         try {
@@ -122,6 +132,8 @@ public class OrdenRestController {
             @ApiResponse(code = 404 , message = "No es posible localizar la orden"),
             @ApiResponse(code = 500 , message = "Información incorrecta recibida")
     })
+
+    @PreAuthorize("hasRole('ROLE_USER')")
     @PutMapping(value= "/ordenes/tara")
     public ResponseEntity<Orden> pesoInicialCamion(@RequestBody Orden orden) {
         try {
@@ -147,6 +159,8 @@ public class OrdenRestController {
             @ApiResponse(code = 404 , message = "No es posible localizar la orden"),
             @ApiResponse(code = 500 , message = "Información incorrecta recibida")
     })
+
+    @PreAuthorize("hasRole('ROLE_USER')")
     @PutMapping(value= "/ordenes/frenar-carga")
     public ResponseEntity<Orden> frenarCargar(@RequestBody Orden orden) {
         try {
@@ -166,6 +180,8 @@ public class OrdenRestController {
             @ApiResponse(code = 404 , message = "No es posible localizar la orden"),
             @ApiResponse(code = 500 , message = "Información incorrecta recibida")
     })
+
+    @PreAuthorize("hasRole('ROLE_USER')")
     @PutMapping(value= "/ordenes/peso-final")
     public ResponseEntity<Orden> pesoFinalCamion(@RequestBody Orden orden) {
         try {
@@ -186,6 +202,8 @@ public class OrdenRestController {
             @ApiResponse(code = 404 , message = "No es posible localizar la orden"),
             @ApiResponse(code = 500 , message = "Información incorrecta recibida")
     })
+
+    @PreAuthorize("hasRole('ROLE_USER')")
     @PutMapping(value= "/ordenes")
     public ResponseEntity<Orden> modificar(@RequestBody Orden orden) {
         try {
@@ -203,6 +221,8 @@ public class OrdenRestController {
             @ApiResponse(code = 404 , message = "No es posible localizar la orden"),
             @ApiResponse(code = 500 , message = "Información incorrecta recibida")
     })
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping(value= "/ordenes/{id}")
     public ResponseEntity<String> eliminar(@PathVariable("id") long id) {
         try {

@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ar.edu.iua.iw3.negocio.CamionNegocio;
 import ar.edu.iua.iw3.negocio.ICamionNegocio;
@@ -34,6 +35,8 @@ public class CamionRestController {
 			@ApiResponse(code = 200 , message = "Camiones enviados correctamente"),
 			@ApiResponse(code = 500 , message = "Información incorrecta recibida")
 	})
+
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@GetMapping(value="/camiones")
 	public ResponseEntity<List<Camion>> listado() {
 		try {
@@ -49,6 +52,8 @@ public class CamionRestController {
 			@ApiResponse(code = 302 , message = "El camión ya se encuentra registrado"),
 			@ApiResponse(code = 500 , message = "Información incorrecta recibida")
 	})
+
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@PostMapping(value="/camiones")
 	public ResponseEntity<String> agregar(@RequestBody Camion camion) {
 		try {
@@ -73,6 +78,8 @@ public class CamionRestController {
 			@ApiResponse(code = 404 , message = "No es posible localizar el camión"),
 			@ApiResponse(code = 500 , message = "Información incorrecta recibida")
 	})
+
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@PutMapping(value="/camiones")
 	public ResponseEntity<String> modificar(@RequestBody Camion camion) {
 		try {
@@ -92,6 +99,8 @@ public class CamionRestController {
 			@ApiResponse(code = 404 , message = "No es posible localizar el camión"),
 			@ApiResponse(code = 500 , message = "Información incorrecta recibida")
 	})
+
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@DeleteMapping(value="/camiones/{id}")
 	public ResponseEntity<String> eliminar(@PathVariable("id") long id) {
 		try {

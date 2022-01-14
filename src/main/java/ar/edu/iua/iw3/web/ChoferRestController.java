@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import ar.edu.iua.iw3.modelo.Chofer;
@@ -34,6 +35,8 @@ public class ChoferRestController {
 			@ApiResponse(code = 200 , message = "Choferes enviados correctamente"),
 			@ApiResponse(code = 500 , message = "Información incorrecta recibida")
 	})
+
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@GetMapping(value="/choferes")
 	public ResponseEntity<List<Chofer>> listado() {
 		try {
@@ -49,6 +52,8 @@ public class ChoferRestController {
 			@ApiResponse(code = 500 , message = "Información incorrecta recibida"),
 			@ApiResponse(code = 302 , message = "El chófer ya se encuentra registrado")
 	})
+
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@PostMapping(value="/choferes")
 	public ResponseEntity<String> agregar(@RequestBody Chofer chofer) {
 		try {
@@ -64,12 +69,15 @@ public class ChoferRestController {
 		}
 	}
 
+
 	@ApiOperation("Modificar un chófer")
 	@ApiResponses( value = {
 			@ApiResponse(code = 200 , message = "Chófer modificado correctamente"),
 			@ApiResponse(code = 500 , message = "Información incorrecta recibida"),
 			@ApiResponse(code = 404 , message = "No es posible localizar al chófer")
 	})
+
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@PutMapping(value="/choferes")
 	public ResponseEntity<String> modificar(@RequestBody Chofer chofer) {
 		try {
@@ -89,6 +97,8 @@ public class ChoferRestController {
 			@ApiResponse(code = 500 , message = "Información incorrecta recibida"),
 			@ApiResponse(code = 404 , message = "No es posible localizar al chófer")
 	})
+
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@DeleteMapping(value="/choferes/{id}")
 	public ResponseEntity<String> eliminar(@PathVariable("id") long id) {
 		try {
