@@ -135,6 +135,17 @@ public class Orden implements Serializable{
 	@JsonBackReference
 	private List<Carga> cargaList;
 
+	@ApiModelProperty(notes = "Temperatura maxima aceptable del combustible.", example = "21,874")
+	private float umbralTemperaturaCombustible = 25;
+
+	public float getUmbralTemperaturaCombustible() {
+		return umbralTemperaturaCombustible;
+	}
+
+	public void setUmbralTemperaturaCombustible(float umbralTemperaturaCombustible) {
+		this.umbralTemperaturaCombustible = umbralTemperaturaCombustible;
+	}
+
 	public long getId() {
 		return id;
 	}
@@ -318,7 +329,7 @@ public class Orden implements Serializable{
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, codigoExterno, fechaTurno, fechaPesajeInicial, fechaInicioProcesoCarga, fechaFinProcesoCarga, fechaRecepcionPesajeFinal, estado, password, frecuencia, masaAcumuladaKg, promedDensidadProductoKilogramoMetroCub, promedioTemperaturaProductoCelcius, promedioCaudalLitroSegundo, ultimaDensidadProductoKilogramoMetroCub, ultimaTemperaturaProductoCelcius, ultimoCaudalLitroSegundo, camion, cliente, chofer, producto, cargaList);
+		return Objects.hash(id, codigoExterno, fechaTurno, fechaPesajeInicial, fechaInicioProcesoCarga, fechaFinProcesoCarga, fechaRecepcionPesajeFinal, estado, password, frecuencia, masaAcumuladaKg, promedDensidadProductoKilogramoMetroCub, promedioTemperaturaProductoCelcius, promedioCaudalLitroSegundo, ultimaDensidadProductoKilogramoMetroCub, ultimaTemperaturaProductoCelcius, ultimoCaudalLitroSegundo, camion, cliente, chofer, producto, cargaList, umbralTemperaturaCombustible);
 	}
 }
 

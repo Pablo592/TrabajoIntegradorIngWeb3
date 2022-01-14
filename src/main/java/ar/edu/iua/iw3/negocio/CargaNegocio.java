@@ -110,7 +110,7 @@ public class CargaNegocio implements ICargaNegocio {
             orden.setMasaAcumuladaKg(0);      //digo que la carga inicial de la orden es "cero" si es la primera carga de la orden
         }
 
-        if(carga.getTemperaturaProductoCelcius() > 20){
+        if(carga.getTemperaturaProductoCelcius() > orden.getUmbralTemperaturaCombustible()){
             generarEvento(carga, CargaEvent.Tipo.SUPERADO_UMBRAL_DE_TEMPERATURA);
         }
 

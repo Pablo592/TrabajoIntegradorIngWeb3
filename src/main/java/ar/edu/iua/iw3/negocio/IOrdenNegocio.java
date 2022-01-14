@@ -27,5 +27,7 @@ public interface IOrdenNegocio {
     Orden establecerPesajeFinal(Orden orden) throws NegocioException, NoEncontradoException;
 
     ConciliacionDTO obtenerConciliacion(String codigoExterno)  throws NegocioException, NoEncontradoException;
+
+    public Orden cambiarUmbralTemperatura(Orden orden) throws BadRequest, NoEncontradoException, NegocioException;
 }
 

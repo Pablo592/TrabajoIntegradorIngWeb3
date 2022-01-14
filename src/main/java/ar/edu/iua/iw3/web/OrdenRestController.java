@@ -215,6 +215,30 @@ public class OrdenRestController {
             return new ResponseEntity<Orden>(HttpStatus.NOT_FOUND);
         }
     }
+
+    @ApiOperation("Modificar umbral de temperatura del combustible")
+    @ApiResponses( value = {
+            @ApiResponse(code = 200 , message = "Orden modificada correctamente"),
+            @ApiResponse(code = 404 , message = "No es posible localizar la orden"),
+            @ApiResponse(code = 500 , message = "Información incorrecta recibida")
+    })
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PutMapping(value= "/ordenes/umbral-temperatura")
+    public ResponseEntity<Orden> modificarUmbralTemperatura(@RequestBody Orden orden) {
+        try {
+            return new ResponseEntity<Orden>( ordenNegocio.cambiarUmbralTemperatura(orden),HttpStatus.OK);
+        } catch (NegocioException e) {
+            log.error(e.getMessage(), e);
+            return new ResponseEntity<Orden>(HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (NoEncontradoException e) {
+            return new ResponseEntity<Orden>(HttpStatus.NOT_FOUND);
+        } catch (BadRequest e) {
+            log.error(e.getMessage(), e);
+            return new ResponseEntity<Orden>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @ApiOperation("Eliminar una orden")
     @ApiResponses( value = {
             @ApiResponse(code = 200 , message = "Orden eliminada correctamente"),

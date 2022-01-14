@@ -234,7 +234,15 @@ public class OrdenNegocio implements IOrdenNegocio{
         return  ordenDB;
     }
 
+    public Orden cambiarUmbralTemperatura(Orden orden) throws BadRequest, NoEncontradoException, NegocioException {
 
+        if(orden.getUmbralTemperaturaCombustible() < 1 )
+            throw new BadRequest("Ingrese un umbral de temperatura valido");
+
+        Orden ordenBD = findByCodigoExterno(orden.getCodigoExterno());
+        ordenBD.setUmbralTemperaturaCombustible(orden.getUmbralTemperaturaCombustible());
+        return modificar(ordenBD);
+    }
 
 
 }
