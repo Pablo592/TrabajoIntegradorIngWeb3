@@ -1,8 +1,11 @@
 package ar.edu.iua.iw3.modelo.Cuentas;
 
+import ar.edu.iua.iw3.negocio.excepciones.BadRequest;
 import ar.edu.iua.iw3.negocio.excepciones.EncontradoException;
 import ar.edu.iua.iw3.negocio.excepciones.NegocioException;
 import ar.edu.iua.iw3.negocio.excepciones.NoEncontradoException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,13 +15,23 @@ import java.util.Optional;
 @Service
 public class UsuarioNegocio implements IUsuarioNegocio {
 
+	private Logger log = LoggerFactory.getLogger(UsuarioNegocio.class);
 	@Autowired
-	private UserRepository userDAO;
+	private UsuarioRepository userDAO;
 
 	@Override
 	public Usuario cargar(int id) throws NegocioException, NoEncontradoException {
-		// TODO Auto-generated method stub
-		return null;
+		Optional<Usuario> o;
+		try {
+			o = userDAO.findById(id);
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			throw new NegocioException(e);
+		}
+		if (!o.isPresent()) {
+			throw new NoEncontradoException("No se encuentra al usuario con id= " + id);
+		}
+		return o.get();
 	}
 
 	@Override
@@ -31,19 +44,61 @@ public class UsuarioNegocio implements IUsuarioNegocio {
 	}
 
 	@Override
-	public Usuario agregar(Usuario usuario) throws NegocioException, EncontradoException {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public Usuario agregar(Usuario usuario) throws NegocioException, EncontradoException, BadRequest {
+		//si es nulo esta bien
+		String msjCheck = usuario.checkBasicData();
+		if (msjCheck != null) {
+			throw new BadRequest(msjCheck);
+		} else {
+			if(usuario.getEmail() != null)
+				if (userDAO.findFirstByEmail(usuario.getEmail()) !=  null )
+					throw new EncontradoException("El email " + usuario.getEmail() + " ya se encuentra registrado");
+
+			if (userDAO.findFirstByUsername(usuario.getUsername()) !=  null)
+				throw new EncontradoException("El username " + usuario.getUsername() + " ya se encuentra registrado");
+			try {
+					return userDAO.save(usuario);
+				} catch (Exception e) {
+					log.error(e.getMessage(), e);
+					throw new NegocioException(e);
+				}
+		}
+		}
+
+
 
 	@Override
-	public Usuario modificar(Usuario usuario) throws NegocioException, EncontradoException, NoEncontradoException {
+	public Usuario modificar(Usuario usuario) throws NegocioException, EncontradoException, NoEncontradoException, BadRequest {
+
+		String msjCheck = usuario.checkBasicData();
+		if (msjCheck != null) 
+			throw new BadRequest(msjCheck);
+		
+		Usuario usuarioDb = cargar(usuario.getId());
+
+		if(usuarioDb == null) {
+			throw new NoEncontradoException("El usuario que desea modificar no se encuentra registrado");
+		}else {
+			if(usuario.getEmail() != null)
+				if (usuario.getId() != userDAO.findFirstByEmail(usuario.getEmail()).get().getId())
+					throw new EncontradoException("El email " + usuario.getEmail() + " ya se encuentra registrado");
+
+			if (usuario.getId() != userDAO.findFirstByUsername(usuario.getUsername()).get().getId())
+				throw new EncontradoException("El username " + usuario.getUsername() + " ya se encuentra registrado");
+		}
+		return saveUser(usuario);	//Paso 4
+	}
+
+	public  Usuario saveUser(Usuario usuario) throws NegocioException {
 		try {
 			return userDAO.save(usuario);
 		} catch (Exception e) {
+			log.error(e.getMessage(), e);
 			throw new NegocioException(e);
 		}
 	}
+
+
 
 	@Override
 	public Usuario cargarPorNombreOEmail(String nombreOEmail) throws NegocioException, NoEncontradoException {
@@ -59,6 +114,16 @@ public class UsuarioNegocio implements IUsuarioNegocio {
 					String.format("No se encuentra un user con nombre o email = '%s'", nombreOEmail));
 		
 		return o.get();
+	}
+
+	public void eliminar(int id) throws NegocioException, NoEncontradoException {
+		cargar(id);
+		try {
+			userDAO.deleteById(id);
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			throw new NegocioException(e);
+		}
 	}
 
 }

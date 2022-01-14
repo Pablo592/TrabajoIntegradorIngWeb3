@@ -165,7 +165,20 @@ public class Usuario implements UserDetails, Serializable {
 	 * - r3 =>  -  -  -  -  ====>  SGA(r1) SGA(r12) SGA(r3) SGA(r4) =>   - SGA(r3)
 	 * - r4                                                              - SGA(r4)
 	 */
-	
+
+	public String checkBasicData(){
+		if(getApellido().trim().length()==0)
+			return "El atributo 'apellido' es obligatorio";
+		if(getNombre().trim().length()==0)
+			return "El atributo 'nombre' es obligatorio";
+		if(getUsername().trim().length()==0)
+			return "El atributo 'username' es obligatorio";
+		if(getPassword().trim().length()==0)
+			return "El atributo 'password' es obligatorio";
+		return null;
+	}
+
+
 	
 	public String checkAccount(PasswordEncoder passwordEncoder, String password) {
 		

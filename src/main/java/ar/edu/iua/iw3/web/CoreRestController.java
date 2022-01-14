@@ -2,6 +2,7 @@ package ar.edu.iua.iw3.web;
 
 import ar.edu.iua.iw3.modelo.Cuentas.IUsuarioNegocio;
 import ar.edu.iua.iw3.modelo.Cuentas.Usuario;
+import ar.edu.iua.iw3.negocio.excepciones.BadRequest;
 import ar.edu.iua.iw3.negocio.excepciones.EncontradoException;
 import ar.edu.iua.iw3.negocio.excepciones.NegocioException;
 import ar.edu.iua.iw3.negocio.excepciones.NoEncontradoException;
@@ -44,6 +45,9 @@ public class CoreRestController extends BaseRestController{
 				} catch (EncontradoException e) {
 					log.error(e.getMessage());
 					return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
+				} catch (BadRequest e) {
+					log.error(e.getMessage(), e);
+					return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
 				}
 				return new ResponseEntity<String>(msg, HttpStatus.UNAUTHORIZED);
 			} else {
@@ -75,6 +79,9 @@ public class CoreRestController extends BaseRestController{
 				} catch (EncontradoException e) {
 					log.error(e.getMessage());
 					return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
+				} catch (BadRequest e) {
+					log.error(e.getMessage(), e);
+					return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
 				}
 				return new ResponseEntity<String>(msg, HttpStatus.UNAUTHORIZED);
 			} else {
