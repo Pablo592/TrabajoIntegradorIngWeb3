@@ -1,5 +1,9 @@
 package ar.edu.iua.iw3.modelo.Cuentas;
 
+import ar.edu.iua.iw3.modelo.Alarma;
+import ar.edu.iua.iw3.modelo.Carga;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import io.swagger.annotations.ApiModelProperty;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,6 +20,7 @@ import java.util.stream.Collectors;
 @Table(name="usuarios")
 public class Usuario implements UserDetails, Serializable {
 
+	private static final long serialVersionUID = -1920138525852395737L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,10 +49,11 @@ public class Usuario implements UserDetails, Serializable {
 
 	@Column(columnDefinition = "TINYINT DEFAULT 1")
 	private boolean enabled;
-	
-	private static final long serialVersionUID = -1920138525852395737L;
 
-	
+	@ApiModelProperty(notes = "Un usuario puede crear varias alarmas")
+	@OneToMany(targetEntity= Alarma.class, mappedBy= "autor", fetch = FetchType.LAZY)
+	@JsonBackReference
+	private List<Alarma> alarmaList;
 
 	public int getId() {
 		return id;

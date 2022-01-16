@@ -12,7 +12,14 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class CargaEventListener implements ApplicationListener<CargaEvent> {
+
     private Logger log = LoggerFactory.getLogger(this.getClass());
+
+    @Value("${mail.carga.umbralTemperatura.to:pgaido524@alumnos.iua.edu.ar}")
+    private String to;
+
+    @Autowired
+    private JavaMailSender emailSender;
 
     @Override
     public void onApplicationEvent(CargaEvent event) {
@@ -21,14 +28,10 @@ public class CargaEventListener implements ApplicationListener<CargaEvent> {
         }
     }
 
-    @Value("${mail.carga.umbralTemperatura.to:pgaido524@alumnos.iua.edu.ar}")
-    private String to;
 
-    @Autowired
-    private JavaMailSender emailSender;
 
     private void manejaEventoSuperadoUmbralTemperatura(Carga carga){
-        String mensaje = String.format("El combustible abastecido en la orden %s, supero el umbral de temperatura al tener %.2f grados celcius"
+        String mensaje = String.format("El combustible abastecido en la orden %s, supero el umbral de temperatura al tener %.2f Cª"
                 ,carga.getOrden().getCodigoExterno(),carga.getTemperaturaProductoCelcius());
         log.info("Enviando mensaje '{}'",mensaje);
 

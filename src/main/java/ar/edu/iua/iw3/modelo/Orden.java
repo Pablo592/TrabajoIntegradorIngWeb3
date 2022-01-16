@@ -135,6 +135,12 @@ public class Orden implements Serializable{
 	@JsonBackReference
 	private List<Carga> cargaList;
 
+
+	@ApiModelProperty(notes = "Una orden tiene muchas alarmas")
+	@OneToMany(targetEntity=Alarma.class, mappedBy= "orden", fetch = FetchType.LAZY)
+	@JsonBackReference
+	private List<Alarma> alarmaList;
+
 	@ApiModelProperty(notes = "Temperatura maxima aceptable del combustible.", example = "21,874")
 	private float umbralTemperaturaCombustible = 25;
 
