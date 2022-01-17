@@ -54,7 +54,7 @@ public class UsuarioRestController {
     })
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @GetMapping(value="/usuarios-buscar-uno")
+    @GetMapping(value="/usuarios/{id}")
     public ResponseEntity<Usuario> cargar(@PathVariable("id") int id) {
         try {
             return new ResponseEntity<Usuario>(usuarioNegocio.cargar(id), HttpStatus.OK);

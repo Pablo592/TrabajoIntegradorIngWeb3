@@ -7,6 +7,7 @@ import ar.edu.iua.iw3.negocio.excepciones.NoEncontradoException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,8 +17,12 @@ import java.util.Optional;
 public class UsuarioNegocio implements IUsuarioNegocio {
 
 	private Logger log = LoggerFactory.getLogger(UsuarioNegocio.class);
+
 	@Autowired
 	private UsuarioRepository userDAO;
+
+	@Autowired
+	private PasswordEncoder pwdEncoder;
 
 	@Override
 	public Usuario cargar(int id) throws NegocioException, NoEncontradoException {
@@ -51,12 +56,13 @@ public class UsuarioNegocio implements IUsuarioNegocio {
 			throw new BadRequest(msjCheck);
 		} else {
 			if(usuario.getEmail() != null)
-				if (userDAO.findFirstByEmail(usuario.getEmail()) !=  null )
+				if (userDAO.findFirstByEmail(usuario.getEmail()).isPresent() )
 					throw new EncontradoException("El email " + usuario.getEmail() + " ya se encuentra registrado");
 
-			if (userDAO.findFirstByUsername(usuario.getUsername()) !=  null)
+			if (userDAO.findFirstByUsername(usuario.getUsername()).isPresent())
 				throw new EncontradoException("El username " + usuario.getUsername() + " ya se encuentra registrado");
 			try {
+					usuario.setPassword(pwdEncoder.encode(usuario.getPassword()));
 					return userDAO.save(usuario);
 				} catch (Exception e) {
 					log.error(e.getMessage(), e);
@@ -70,6 +76,8 @@ public class UsuarioNegocio implements IUsuarioNegocio {
 	@Override
 	public Usuario modificar(Usuario usuario) throws NegocioException, EncontradoException, NoEncontradoException, BadRequest {
 
+		Optional<Usuario> buscandoDb;
+
 		String msjCheck = usuario.checkBasicData();
 		if (msjCheck != null) 
 			throw new BadRequest(msjCheck);
@@ -79,11 +87,15 @@ public class UsuarioNegocio implements IUsuarioNegocio {
 		if(usuarioDb == null) {
 			throw new NoEncontradoException("El usuario que desea modificar no se encuentra registrado");
 		}else {
-			if(usuario.getEmail() != null)
-				if (usuario.getId() != userDAO.findFirstByEmail(usuario.getEmail()).get().getId())
-					throw new EncontradoException("El email " + usuario.getEmail() + " ya se encuentra registrado");
-
-			if (usuario.getId() != userDAO.findFirstByUsername(usuario.getUsername()).get().getId())
+			if(usuario.getEmail() != null) {
+				buscandoDb = userDAO.findFirstByUsername(usuario.getEmail());
+				if (buscandoDb.isPresent())
+					if (usuario.getId() != buscandoDb.get().getId())
+						throw new EncontradoException("El email " + usuario.getEmail() + " ya se encuentra registrado");
+			}
+				buscandoDb	= userDAO.findFirstByUsername(usuario.getUsername());
+			if(buscandoDb.isPresent())
+			if (usuario.getId() != buscandoDb.get().getId())
 				throw new EncontradoException("El username " + usuario.getUsername() + " ya se encuentra registrado");
 		}
 		return saveUser(usuario);	//Paso 4
@@ -91,6 +103,7 @@ public class UsuarioNegocio implements IUsuarioNegocio {
 
 	public  Usuario saveUser(Usuario usuario) throws NegocioException {
 		try {
+			usuario.setPassword(pwdEncoder.encode(usuario.getPassword()));
 			return userDAO.save(usuario);
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);

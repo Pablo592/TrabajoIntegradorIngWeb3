@@ -39,16 +39,16 @@ public class Usuario implements UserDetails, Serializable {
 	private String username;
 	
 	@Column(columnDefinition = "TINYINT DEFAULT 1")
-	private boolean accountNonExpired;
+	private boolean accountNonExpired = true;
 	
 	@Column(columnDefinition = "TINYINT DEFAULT 1")
-	private boolean accountNonLocked;
+	private boolean accountNonLocked = true;
 	
 	@Column(columnDefinition = "TINYINT DEFAULT 1")
-	private boolean credentialsNonExpired;
+	private boolean credentialsNonExpired = true;
 
 	@Column(columnDefinition = "TINYINT DEFAULT 1")
-	private boolean enabled;
+	private boolean enabled = true;
 
 	@ApiModelProperty(notes = "Un usuario puede crear varias alarmas")
 	@OneToMany(targetEntity= Alarma.class, mappedBy= "autor", fetch = FetchType.LAZY)
@@ -206,7 +206,7 @@ public class Usuario implements UserDetails, Serializable {
 		return String.format("%s, %s", getApellido(), getNombre());
 	}
 	
-	private int duracionToken;
+	private int duracionToken = 60;
 	private int intentosFallidos;
 	
 	private static int MAXIMO_INTENTOS_FALLIDOS=3;
