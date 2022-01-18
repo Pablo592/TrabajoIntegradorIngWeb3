@@ -2,10 +2,7 @@ package ar.edu.iua.iw3.web;
 
 import ar.edu.iua.iw3.modelo.Cuentas.IUsuarioNegocio;
 import ar.edu.iua.iw3.modelo.Cuentas.Usuario;
-import ar.edu.iua.iw3.negocio.excepciones.BadRequest;
-import ar.edu.iua.iw3.negocio.excepciones.EncontradoException;
-import ar.edu.iua.iw3.negocio.excepciones.NegocioException;
-import ar.edu.iua.iw3.negocio.excepciones.NoEncontradoException;
+import ar.edu.iua.iw3.negocio.excepciones.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,12 +39,12 @@ public class CoreRestController extends BaseRestController{
 				u.agregaIntentoFallido();
 				try {
 					userBusiness.modificar(u);
-				} catch (EncontradoException e) {
-					log.error(e.getMessage());
-					return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
 				} catch (BadRequest e) {
 					log.error(e.getMessage(), e);
 					return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+				} catch (ConflictException e) {
+					e.printStackTrace();
+					return new ResponseEntity<String>(HttpStatus.CONFLICT);
 				}
 				return new ResponseEntity<String>(msg, HttpStatus.UNAUTHORIZED);
 			} else {
@@ -76,12 +73,12 @@ public class CoreRestController extends BaseRestController{
 				u.agregaIntentoFallido();
 				try {
 					userBusiness.modificar(u);
-				} catch (EncontradoException e) {
-					log.error(e.getMessage());
-					return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
 				} catch (BadRequest e) {
 					log.error(e.getMessage(), e);
 					return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+				} catch (ConflictException e) {
+					e.printStackTrace();
+					return new ResponseEntity<String>(HttpStatus.CONFLICT);
 				}
 				return new ResponseEntity<String>(msg, HttpStatus.UNAUTHORIZED);
 			} else {

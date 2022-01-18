@@ -2,10 +2,7 @@ package ar.edu.iua.iw3.modelo.Cuentas;
 
 import ar.edu.iua.iw3.modelo.Orden;
 import ar.edu.iua.iw3.modelo.dto.ConciliacionDTO;
-import ar.edu.iua.iw3.negocio.excepciones.BadRequest;
-import ar.edu.iua.iw3.negocio.excepciones.EncontradoException;
-import ar.edu.iua.iw3.negocio.excepciones.NegocioException;
-import ar.edu.iua.iw3.negocio.excepciones.NoEncontradoException;
+import ar.edu.iua.iw3.negocio.excepciones.*;
 import ar.edu.iua.iw3.util.MensajeRespuesta;
 import ar.edu.iua.iw3.util.RespuestaGenerica;
 import org.slf4j.Logger;
@@ -68,8 +65,9 @@ public class UsuarioNegocio implements IUsuarioNegocio {
 				throw new EncontradoException("El username " + usuario.getUsername() + " ya se encuentra registrado");
 			try {
 					usuario.setPassword(pwdEncoder.encode(usuario.getPassword()));
-				userDAO.save(usuario);
-					return new RespuestaGenerica<Usuario>(usuario, m);
+					Usuario usuarioNuevo = userDAO.save(usuario);
+					m.setMensaje(usuarioNuevo.toString());
+					return new RespuestaGenerica<Usuario>(usuarioNuevo, m);
 				} catch (Exception e) {
 					log.error(e.getMessage(), e);
 					throw new NegocioException(e);
@@ -78,7 +76,7 @@ public class UsuarioNegocio implements IUsuarioNegocio {
 		}
 
 	@Override
-	public RespuestaGenerica<Usuario> modificar(Usuario usuario) throws NegocioException, EncontradoException, NoEncontradoException, BadRequest {
+	public RespuestaGenerica<Usuario> modificar(Usuario usuario) throws NegocioException, ConflictException, NoEncontradoException, BadRequest {
 		MensajeRespuesta m=new MensajeRespuesta();
 		Optional<Usuario> buscandoDb;
 
@@ -95,12 +93,12 @@ public class UsuarioNegocio implements IUsuarioNegocio {
 				buscandoDb = userDAO.findFirstByEmail(usuario.getEmail());
 				if (buscandoDb.isPresent())
 					if (usuario.getId() != buscandoDb.get().getId())
-						throw new EncontradoException("El email " + usuario.getEmail() + " ya se encuentra registrado");
+						throw new ConflictException("El email " + usuario.getEmail() + " ya se encuentra registrado");
 			}
 				buscandoDb	= userDAO.findFirstByUsername(usuario.getUsername());
 			if(buscandoDb.isPresent())
 			if (usuario.getId() != buscandoDb.get().getId())
-				throw new EncontradoException("El username " + usuario.getUsername() + " ya se encuentra registrado");
+				throw new ConflictException("El username " + usuario.getUsername() + " ya se encuentra registrado");
 		}
 		saveUser(usuario);
 		return 	new RespuestaGenerica<Usuario>(usuario, m);

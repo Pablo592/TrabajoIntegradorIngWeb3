@@ -1,10 +1,7 @@
 package ar.edu.iua.iw3.modelo.Cuentas;
 
 import ar.edu.iua.iw3.modelo.Orden;
-import ar.edu.iua.iw3.negocio.excepciones.BadRequest;
-import ar.edu.iua.iw3.negocio.excepciones.EncontradoException;
-import ar.edu.iua.iw3.negocio.excepciones.NegocioException;
-import ar.edu.iua.iw3.negocio.excepciones.NoEncontradoException;
+import ar.edu.iua.iw3.negocio.excepciones.*;
 import ar.edu.iua.iw3.util.MensajeRespuesta;
 import ar.edu.iua.iw3.web.Constantes;
 import io.swagger.annotations.ApiOperation;
@@ -117,10 +114,10 @@ public class UsuarioRestController {
             log.error(e.getMessage(), e);
             MensajeRespuesta r=new MensajeRespuesta(-1,e.getMessage());
             return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.NOT_FOUND);
-        } catch (EncontradoException e) {
+        } catch (ConflictException e) {
             log.error(e.getMessage(), e);
             MensajeRespuesta r=new MensajeRespuesta(-1,e.getMessage());
-            return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.FOUND);
+            return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.CONFLICT);
         } catch (BadRequest e) {
             log.error(e.getMessage(), e);
             MensajeRespuesta r=new MensajeRespuesta(-1,e.getMessage());

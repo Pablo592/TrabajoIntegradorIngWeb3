@@ -235,7 +235,23 @@ public class Usuario implements UserDetails, Serializable {
 	public void setIntentosFallidos(int intentosFallidos) {
 		this.intentosFallidos = intentosFallidos;
 	}
-	
-	
 
+	@Override
+	public String toString() {
+		return "Usuario{" +
+				"id=" + id +
+				", nombre='" + nombre + '\'' +
+				", apellido='" + apellido + '\'' +
+				", email='" + email + '\'' +
+				", password='" + password + '\'' +
+				", username='" + username + '\'' +
+				", accountNonExpired=" + accountNonExpired +
+				", accountNonLocked=" + accountNonLocked +
+				", credentialsNonExpired=" + credentialsNonExpired +
+				", enabled=" + enabled +
+				", roles=" + roles +
+				", duracionToken=" + duracionToken +
+				", intentosFallidos=" + intentosFallidos +
+				'}';
+	}
 }
