@@ -152,4 +152,17 @@ public class Carga implements Serializable {
                     "en salio del hadward");
     }
 
+    @Override
+    public String toString() {
+        return "Carga{" +
+                "id=" + id +
+                ", masaAcumuladaKg=" + masaAcumuladaKg +
+                ", densidadProductoKilogramoMetroCub=" + densidadProductoKilogramoMetroCub +
+                ", temperaturaProductoCelcius=" + temperaturaProductoCelcius +
+                ", caudalLitroSegundo=" + caudalLitroSegundo +
+                ", fechaSalidaHW=" + fechaSalidaHW +
+                ", fechaEntradaBackEnd=" + fechaEntradaBackEnd +
+                ", orden=" + orden +
+                '}';
+    }
 }

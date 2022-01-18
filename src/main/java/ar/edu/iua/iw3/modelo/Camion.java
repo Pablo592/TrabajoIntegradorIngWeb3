@@ -138,8 +138,8 @@ public class Camion  implements Serializable {
     }
 
     public String checkBasicData(){
-        if(getPatente().trim().length()==0)
-            return "El atributo 'patente' es obligatorio";
+        if(getPatente().trim().length()!=7)
+            return "El atributo 'patente' debe tener una longitud de 7 caracteres";
         if(!checkPatente(getPatente()))
             return "El atributo 'patente' tiene un mal formato";
         if(getCisternadoLitros()<=0)

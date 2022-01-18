@@ -1,6 +1,5 @@
 package ar.edu.iua.iw3.modelo.Cuentas;
 
-import ar.edu.iua.iw3.modelo.Producto;
 import ar.edu.iua.iw3.negocio.excepciones.BadRequest;
 import ar.edu.iua.iw3.negocio.excepciones.EncontradoException;
 import ar.edu.iua.iw3.negocio.excepciones.NegocioException;
@@ -17,7 +16,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController

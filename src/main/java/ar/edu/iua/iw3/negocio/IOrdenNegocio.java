@@ -1,9 +1,8 @@
 package ar.edu.iua.iw3.negocio;
-
-import ar.edu.iua.iw3.modelo.Carga;
 import ar.edu.iua.iw3.modelo.Orden;
 import ar.edu.iua.iw3.modelo.dto.ConciliacionDTO;
 import ar.edu.iua.iw3.negocio.excepciones.*;
+import ar.edu.iua.iw3.util.RespuestaGenerica;
 
 import java.util.List;
 
@@ -12,22 +11,22 @@ public interface IOrdenNegocio {
 
     Orden cargar(long id) throws NegocioException, NoEncontradoException;
 
-    Orden agregar(Orden orden) throws NegocioException, EncontradoException, BadRequest;
+    RespuestaGenerica<Orden> agregar(Orden orden) throws NegocioException, EncontradoException, BadRequest;
 
-    Orden modificar(Orden orden) throws NegocioException, NoEncontradoException;
+    Orden modificar(Orden orden) throws NegocioException, NoEncontradoException, ConflictException;
 
     void eliminar(long id) throws NegocioException, NoEncontradoException;
 
-    Orden establecerPesajeInicial(Orden orden) throws NegocioException, NoEncontradoException, BadRequest, ConflictException;
+    RespuestaGenerica<Orden> establecerPesajeInicial(Orden orden) throws NegocioException, NoEncontradoException, BadRequest, ConflictException;
 
     Orden traerUltimaCarga(String codigoExterno) throws NegocioException, NoEncontradoException;
 
-    Orden frenarCargar(String codigoExterno)  throws NegocioException, NoEncontradoException;
+    RespuestaGenerica<Orden> frenarCargar(String codigoExterno) throws NegocioException, NoEncontradoException, UnprocessableException;
 
-    Orden establecerPesajeFinal(Orden orden) throws NegocioException, NoEncontradoException;
+    RespuestaGenerica<Orden>  establecerPesajeFinal(Orden orden) throws NegocioException, NoEncontradoException, UnprocessableException;
 
-    ConciliacionDTO obtenerConciliacion(String codigoExterno)  throws NegocioException, NoEncontradoException;
+    RespuestaGenerica<ConciliacionDTO>  obtenerConciliacion(String codigoExterno) throws NegocioException, NoEncontradoException, UnprocessableException;
 
-    public Orden cambiarUmbralTemperatura(Orden orden) throws BadRequest, NoEncontradoException, NegocioException;
+    public Orden cambiarUmbralTemperatura(Orden orden) throws BadRequest, NoEncontradoException, NegocioException, ConflictException;
 }
 

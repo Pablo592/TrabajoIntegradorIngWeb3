@@ -136,10 +136,10 @@ public class Orden implements Serializable{
 	private List<Carga> cargaList;
 
 
-	@ApiModelProperty(notes = "Una orden tiene muchas alarmas")
+	/*@ApiModelProperty(notes = "Una orden tiene muchas alarmas")
 	@OneToMany(targetEntity=Alarma.class, mappedBy= "orden", fetch = FetchType.LAZY)
 	@JsonBackReference
-	private List<Alarma> alarmaList;
+	private List<Alarma> alarmaList;*/
 
 	@ApiModelProperty(notes = "Temperatura maxima aceptable del combustible.", example = "21,874")
 	private float umbralTemperaturaCombustible = 25;
@@ -332,10 +332,47 @@ public class Orden implements Serializable{
 	//aca tengo que hacer un metodo que chequee basicamente el contenido de los valores que me llegan en el json
 	// tanto para el insert como en el update
 
+	public String checkBasicData(){
+		if(getFrecuencia() <1)
+			return "El atributo 'Frecuencia' tiene que ser mayor a 0(cero)";
+		if(getCodigoExterno().trim().length() == 0)
+			return "El atributo 'codigo externo' no puede ser nulo";
+		return null;
+	}
+
 
 	@Override
 	public int hashCode() {
 		return Objects.hash(id, codigoExterno, fechaTurno, fechaPesajeInicial, fechaInicioProcesoCarga, fechaFinProcesoCarga, fechaRecepcionPesajeFinal, estado, password, frecuencia, masaAcumuladaKg, promedDensidadProductoKilogramoMetroCub, promedioTemperaturaProductoCelcius, promedioCaudalLitroSegundo, ultimaDensidadProductoKilogramoMetroCub, ultimaTemperaturaProductoCelcius, ultimoCaudalLitroSegundo, camion, cliente, chofer, producto, cargaList, umbralTemperaturaCombustible);
+	}
+
+	@Override
+	public String toString() {
+		return "Orden{" +
+				"id=" + id +
+				", codigoExterno='" + codigoExterno + '\'' +
+				", fechaTurno=" + fechaTurno +
+				", fechaPesajeInicial=" + fechaPesajeInicial +
+				", fechaInicioProcesoCarga=" + fechaInicioProcesoCarga +
+				", fechaFinProcesoCarga=" + fechaFinProcesoCarga +
+				", fechaRecepcionPesajeFinal=" + fechaRecepcionPesajeFinal +
+				", estado=" + estado +
+				", password='" + password + '\'' +
+				", frecuencia=" + frecuencia +
+				", masaAcumuladaKg=" + masaAcumuladaKg +
+				", promedDensidadProductoKilogramoMetroCub=" + promedDensidadProductoKilogramoMetroCub +
+				", promedioTemperaturaProductoCelcius=" + promedioTemperaturaProductoCelcius +
+				", promedioCaudalLitroSegundo=" + promedioCaudalLitroSegundo +
+				", ultimaDensidadProductoKilogramoMetroCub=" + ultimaDensidadProductoKilogramoMetroCub +
+				", ultimaTemperaturaProductoCelcius=" + ultimaTemperaturaProductoCelcius +
+				", ultimoCaudalLitroSegundo=" + ultimoCaudalLitroSegundo +
+				", camion=" + camion +
+				", cliente=" + cliente +
+				", chofer=" + chofer +
+				", producto=" + producto +
+				", cargaList=" + cargaList +
+				", umbralTemperaturaCombustible=" + umbralTemperaturaCombustible +
+				'}';
 	}
 }
 

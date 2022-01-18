@@ -71,8 +71,6 @@ public class UsuarioNegocio implements IUsuarioNegocio {
 		}
 		}
 
-
-
 	@Override
 	public Usuario modificar(Usuario usuario) throws NegocioException, EncontradoException, NoEncontradoException, BadRequest {
 
@@ -110,8 +108,6 @@ public class UsuarioNegocio implements IUsuarioNegocio {
 			throw new NegocioException(e);
 		}
 	}
-
-
 
 	@Override
 	public Usuario cargarPorNombreOEmail(String nombreOEmail) throws NegocioException, NoEncontradoException {

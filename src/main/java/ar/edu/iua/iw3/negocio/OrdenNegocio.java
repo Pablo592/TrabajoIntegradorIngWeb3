@@ -4,6 +4,8 @@ import ar.edu.iua.iw3.modelo.*;
 import ar.edu.iua.iw3.modelo.dto.ConciliacionDTO;
 import ar.edu.iua.iw3.modelo.persistencia.OrdenRepository;
 import ar.edu.iua.iw3.negocio.excepciones.*;
+import ar.edu.iua.iw3.util.MensajeRespuesta;
+import ar.edu.iua.iw3.util.RespuestaGenerica;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,15 +52,20 @@ public class OrdenNegocio implements IOrdenNegocio{
     }
 
     @Override
-    public Orden frenarCargar(String codigoExterno) throws NegocioException, NoEncontradoException {
+    public RespuestaGenerica<Orden> frenarCargar(String codigoExterno) throws NegocioException, NoEncontradoException, UnprocessableException {
         Orden ordenBD = findByCodigoExterno(codigoExterno);
         if(null==ordenBD)
             throw new NoEncontradoException("No existe la orden con codigo externo =" + codigoExterno);
         if(ordenBD.getEstado()!=2)
-            throw new NegocioException("Solo se pueden parar ordes cuyo estado sea 2");
+            throw new UnprocessableException("Solo se pueden parar ordes cuyo estado sea 2");
         try{
+            MensajeRespuesta m=new MensajeRespuesta();
+            RespuestaGenerica<Orden> r = new RespuestaGenerica<Orden>(ordenBD, m);
             ordenBD.setEstado(3);
-            return modificar(ordenBD);
+            Orden ordenNueva = modificar(ordenBD);
+            m.setCodigo(0);
+            m.setMensaje(ordenNueva.toString());
+            return r;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             throw new NegocioException(e);
@@ -66,17 +73,23 @@ public class OrdenNegocio implements IOrdenNegocio{
     }
 
     @Override
-    public Orden establecerPesajeFinal(Orden orden) throws NegocioException, NoEncontradoException {
+    public RespuestaGenerica<Orden> establecerPesajeFinal(Orden orden) throws NegocioException, NoEncontradoException, UnprocessableException {
+
         Orden ordenBD = findByCodigoExterno(orden.getCodigoExterno());
         if(null==ordenBD)
             throw new NoEncontradoException("No existe la orden con codigo externo =" + orden.getCodigoExterno());
         if(ordenBD.getEstado()!=3)
-            throw new NegocioException("Solo se puede establecer el pesaje final solo si el estado es 3");
+            throw new UnprocessableException("Solo se puede establecer el pesaje final solo si el estado es 3");
         try{
+            MensajeRespuesta m=new MensajeRespuesta();
+            RespuestaGenerica<Orden> r = new RespuestaGenerica<Orden>(ordenBD, m);
             camionNegocio.setearPesoFinalCamion(orden);
             ordenBD.setEstado(4);
             ordenBD.setFechaRecepcionPesajeFinal(new Date());
-            return modificar(ordenBD);
+            Orden ordenNueva = modificar(ordenBD);
+            m.setCodigo(0);
+            m.setMensaje(ordenNueva.toString());
+            return r;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             throw new NegocioException(e);
@@ -84,14 +97,20 @@ public class OrdenNegocio implements IOrdenNegocio{
     }
 
     @Override
-    public ConciliacionDTO obtenerConciliacion(String codigoExterno) throws NegocioException, NoEncontradoException {
+    public RespuestaGenerica<ConciliacionDTO> obtenerConciliacion(String codigoExterno) throws NegocioException, NoEncontradoException, UnprocessableException {
+
         Orden ordenBD = findByCodigoExterno(codigoExterno);
         if(null==ordenBD)
             throw new NoEncontradoException("No existe la orden con codigo externo =" + codigoExterno);
         if(ordenBD.getEstado()<3)
-            throw new NegocioException("Solo se puede obtener la consiliacion cuando la orden esta en estado 3 o 4");
+            throw new UnprocessableException("Solo se puede obtener la consiliacion cuando la orden esta en estado 3 o 4");
         try{
-            return ordenDAO.getPesoInicialAndPesoFinalAndMasaAcumuladaKgAndDiferenciaMasaAcu_DeltaPeso(ordenBD.getId());
+            ConciliacionDTO conciliacionDTO = ordenDAO.getPesoInicialAndPesoFinalAndMasaAcumuladaKgAndDiferenciaMasaAcu_DeltaPeso(ordenBD.getId());
+            MensajeRespuesta m=new MensajeRespuesta();
+            RespuestaGenerica<ConciliacionDTO> r = new RespuestaGenerica<ConciliacionDTO>(conciliacionDTO, m);
+            m.setCodigo(0);
+            m.setMensaje(conciliacionDTO.toString());
+            return r;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             throw new NegocioException(e);
@@ -116,7 +135,10 @@ public class OrdenNegocio implements IOrdenNegocio{
 
 
     @Override
-    public Orden agregar(Orden orden) throws NegocioException, EncontradoException, BadRequest {
+    public RespuestaGenerica<Orden> agregar(Orden orden) throws NegocioException, EncontradoException, BadRequest {
+        MensajeRespuesta m=new MensajeRespuesta();
+        RespuestaGenerica<Orden> r = new RespuestaGenerica<Orden>(orden, m);
+
         try {
             if(null!=findByCodigoExterno(orden.getCodigoExterno()))
                 throw new EncontradoException("Ya existe en la base de datos una orden con el numero =" + orden.getCodigoExterno());
@@ -149,7 +171,12 @@ public class OrdenNegocio implements IOrdenNegocio{
                 orden.setProducto(producto);
             ////3.0 --> Los creo en caso de que no existan
             orden.setEstado(1);
-            return ordenDAO.save(orden);
+            Orden orderNueva = ordenDAO.save(orden);
+
+            m.setCodigo(0);//cero esta todo ok
+            m.setMensaje(orderNueva.toString());
+
+            return r;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             throw new NegocioException(e);
@@ -174,14 +201,14 @@ public class OrdenNegocio implements IOrdenNegocio{
 
 
     @Override
-    public Orden modificar(Orden orden) throws NegocioException, NoEncontradoException {
+    public Orden modificar(Orden orden) throws NegocioException, NoEncontradoException, ConflictException {
         cargar(orden.getId()); //Paso 1
         Orden ordenWithCodigoExterno= findByCodigoExterno(orden.getCodigoExterno());
 
         if(null!=ordenWithCodigoExterno) { //Paso 2
 
             if (orden.getId() != ordenWithCodigoExterno.getId())
-                throw new NegocioException("Ya existe la orden " + ordenWithCodigoExterno.getId() + "con el numero ="
+                throw new ConflictException("Ya existe la orden " + ordenWithCodigoExterno.getId() + "con el numero ="
                         + orden.getCodigoExterno());	//Paso 3_a
 
             return	saveOrden(orden);	//Paso 3_b
@@ -211,7 +238,11 @@ public class OrdenNegocio implements IOrdenNegocio{
     }
 
     @Override
-    public Orden establecerPesajeInicial(Orden orden) throws NegocioException, NoEncontradoException, BadRequest, ConflictException {
+    public RespuestaGenerica<Orden> establecerPesajeInicial(Orden orden) throws NegocioException, NoEncontradoException, BadRequest, ConflictException {
+        MensajeRespuesta m=new MensajeRespuesta();
+        RespuestaGenerica<Orden> r = new RespuestaGenerica<Orden>(orden, m);
+
+        validarMetadata(orden);
         Orden ordenBD = findByCodigoExterno(orden.getCodigoExterno());
         if(null==ordenBD)
             throw new NoEncontradoException("No existe la orden con codigo externo =" + orden.getCodigoExterno());
@@ -220,8 +251,11 @@ public class OrdenNegocio implements IOrdenNegocio{
         ordenBD = validarFechaPesajeInicial(orden, ordenBD);
         ordenBD.setEstado(2);
         ordenBD.setPassword(String.valueOf(Math.abs(ordenBD.hashCode())).substring(0,5));
-    return modificar(ordenBD);
+        Orden ordenNueva = modificar(ordenBD);
 
+        m.setCodigo(0);
+        m.setMensaje(ordenNueva.toString());
+        return r;
     }
 
     private Orden validarFechaPesajeInicial(Orden orden, Orden ordenDB) throws ConflictException {
@@ -234,7 +268,7 @@ public class OrdenNegocio implements IOrdenNegocio{
         return  ordenDB;
     }
 
-    public Orden cambiarUmbralTemperatura(Orden orden) throws BadRequest, NoEncontradoException, NegocioException {
+    public Orden cambiarUmbralTemperatura(Orden orden) throws BadRequest, NoEncontradoException, NegocioException, ConflictException {
 
         if(orden.getUmbralTemperaturaCombustible() < 1 )
             throw new BadRequest("Ingrese un umbral de temperatura valido");
@@ -242,6 +276,11 @@ public class OrdenNegocio implements IOrdenNegocio{
         Orden ordenBD = findByCodigoExterno(orden.getCodigoExterno());
         ordenBD.setUmbralTemperaturaCombustible(orden.getUmbralTemperaturaCombustible());
         return modificar(ordenBD);
+    }
+
+    private void validarMetadata(Orden orden) throws BadRequest {
+        if (orden.checkBasicData() != null)
+            throw new BadRequest(orden.checkBasicData());
     }
 
 

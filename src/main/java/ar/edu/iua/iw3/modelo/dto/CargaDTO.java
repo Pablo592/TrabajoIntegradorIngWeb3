@@ -42,4 +42,12 @@ public class CargaDTO {
         this.promedioCaudalLitroSegundo = promedioCaudalLitroSegundo;
     }
 
+    @Override
+    public String toString() {
+        return "CargaDTO{" +
+                "promedDensidadProductoKilogramoMetroCub=" + promedDensidadProductoKilogramoMetroCub +
+                ", promedioTemperaturaProductoCelcius=" + promedioTemperaturaProductoCelcius +
+                ", promedioCaudalLitroSegundo=" + promedioCaudalLitroSegundo +
+                '}';
+    }
 }

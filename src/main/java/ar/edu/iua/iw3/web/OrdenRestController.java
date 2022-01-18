@@ -1,10 +1,13 @@
 package ar.edu.iua.iw3.web;
 
+import ar.edu.iua.iw3.modelo.Carga;
 import ar.edu.iua.iw3.modelo.Orden;
 import ar.edu.iua.iw3.modelo.dto.ConciliacionDTO;
 import ar.edu.iua.iw3.negocio.IOrdenNegocio;
 import ar.edu.iua.iw3.negocio.OrdenNegocio;
 import ar.edu.iua.iw3.negocio.excepciones.*;
+import ar.edu.iua.iw3.util.MensajeRespuesta;
+import ar.edu.iua.iw3.util.RespuestaGenerica;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -13,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -32,8 +36,8 @@ public class OrdenRestController {
             @ApiResponse(code = 500 , message = "Información incorrecta recibida")
     })
 
-    @PreAuthorize("hasRole('ROLE_USER')")
-    @GetMapping(value= "/ordenes")
+    //@PreAuthorize("hasRole('ROLE_USER')")
+    @GetMapping(value= "/ordenes",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Orden>> listado() {
         try {
             return new ResponseEntity<List<Orden>>(ordenNegocio.listado(), HttpStatus.OK);
@@ -45,15 +49,22 @@ public class OrdenRestController {
 
     @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping(value= "/ordenes/conciliacion/{codigoExterno}")
-    public ResponseEntity<ConciliacionDTO> getConciliacion(@PathVariable("codigoExterno") String codigoExterno) {
+    public ResponseEntity<MensajeRespuesta>  getConciliacion(@PathVariable("codigoExterno") String codigoExterno) {
         try {
-            return new ResponseEntity<ConciliacionDTO>(ordenNegocio.obtenerConciliacion(codigoExterno), HttpStatus.OK);
+            MensajeRespuesta r = ordenNegocio.obtenerConciliacion(codigoExterno).getMensaje();
+            return new ResponseEntity<MensajeRespuesta>(r, HttpStatus.OK);
         } catch (NegocioException e) {
             log.error(e.getMessage(), e);
-            return new ResponseEntity<ConciliacionDTO>(HttpStatus.INTERNAL_SERVER_ERROR);
+            MensajeRespuesta r=new MensajeRespuesta(-1,e.getMessage());
+            return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.INTERNAL_SERVER_ERROR);
         }catch (NoEncontradoException e) {
             log.error(e.getMessage(), e);
-            return new ResponseEntity<ConciliacionDTO>(HttpStatus.NOT_FOUND);
+            MensajeRespuesta r=new MensajeRespuesta(-1,e.getMessage());
+            return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.NOT_FOUND);
+        } catch (UnprocessableException e) {
+            log.error(e.getMessage(), e);
+            MensajeRespuesta r=new MensajeRespuesta(-1,e.getMessage());
+            return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.UNPROCESSABLE_ENTITY);
         }
     }
 
@@ -85,7 +96,7 @@ public class OrdenRestController {
             @ApiResponse(code = 404 , message = "No es posible localizar la orden")
     })
 
-    @PreAuthorize("hasRole('ROLE_USER')")
+    //@PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping(value= "/ordenes/ultima-carga/{codigoExterno}")
     public ResponseEntity<Orden> ultimaCarga(@PathVariable("codigoExterno") String codigoExterno) {
         try {
@@ -108,21 +119,22 @@ public class OrdenRestController {
 
     @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping(value= "/ordenes/primer-envio")
-    public ResponseEntity<String> agregarPrimerRequest(@RequestBody Orden orden) {
+    public ResponseEntity<MensajeRespuesta> agregarPrimerRequest(@RequestBody Orden orden) {
         try {
-            Orden respuesta=ordenNegocio.agregar(orden);
-            HttpHeaders responseHeaders=new HttpHeaders();
-            responseHeaders.set("location", "/orden/"+respuesta.getId());
-            return new ResponseEntity<String>(responseHeaders, HttpStatus.CREATED);
+            MensajeRespuesta r=ordenNegocio.agregar(orden).getMensaje();
+            return new ResponseEntity<MensajeRespuesta>(r, HttpStatus.CREATED);
         } catch (NegocioException e) {
             log.error(e.getMessage(), e);
-            return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
+            MensajeRespuesta r=new MensajeRespuesta(-1,e.getMessage());
+            return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (EncontradoException e) {
             log.error(e.getMessage(), e);
-            return new ResponseEntity<String>(HttpStatus.FOUND);
+            MensajeRespuesta r=new MensajeRespuesta(-1,e.getMessage());
+            return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.FOUND);
         }catch (BadRequest e){
             log.error(e.getMessage(), e);
-            return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+            MensajeRespuesta r=new MensajeRespuesta(-1,e.getMessage());
+            return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -135,21 +147,26 @@ public class OrdenRestController {
 
     @PreAuthorize("hasRole('ROLE_USER')")
     @PutMapping(value= "/ordenes/tara")
-    public ResponseEntity<Orden> pesoInicialCamion(@RequestBody Orden orden) {
+    public ResponseEntity<MensajeRespuesta> pesoInicialCamion(@RequestBody Orden orden) {
         try {
-            return new ResponseEntity<Orden>( ordenNegocio.establecerPesajeInicial(orden),HttpStatus.OK);
+            MensajeRespuesta r=ordenNegocio.establecerPesajeInicial(orden).getMensaje();
+            return new ResponseEntity<MensajeRespuesta>(r, HttpStatus.OK);
         } catch (NegocioException e) {
             log.error(e.getMessage(), e);
-            return new ResponseEntity<Orden>(HttpStatus.INTERNAL_SERVER_ERROR);
+            MensajeRespuesta r=new MensajeRespuesta(-1,e.getMessage());
+            return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (NoEncontradoException e) {
             log.error(e.getMessage(), e);
-            return new ResponseEntity<Orden>(HttpStatus.NOT_FOUND);
+            MensajeRespuesta r=new MensajeRespuesta(-1,e.getMessage());
+            return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.NOT_FOUND);
         } catch (BadRequest e) {
             log.error(e.getMessage(), e);
-            return new ResponseEntity<Orden>(HttpStatus.BAD_REQUEST);
+            MensajeRespuesta r=new MensajeRespuesta(-1,e.getMessage());
+            return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.BAD_REQUEST);
         } catch (ConflictException e) {
             log.error(e.getMessage(), e);
-            return new ResponseEntity<Orden>(HttpStatus.CONFLICT);
+            MensajeRespuesta r=new MensajeRespuesta(-1,e.getMessage());
+            return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.CONFLICT);
         }
     }
 
@@ -162,15 +179,22 @@ public class OrdenRestController {
 
     @PreAuthorize("hasRole('ROLE_USER')")
     @PutMapping(value= "/ordenes/frenar-carga")
-    public ResponseEntity<Orden> frenarCargar(@RequestBody Orden orden) {
+    public  ResponseEntity<MensajeRespuesta> frenarCargar(@RequestBody Orden orden) {
         try {
-            return new ResponseEntity<Orden>(ordenNegocio.frenarCargar(orden.getCodigoExterno()), HttpStatus.OK);
+            MensajeRespuesta r=ordenNegocio.frenarCargar(orden.getCodigoExterno()).getMensaje();
+            return new ResponseEntity<MensajeRespuesta>(r, HttpStatus.OK);
         } catch (NegocioException e) {
             log.error(e.getMessage(), e);
-            return new ResponseEntity<Orden>(HttpStatus.INTERNAL_SERVER_ERROR);
+            MensajeRespuesta r=new MensajeRespuesta(-1,e.getMessage());
+            return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (NoEncontradoException e) {
             log.error(e.getMessage(), e);
-            return new ResponseEntity<Orden>(HttpStatus.NOT_FOUND);
+            MensajeRespuesta r=new MensajeRespuesta(-1,e.getMessage());
+            return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.NOT_FOUND);
+        } catch (UnprocessableException e) {
+            log.error(e.getMessage(), e);
+            MensajeRespuesta r=new MensajeRespuesta(-1,e.getMessage());
+            return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -183,15 +207,22 @@ public class OrdenRestController {
 
     @PreAuthorize("hasRole('ROLE_USER')")
     @PutMapping(value= "/ordenes/peso-final")
-    public ResponseEntity<Orden> pesoFinalCamion(@RequestBody Orden orden) {
+    public ResponseEntity<MensajeRespuesta> pesoFinalCamion(@RequestBody Orden orden) {
         try {
-            return new ResponseEntity<Orden>(ordenNegocio.establecerPesajeFinal(orden), HttpStatus.OK);
+            MensajeRespuesta r=ordenNegocio.establecerPesajeFinal(orden).getMensaje();
+            return new ResponseEntity<MensajeRespuesta>(r, HttpStatus.OK);
         } catch (NegocioException e) {
             log.error(e.getMessage(), e);
-            return new ResponseEntity<Orden>(HttpStatus.INTERNAL_SERVER_ERROR);
+            MensajeRespuesta r=new MensajeRespuesta(-1,e.getMessage());
+            return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (NoEncontradoException e) {
             log.error(e.getMessage(), e);
-            return new ResponseEntity<Orden>(HttpStatus.NOT_FOUND);
+            MensajeRespuesta r=new MensajeRespuesta(-1,e.getMessage());
+            return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.NOT_FOUND);
+        } catch (UnprocessableException e) {
+            log.error(e.getMessage(), e);
+            MensajeRespuesta r=new MensajeRespuesta(-1,e.getMessage());
+            return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.UNPROCESSABLE_ENTITY);
         }
     }
 
@@ -212,7 +243,11 @@ public class OrdenRestController {
             log.error(e.getMessage(), e);
             return new ResponseEntity<Orden>(HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (NoEncontradoException e) {
+            log.error(e.getMessage(), e);
             return new ResponseEntity<Orden>(HttpStatus.NOT_FOUND);
+        } catch (ConflictException e) {
+            log.error(e.getMessage(), e);
+            return new ResponseEntity<Orden>(HttpStatus.CONFLICT);
         }
     }
 
@@ -236,6 +271,9 @@ public class OrdenRestController {
         } catch (BadRequest e) {
             log.error(e.getMessage(), e);
             return new ResponseEntity<Orden>(HttpStatus.BAD_REQUEST);
+        } catch (ConflictException e) {
+            log.error(e.getMessage(), e);
+            return new ResponseEntity<Orden>(HttpStatus.CONFLICT);
         }
     }
 

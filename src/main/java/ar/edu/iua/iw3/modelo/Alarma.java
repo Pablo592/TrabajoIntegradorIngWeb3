@@ -4,7 +4,6 @@ package ar.edu.iua.iw3.modelo;
 import ar.edu.iua.iw3.modelo.Cuentas.Usuario;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
 import javax.persistence.*;
 import java.util.Date;
 
@@ -20,14 +19,13 @@ public class Alarma {
 
     private String descripcion;
 
-    @ApiModelProperty(notes = "Una alarma tiene un unico autor.")
+    /*@ApiModelProperty(notes = "Una alarma tiene un unico autor.")
     @ManyToOne(cascade=CascadeType.ALL)
     private Usuario autor;
 
-    @ApiModelProperty(notes = "Pueden haber muchas Alarmas en una orden.")
+    @ApiModelProperty(notes = "Una Orden puede tener muchas alarmas.")
     @ManyToOne(cascade=CascadeType.ALL)
-    @JoinColumn(name = "orden_id")
-    private Orden orden;
+    private Orden orden;*/
 
     private Date  fechaAceptada;
 

@@ -127,18 +127,19 @@ public class CargaNegocio implements ICargaNegocio {
             orden.setFechaInicioProcesoCarga(new Date());
 
         ordenNegocio.modificar(orden);
-
+        Carga cargaNueva = carga;
         //sino hay cargas en la bd entonces la tiempo inicial es
         if(listado().size()==0 || proximoTiempoLimite == null) { //en caso de que se corte la luz
-            cargaDAO.save(carga);
+            cargaNueva = cargaDAO.save(carga);
             proximoTiempoLimite = sumarFrecuenciaConTiempo(orden.getFrecuencia(), orden.getFechaInicioProcesoCarga());
         }//
         if(proximoTiempoLimite.compareTo(carga.getFechaEntradaBackEnd())<0) {
-            cargaDAO.save(carga);
+            cargaNueva = cargaDAO.save(carga);
             proximoTiempoLimite = sumarFrecuenciaConTiempo(orden.getFrecuencia(),proximoTiempoLimite);
         }
         System.out.println("No se guarda la carga porque ya paso su frecuencia");
-        //return carga;
+        m.setCodigo(0);
+        m.setMensaje(cargaNueva.toString());
         return r;
     }
 

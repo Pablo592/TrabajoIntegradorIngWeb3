@@ -95,4 +95,18 @@ public class ConciliacionDTO {
     public void setPromedioCaudalLitroSegundo(float promedioCaudalLitroSegundo) {
         this.promedioCaudalLitroSegundo = promedioCaudalLitroSegundo;
     }
+
+    @Override
+    public String toString() {
+        return "ConciliacionDTO{" +
+                "pesajeInicial=" + pesajeInicial +
+                ", pesajeFinal=" + pesajeFinal +
+                ", masaAcumuladaKg=" + masaAcumuladaKg +
+                ", netoPorBalanza=" + netoPorBalanza +
+                ", diferenciaNetoPorBalanza_masaAcumuludada=" + diferenciaNetoPorBalanza_masaAcumuludada +
+                ", promedDensidadProductoKilogramoMetroCub=" + promedDensidadProductoKilogramoMetroCub +
+                ", promedioTemperaturaProductoCelcius=" + promedioTemperaturaProductoCelcius +
+                ", promedioCaudalLitroSegundo=" + promedioCaudalLitroSegundo +
+                '}';
+    }
 }
