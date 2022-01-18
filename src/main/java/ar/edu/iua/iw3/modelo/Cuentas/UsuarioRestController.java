@@ -1,9 +1,11 @@
 package ar.edu.iua.iw3.modelo.Cuentas;
 
+import ar.edu.iua.iw3.modelo.Orden;
 import ar.edu.iua.iw3.negocio.excepciones.BadRequest;
 import ar.edu.iua.iw3.negocio.excepciones.EncontradoException;
 import ar.edu.iua.iw3.negocio.excepciones.NegocioException;
 import ar.edu.iua.iw3.negocio.excepciones.NoEncontradoException;
+import ar.edu.iua.iw3.util.MensajeRespuesta;
 import ar.edu.iua.iw3.web.Constantes;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -40,6 +42,7 @@ public class UsuarioRestController {
         try {
             return new ResponseEntity<List<Usuario>>(usuarioNegocio.lista(), HttpStatus.OK);
         } catch (NegocioException e) {
+            log.error(e.getMessage(), e);
             return new ResponseEntity<List<Usuario>>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -57,8 +60,10 @@ public class UsuarioRestController {
         try {
             return new ResponseEntity<Usuario>(usuarioNegocio.cargar(id), HttpStatus.OK);
         } catch (NegocioException e) {
+            log.error(e.getMessage(), e);
             return new ResponseEntity<Usuario>(HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (NoEncontradoException e) {
+            log.error(e.getMessage(), e);
             return new ResponseEntity<Usuario>(HttpStatus.NOT_FOUND);
         }
     }
@@ -72,20 +77,22 @@ public class UsuarioRestController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping(value="/usuarios")
-    public ResponseEntity<String> agregar(@RequestBody Usuario usuario) {
+    public ResponseEntity<MensajeRespuesta> agregar(@RequestBody Usuario usuario) {
         try {
-            Usuario respuesta=usuarioNegocio.agregar(usuario);
-            HttpHeaders responseHeaders=new HttpHeaders();
-            responseHeaders.set("location", "/usuarios/"+respuesta.getId());
-            return new ResponseEntity<String>(responseHeaders, HttpStatus.CREATED);
+            MensajeRespuesta r = usuarioNegocio.agregar(usuario).getMensaje();
+            return new ResponseEntity<MensajeRespuesta>(r, HttpStatus.CREATED);
         } catch (NegocioException e) {
-            return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
+            log.error(e.getMessage(), e);
+            MensajeRespuesta r=new MensajeRespuesta(-1,e.getMessage());
+            return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (EncontradoException e) {
             log.error(e.getMessage(), e);
-            return new ResponseEntity<String>(HttpStatus.FOUND);
+            MensajeRespuesta r=new MensajeRespuesta(-1,e.getMessage());
+            return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.FOUND);
         } catch (BadRequest e) {
             log.error(e.getMessage(), e);
-            return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+            MensajeRespuesta r=new MensajeRespuesta(-1,e.getMessage());
+            return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -98,21 +105,26 @@ public class UsuarioRestController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping(value="/usuarios")
-    public ResponseEntity<String> modificar(@RequestBody Usuario usuario) {
+    public ResponseEntity<MensajeRespuesta> modificar(@RequestBody Usuario usuario) {
         try {
-            usuarioNegocio.modificar(usuario);
-            return new ResponseEntity<String>(HttpStatus.OK);
+            MensajeRespuesta r = usuarioNegocio.modificar(usuario).getMensaje();
+            return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.OK);
         } catch (NegocioException e) {
             log.error(e.getMessage(), e);
-            return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
+            MensajeRespuesta r=new MensajeRespuesta(-1,e.getMessage());
+            return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (NoEncontradoException e) {
-            return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
+            log.error(e.getMessage(), e);
+            MensajeRespuesta r=new MensajeRespuesta(-1,e.getMessage());
+            return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.NOT_FOUND);
         } catch (EncontradoException e) {
             log.error(e.getMessage(), e);
-            return new ResponseEntity<String>(HttpStatus.FOUND);
+            MensajeRespuesta r=new MensajeRespuesta(-1,e.getMessage());
+            return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.FOUND);
         } catch (BadRequest e) {
             log.error(e.getMessage(), e);
-            return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+            MensajeRespuesta r=new MensajeRespuesta(-1,e.getMessage());
+            return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -125,14 +137,18 @@ public class UsuarioRestController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping(value="/usuarios/{id}")
-    public ResponseEntity<String> eliminar(@PathVariable("id") int id) {
+    public ResponseEntity<MensajeRespuesta> eliminar(@PathVariable("id") int id) {
         try {
-            usuarioNegocio.eliminar(id);
-            return new ResponseEntity<String>(HttpStatus.OK);
+            MensajeRespuesta r =   usuarioNegocio.eliminar(id).getMensaje();
+            return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.OK);
         } catch (NegocioException e) {
-            return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
+            log.error(e.getMessage(), e);
+            MensajeRespuesta r=new MensajeRespuesta(-1,e.getMessage());
+            return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (NoEncontradoException e) {
-            return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
+            log.error(e.getMessage(), e);
+            MensajeRespuesta r=new MensajeRespuesta(-1,e.getMessage());
+            return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.NOT_FOUND);
         }
     }
 }

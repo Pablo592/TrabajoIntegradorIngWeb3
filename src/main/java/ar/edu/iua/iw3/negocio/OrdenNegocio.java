@@ -268,14 +268,22 @@ public class OrdenNegocio implements IOrdenNegocio{
         return  ordenDB;
     }
 
-    public Orden cambiarUmbralTemperatura(Orden orden) throws BadRequest, NoEncontradoException, NegocioException, ConflictException {
+    public RespuestaGenerica<Orden> cambiarUmbralTemperatura(Orden orden) throws BadRequest, NoEncontradoException, NegocioException, ConflictException {
+        MensajeRespuesta m=new MensajeRespuesta();
+        RespuestaGenerica<Orden> r = new RespuestaGenerica<Orden>(orden, m);
 
-        if(orden.getUmbralTemperaturaCombustible() < 1 )
+
+        if(orden.getUmbralTemperaturaCombustible() < 1)
             throw new BadRequest("Ingrese un umbral de temperatura valido");
 
         Orden ordenBD = findByCodigoExterno(orden.getCodigoExterno());
+
+        if(ordenBD == null)
+            throw new NoEncontradoException("No existe la orden con el codigo externo: " + orden.getCodigoExterno());
+
         ordenBD.setUmbralTemperaturaCombustible(orden.getUmbralTemperaturaCombustible());
-        return modificar(ordenBD);
+        modificar(ordenBD);
+        return r;
     }
 
     private void validarMetadata(Orden orden) throws BadRequest {

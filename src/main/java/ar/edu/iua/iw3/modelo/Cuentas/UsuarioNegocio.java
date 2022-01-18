@@ -1,9 +1,13 @@
 package ar.edu.iua.iw3.modelo.Cuentas;
 
+import ar.edu.iua.iw3.modelo.Orden;
+import ar.edu.iua.iw3.modelo.dto.ConciliacionDTO;
 import ar.edu.iua.iw3.negocio.excepciones.BadRequest;
 import ar.edu.iua.iw3.negocio.excepciones.EncontradoException;
 import ar.edu.iua.iw3.negocio.excepciones.NegocioException;
 import ar.edu.iua.iw3.negocio.excepciones.NoEncontradoException;
+import ar.edu.iua.iw3.util.MensajeRespuesta;
+import ar.edu.iua.iw3.util.RespuestaGenerica;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +53,8 @@ public class UsuarioNegocio implements IUsuarioNegocio {
 	}
 
 	@Override
-	public Usuario agregar(Usuario usuario) throws NegocioException, EncontradoException, BadRequest {
+	public RespuestaGenerica<Usuario> agregar(Usuario usuario) throws NegocioException, EncontradoException, BadRequest {
+		MensajeRespuesta m=new MensajeRespuesta();
 		//si es nulo esta bien
 		String msjCheck = usuario.checkBasicData();
 		if (msjCheck != null) {
@@ -63,7 +68,8 @@ public class UsuarioNegocio implements IUsuarioNegocio {
 				throw new EncontradoException("El username " + usuario.getUsername() + " ya se encuentra registrado");
 			try {
 					usuario.setPassword(pwdEncoder.encode(usuario.getPassword()));
-					return userDAO.save(usuario);
+				userDAO.save(usuario);
+					return new RespuestaGenerica<Usuario>(usuario, m);
 				} catch (Exception e) {
 					log.error(e.getMessage(), e);
 					throw new NegocioException(e);
@@ -72,8 +78,8 @@ public class UsuarioNegocio implements IUsuarioNegocio {
 		}
 
 	@Override
-	public Usuario modificar(Usuario usuario) throws NegocioException, EncontradoException, NoEncontradoException, BadRequest {
-
+	public RespuestaGenerica<Usuario> modificar(Usuario usuario) throws NegocioException, EncontradoException, NoEncontradoException, BadRequest {
+		MensajeRespuesta m=new MensajeRespuesta();
 		Optional<Usuario> buscandoDb;
 
 		String msjCheck = usuario.checkBasicData();
@@ -86,7 +92,7 @@ public class UsuarioNegocio implements IUsuarioNegocio {
 			throw new NoEncontradoException("El usuario que desea modificar no se encuentra registrado");
 		}else {
 			if(usuario.getEmail() != null) {
-				buscandoDb = userDAO.findFirstByUsername(usuario.getEmail());
+				buscandoDb = userDAO.findFirstByEmail(usuario.getEmail());
 				if (buscandoDb.isPresent())
 					if (usuario.getId() != buscandoDb.get().getId())
 						throw new EncontradoException("El email " + usuario.getEmail() + " ya se encuentra registrado");
@@ -96,7 +102,8 @@ public class UsuarioNegocio implements IUsuarioNegocio {
 			if (usuario.getId() != buscandoDb.get().getId())
 				throw new EncontradoException("El username " + usuario.getUsername() + " ya se encuentra registrado");
 		}
-		return saveUser(usuario);	//Paso 4
+		saveUser(usuario);
+		return 	new RespuestaGenerica<Usuario>(usuario, m);
 	}
 
 	public  Usuario saveUser(Usuario usuario) throws NegocioException {
@@ -121,14 +128,19 @@ public class UsuarioNegocio implements IUsuarioNegocio {
 		if (!o.isPresent())
 			throw new NoEncontradoException(
 					String.format("No se encuentra un user con nombre o email = '%s'", nombreOEmail));
-		
+
 		return o.get();
 	}
 
-	public void eliminar(int id) throws NegocioException, NoEncontradoException {
-		cargar(id);
+	public RespuestaGenerica<Usuario> eliminar(int id) throws NegocioException, NoEncontradoException {
+		MensajeRespuesta m=new MensajeRespuesta();
+		Usuario u = cargar(id);
+		if(u == null)
+			throw new NoEncontradoException("El usuario que desea eliminar no se encuentra registrado");
+
 		try {
 			userDAO.deleteById(id);
+			return new RespuestaGenerica<Usuario>(u, m);
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 			throw new NegocioException(e);

@@ -27,6 +27,6 @@ public interface IOrdenNegocio {
 
     RespuestaGenerica<ConciliacionDTO>  obtenerConciliacion(String codigoExterno) throws NegocioException, NoEncontradoException, UnprocessableException;
 
-    public Orden cambiarUmbralTemperatura(Orden orden) throws BadRequest, NoEncontradoException, NegocioException, ConflictException;
+    public RespuestaGenerica<Orden> cambiarUmbralTemperatura(Orden orden) throws BadRequest, NoEncontradoException, NegocioException, ConflictException;
 }
 

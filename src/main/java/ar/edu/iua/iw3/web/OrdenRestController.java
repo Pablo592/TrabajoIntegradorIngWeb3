@@ -260,20 +260,26 @@ public class OrdenRestController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping(value= "/ordenes/umbral-temperatura")
-    public ResponseEntity<Orden> modificarUmbralTemperatura(@RequestBody Orden orden) {
+    public ResponseEntity<MensajeRespuesta> modificarUmbralTemperatura(@RequestBody Orden orden) {
         try {
-            return new ResponseEntity<Orden>( ordenNegocio.cambiarUmbralTemperatura(orden),HttpStatus.OK);
+            MensajeRespuesta r = ordenNegocio.cambiarUmbralTemperatura(orden).getMensaje();
+            return new ResponseEntity<MensajeRespuesta>( r,HttpStatus.OK);
         } catch (NegocioException e) {
             log.error(e.getMessage(), e);
-            return new ResponseEntity<Orden>(HttpStatus.INTERNAL_SERVER_ERROR);
+            MensajeRespuesta r=new MensajeRespuesta(-1,e.getMessage());
+            return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (NoEncontradoException e) {
-            return new ResponseEntity<Orden>(HttpStatus.NOT_FOUND);
+            log.error(e.getMessage(), e);
+            MensajeRespuesta r=new MensajeRespuesta(-1,e.getMessage());
+            return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.NOT_FOUND);
         } catch (BadRequest e) {
             log.error(e.getMessage(), e);
-            return new ResponseEntity<Orden>(HttpStatus.BAD_REQUEST);
+            MensajeRespuesta r=new MensajeRespuesta(-1,e.getMessage());
+            return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.BAD_REQUEST);
         } catch (ConflictException e) {
             log.error(e.getMessage(), e);
-            return new ResponseEntity<Orden>(HttpStatus.CONFLICT);
+            MensajeRespuesta r=new MensajeRespuesta(-1,e.getMessage());
+            return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.CONFLICT);
         }
     }
 
