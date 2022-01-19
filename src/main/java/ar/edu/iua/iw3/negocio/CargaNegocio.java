@@ -123,6 +123,9 @@ public class CargaNegocio implements ICargaNegocio {
         orden.setUltimaTemperaturaProductoCelcius(carga.getTemperaturaProductoCelcius());
         orden.setFechaFinProcesoCarga(new Date());
 
+        List<Carga> lista = null;
+        lista.add(carga);
+        orden.setCargaList(lista);
         if (orden.getFechaInicioProcesoCarga() == null)
             orden.setFechaInicioProcesoCarga(new Date());
 

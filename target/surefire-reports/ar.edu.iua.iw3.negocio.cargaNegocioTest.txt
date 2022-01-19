@@ -1,0 +1,8 @@
+-------------------------------------------------------------------------------
+Test set: ar.edu.iua.iw3.negocio.cargaNegocioTest
+-------------------------------------------------------------------------------
+Tests run: 2, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 5.454 s <<< FAILURE! - in ar.edu.iua.iw3.negocio.cargaNegocioTest
+testLoadSuccess3  Time elapsed: 0.01 s  <<< ERROR!
+ar.edu.iua.iw3.negocio.excepciones.NoEncontradoException: No existe una orden con codigo externo: 10
+	at ar.edu.iua.iw3.negocio.cargaNegocioTest.testLoadSuccess3(cargaNegocioTest.java:126)
+
