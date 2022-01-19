@@ -24,7 +24,6 @@ import ar.edu.iua.iw3.negocio.excepciones.NoEncontradoException;
 @RequestMapping(Constantes.URL_BASE)
 public class CamionRestController {
 
-	
 	@Autowired
 	private ICamionNegocio camionNegocio;
 	
@@ -42,6 +41,7 @@ public class CamionRestController {
 		try {
 			return new ResponseEntity<List<Camion>>(camionNegocio.listado(), HttpStatus.OK);
 		} catch (NegocioException e) {
+			log.error(e.getMessage(), e);
 			return new ResponseEntity<List<Camion>>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
@@ -62,6 +62,7 @@ public class CamionRestController {
 			responseHeaders.set("location", "/camiones/"+respuesta.getId());
 			return new ResponseEntity<String>(responseHeaders, HttpStatus.CREATED);
 		} catch (NegocioException e) {
+			log.error(e.getMessage(), e);
 			return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
 		} catch (EncontradoException e) {
 			log.error(e.getMessage(), e);	
@@ -89,6 +90,7 @@ public class CamionRestController {
 			log.error(e.getMessage(), e);
 			return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
 		} catch (NoEncontradoException e) {
+			log.error(e.getMessage(), e);
 			return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
 		}
 	}

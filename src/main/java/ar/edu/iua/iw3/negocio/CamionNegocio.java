@@ -109,9 +109,9 @@ public class CamionNegocio implements ICamionNegocio{
 				return saveCamion(camion);	//Paso 4
 	}
 	
-	public  Camion saveCamion(Camion componente) throws NegocioException {
+	public  Camion saveCamion(Camion camion) throws NegocioException {
 		try {
-			return camionDAO.save(componente); // sino existe el camion lo cargo
+			return camionDAO.save(camion); // sino existe el camion lo cargo
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 			throw new NegocioException(e);

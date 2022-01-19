@@ -135,14 +135,16 @@ public class Orden implements Serializable{
 	@JsonBackReference
 	private List<Carga> cargaList;
 
-
-	/*@ApiModelProperty(notes = "Una orden tiene muchas alarmas")
-	@OneToMany(targetEntity=Alarma.class, mappedBy= "orden", fetch = FetchType.LAZY)
+	@ApiModelProperty(notes = "Una orden tiene muchas alarmas")
+	@OneToMany(targetEntity=Alarma.class, mappedBy= "ordenAlarma", fetch = FetchType.LAZY)
 	@JsonBackReference
-	private List<Alarma> alarmaList;*/
+	private List<Alarma> alarmaList;
 
 	@ApiModelProperty(notes = "Temperatura maxima aceptable del combustible.", example = "21,874")
 	private float umbralTemperaturaCombustible = 25;
+
+	@ApiModelProperty(notes = "Representa si la orden tiene su alarma prendida o no, para no enviar muchas alarmas", example = "true||false")
+	boolean alarmaActiva = false;
 
 	public float getUmbralTemperaturaCombustible() {
 		return umbralTemperaturaCombustible;
@@ -340,6 +342,21 @@ public class Orden implements Serializable{
 		return null;
 	}
 
+	public List<Alarma> getAlarmaList() {
+		return alarmaList;
+	}
+
+	public void setAlarmaList(List<Alarma> alarmaList) {
+		this.alarmaList = alarmaList;
+	}
+
+	public boolean isAlarmaActiva() {
+		return alarmaActiva;
+	}
+
+	public void setAlarmaActiva(boolean alarmaActiva) {
+		this.alarmaActiva = alarmaActiva;
+	}
 
 	@Override
 	public int hashCode() {
