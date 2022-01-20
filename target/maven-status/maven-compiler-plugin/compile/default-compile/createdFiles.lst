@@ -1,6 +1,6 @@
 ar/edu/iua/iw3/modelo/Cliente.class
-ar/edu/iua/iw3/modelo/persistencia/CamionRepository.class
 ar/edu/iua/iw3/security/SecurityConfig.class
+ar/edu/iua/iw3/modelo/persistencia/CamionRepository.class
 ar/edu/iua/iw3/negocio/excepciones/ConflictException.class
 ar/edu/iua/iw3/modelo/persistencia/ClienteRepository.class
 ar/edu/iua/iw3/negocio/excepciones/NoEncontradoException.class
@@ -56,8 +56,8 @@ ar/edu/iua/iw3/web/OrdenRestController.class
 ar/edu/iua/iw3/negocio/excepciones/NegocioException.class
 ar/edu/iua/iw3/modelo/dto/CargaDTO.class
 ar/edu/iua/iw3/negocio/IChoferNegocio.class
-ar/edu/iua/iw3/modelo/Cuentas/Rol.class
 ar/edu/iua/iw3/security/authtoken/AuthTokenRespository.class
+ar/edu/iua/iw3/modelo/Cuentas/Rol.class
 ar/edu/iua/iw3/web/CargaRestController.class
 ar/edu/iua/iw3/modelo/Cuentas/UsuarioRepository.class
 ar/edu/iua/iw3/modelo/persistencia/OrdenRepository.class
