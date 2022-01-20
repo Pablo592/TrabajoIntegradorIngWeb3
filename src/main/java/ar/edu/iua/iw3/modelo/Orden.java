@@ -1,15 +1,53 @@
 package ar.edu.iua.iw3.modelo;
 
+import ar.edu.iua.iw3.modelo.dto.ConciliacionDTO;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
-
 import javax.persistence.*;
+@NamedNativeQueries({
 
+		@NamedNativeQuery(name = "Orden.getPesoInicialAndPesoFinalAndMasaAcumuladaKgAndDiferenciaMasaAcu_DeltaPeso",
+				query = "SELECT c.tara as pesajeInicial , \n" +
+						"\t c.peso_final_camion as pesajeFinal, \n" +
+						"\t masa_acumulada_kg, \n" +
+						"\t (c.peso_final_camion - c.tara) as netoPorBalanza, \n" +
+						"\t  ((c.peso_final_camion - c.tara) - masa_acumulada_kg ) as diferenciaNetoPorBalanza_masaAcumuludada, \n" +
+						"\t  o.promedio_temperatura_producto_celcius, \n" +
+						"\t  o.promedio_caudal_litro_segundo,\n" +
+						"\t  o.promed_densidad_producto_kilogramo_metro_cub\n" +
+						"\t from orden o \n" +
+						"\t inner join camion c on c.id = o.id_camion \n" +
+						"\t where o.id = ?1", resultSetMapping = "ordenmap")
+
+})
+
+@SqlResultSetMapping(
+		name="ordenmap",
+		classes = {
+				@ConstructorResult(
+						columns = {
+								@ColumnResult(name = "pesajeInicial", type = float.class),
+								@ColumnResult(name = "pesajeFinal", type = float.class),
+								@ColumnResult(name = "masa_acumulada_kg", type = float.class),
+								@ColumnResult(name = "netoPorBalanza", type = float.class),
+								@ColumnResult(name = "diferenciaNetoPorBalanza_masaAcumuludada", type = float.class),
+								@ColumnResult(name = "promedio_temperatura_producto_celcius", type = float.class),
+								@ColumnResult(name = "promedio_caudal_litro_segundo", type = float.class),
+								@ColumnResult(name = "promed_densidad_producto_kilogramo_metro_cub", type = float.class)
+						},
+						targetClass = ConciliacionDTO.class
+				)
+		}
+)
+
+
+
+@ApiModel(description = "Esta clase representa a la orden encargada de registrar la carga de combustible.")
 @Entity
 @Table(name = "orden")
 public class Orden implements Serializable{
@@ -19,59 +57,100 @@ public class Orden implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
+
+	@ApiModelProperty(notes = "Clave principal del sistema externo.", example = "5", required = true)
 	@Column(unique = true, nullable = false)
 	private String codigoExterno;
+
+	@ApiModelProperty(notes = "Fecha prevista de la carga de combustible.", example = "2021-01-01", required = true)
 	@Column(nullable = false)
-	private Date fechaTurno;			//Fecha/Hora en la que el camion tiene turno
+	private Date fechaTurno;
 
-	private Date fechaPesajeInicial;		//Fecha/Hora en que se llevo acabo el pesaje inicial con el camion vacio
+	@ApiModelProperty(notes = "Fecha del pesaje del camión sin carga.", example = "2021-01-01")
+	private Date fechaPesajeInicial;
 
-	private Date fechaInicioProcesoCarga;	//Fecha/Hora en que se comienza a carga el camion
+	@ApiModelProperty(notes = "Fecha del inicio del proceso de carga.", example = "2021-01-01")
+	private Date fechaInicioProcesoCarga;
 
-	private Date fechaFinProcesoCarga;		//Fecha/Hora en la cual dejo de cargarse el camion
+	@ApiModelProperty(notes = "Fecha del fin del proceso de carga,con precision de microSegundos.", example = "2021-01-01")
+	private Date fechaFinProcesoCarga;
 
-	private Date fechaRecepcionPesajeFinal;	//Fecha/Hora en la cual se peso el camion tras finalizar la carga
+	@ApiModelProperty(notes = "Fecha del pesaje final del camión.", example = "2021-01-01")
+	private Date fechaRecepcionPesajeFinal;
+
+	@ApiModelProperty(notes = "Estado actual de la orden.", example = "2")
 	@Column(columnDefinition = "int default 0")
-	private int estado = 0;						//estado del proceso en la que se encuentra la orden
+	private int estado = 0;
 
+	@ApiModelProperty(notes = "Contraseña generada al registrar el pesaje inicial del camión.", example = "65485")
 	private String password;
-	@Column(nullable = true)
-	private int frecuencia;						//la frecuencia deberia de variar segun la orden
-	@Column(nullable = true)
-	private float promedioMasaAcumuladaKg;
-	@Column(nullable = true)
+
+	@ApiModelProperty(notes = "Frecuencia en segundos del registro de carga del camión", example = "1")
+	@Column(columnDefinition = "int default 1")
+	private int frecuencia = 1;
+
+	@ApiModelProperty(notes = "Peso del combustible (kG) ya cargado.", example = "30")
+	private float masaAcumuladaKg;
+
+	@ApiModelProperty(notes = "Densidad promedio del combustible (kg/m^3).", example = "0,874")
 	private float promedDensidadProductoKilogramoMetroCub;
-	@Column(nullable = true)
+
+	@ApiModelProperty(notes = "Temperatura promedio del combustible (°C).", example = "16")
 	private float promedioTemperaturaProductoCelcius;
-	@Column(nullable = true)
+
+	@ApiModelProperty(notes = "Cantidad promedio de combustible cargado por segundo (litro/segundo).", example = "0,16")
 	private float promedioCaudalLitroSegundo;
-	@Column(nullable = true)
+
+	@ApiModelProperty(notes = "Ultima densidad registrada del combustible (kg/m^3).", example = "0,874")
 	private float ultimaDensidadProductoKilogramoMetroCub;
-	@Column(nullable = true)
+
+	@ApiModelProperty(notes = "Ultima temperatura registrada del combustible (°C).", example = "16")
 	private float ultimaTemperaturaProductoCelcius;
-	@Column(nullable = true)
+
+	@ApiModelProperty(notes = "Ultimo caudal registrado (litro/segundo).", example = "0,16")
 	private float ultimoCaudalLitroSegundo;
 
+	@ApiModelProperty(notes = "El camión que sera cargado con combustible")
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_camion")
-	private Camion camion;						//Vehiculo a cargar
+	private Camion camion;
 
+	@ApiModelProperty(notes = "El cliente al que se le entregara el combustible")
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_cliente")
-	private Cliente cliente;					//Cliente que paga el servicio
+	private Cliente cliente;
 
+	@ApiModelProperty(notes = "El chofer al que se le entregara el combustible")
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_chofer")
-	private Chofer chofer;						//Conductor del camion
+	private Chofer chofer;
 
+	@ApiModelProperty(notes = "El combustible introducido en el camión")
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_producto")
 	private Producto producto;
 
-
+	@ApiModelProperty(notes = "Las cargas de combustible introducidas en el camión")
 	@OneToMany(targetEntity=Carga.class, mappedBy= "orden", fetch = FetchType.LAZY)
 	@JsonBackReference
 	private List<Carga> cargaList;
+
+
+	/*@ApiModelProperty(notes = "Una orden tiene muchas alarmas")
+	@OneToMany(targetEntity=Alarma.class, mappedBy= "orden", fetch = FetchType.LAZY)
+	@JsonBackReference
+	private List<Alarma> alarmaList;*/
+
+	@ApiModelProperty(notes = "Temperatura maxima aceptable del combustible.", example = "21,874")
+	private float umbralTemperaturaCombustible = 25;
+
+	public float getUmbralTemperaturaCombustible() {
+		return umbralTemperaturaCombustible;
+	}
+
+	public void setUmbralTemperaturaCombustible(float umbralTemperaturaCombustible) {
+		this.umbralTemperaturaCombustible = umbralTemperaturaCombustible;
+	}
 
 	public long getId() {
 		return id;
@@ -185,12 +264,12 @@ public class Orden implements Serializable{
 		this.frecuencia = frecuencia;
 	}
 
-	public float getPromedioMasaAcumuladaKg() {
-		return promedioMasaAcumuladaKg;
+	public float getMasaAcumuladaKg() {
+		return masaAcumuladaKg;
 	}
 
-	public void setPromedioMasaAcumuladaKg(float promedioMasaAcumuladaKg) {
-		this.promedioMasaAcumuladaKg = promedioMasaAcumuladaKg;
+	public void setMasaAcumuladaKg(float promedioMasaAcumuladaKg) {
+		this.masaAcumuladaKg = promedioMasaAcumuladaKg;
 	}
 
 	public float getPromedDensidadProductoKilogramoMetroCub() {
@@ -249,13 +328,51 @@ public class Orden implements Serializable{
 		this.cargaList = cargaList;
 	}
 
-//aca tengo que hacer un metodo que chequee basicamente el contenido de los valores que me llegan en el json
+
+	//aca tengo que hacer un metodo que chequee basicamente el contenido de los valores que me llegan en el json
 	// tanto para el insert como en el update
+
+	public String checkBasicData(){
+		if(getFrecuencia() <1)
+			return "El atributo 'Frecuencia' tiene que ser mayor a 0(cero)";
+		if(getCodigoExterno().trim().length() == 0)
+			return "El atributo 'codigo externo' no puede ser nulo";
+		return null;
+	}
 
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, codigoExterno, fechaTurno, fechaPesajeInicial, fechaInicioProcesoCarga, fechaFinProcesoCarga, fechaRecepcionPesajeFinal, estado, password, frecuencia, promedioMasaAcumuladaKg, promedDensidadProductoKilogramoMetroCub, promedioTemperaturaProductoCelcius, promedioCaudalLitroSegundo, ultimaDensidadProductoKilogramoMetroCub, ultimaTemperaturaProductoCelcius, ultimoCaudalLitroSegundo, camion, cliente, chofer, producto, cargaList);
+		return Objects.hash(id, codigoExterno, fechaTurno, fechaPesajeInicial, fechaInicioProcesoCarga, fechaFinProcesoCarga, fechaRecepcionPesajeFinal, estado, password, frecuencia, masaAcumuladaKg, promedDensidadProductoKilogramoMetroCub, promedioTemperaturaProductoCelcius, promedioCaudalLitroSegundo, ultimaDensidadProductoKilogramoMetroCub, ultimaTemperaturaProductoCelcius, ultimoCaudalLitroSegundo, camion, cliente, chofer, producto, cargaList, umbralTemperaturaCombustible);
+	}
+
+	@Override
+	public String toString() {
+		return "Orden{" +
+				"id=" + id +
+				", codigoExterno='" + codigoExterno + '\'' +
+				", fechaTurno=" + fechaTurno +
+				", fechaPesajeInicial=" + fechaPesajeInicial +
+				", fechaInicioProcesoCarga=" + fechaInicioProcesoCarga +
+				", fechaFinProcesoCarga=" + fechaFinProcesoCarga +
+				", fechaRecepcionPesajeFinal=" + fechaRecepcionPesajeFinal +
+				", estado=" + estado +
+				", password='" + password + '\'' +
+				", frecuencia=" + frecuencia +
+				", masaAcumuladaKg=" + masaAcumuladaKg +
+				", promedDensidadProductoKilogramoMetroCub=" + promedDensidadProductoKilogramoMetroCub +
+				", promedioTemperaturaProductoCelcius=" + promedioTemperaturaProductoCelcius +
+				", promedioCaudalLitroSegundo=" + promedioCaudalLitroSegundo +
+				", ultimaDensidadProductoKilogramoMetroCub=" + ultimaDensidadProductoKilogramoMetroCub +
+				", ultimaTemperaturaProductoCelcius=" + ultimaTemperaturaProductoCelcius +
+				", ultimoCaudalLitroSegundo=" + ultimoCaudalLitroSegundo +
+				", camion=" + camion +
+				", cliente=" + cliente +
+				", chofer=" + chofer +
+				", producto=" + producto +
+				", cargaList=" + cargaList +
+				", umbralTemperaturaCombustible=" + umbralTemperaturaCombustible +
+				'}';
 	}
 }
 

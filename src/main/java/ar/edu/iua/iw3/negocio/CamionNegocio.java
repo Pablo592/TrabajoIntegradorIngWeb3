@@ -4,15 +4,15 @@ import java.util.List;
 import java.util.Optional;
 
 import ar.edu.iua.iw3.modelo.Camion;
+import ar.edu.iua.iw3.modelo.Orden;
+import ar.edu.iua.iw3.modelo.persistencia.OrdenRepository;
+import ar.edu.iua.iw3.negocio.excepciones.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ar.edu.iua.iw3.modelo.persistencia.CamionRepository;
-import ar.edu.iua.iw3.negocio.excepciones.EncontradoException;
-import ar.edu.iua.iw3.negocio.excepciones.NegocioException;
-import ar.edu.iua.iw3.negocio.excepciones.NoEncontradoException;
 
 
 @Service
@@ -22,6 +22,9 @@ public class CamionNegocio implements ICamionNegocio{
 
 	@Autowired
 	private CamionRepository camionDAO;
+
+	@Autowired
+	private CargaNegocio cargaNegocio;
 	
 	@Override
 	public List<Camion> listado() throws NegocioException {
@@ -51,11 +54,18 @@ public class CamionNegocio implements ICamionNegocio{
 
 	
 	@Override
-	public Camion agregar(Camion camion) throws NegocioException, EncontradoException {
-		try {
-			   if(null!=findCamionByPatente(camion.getPatente()))
-			        throw new EncontradoException("Ya existe un camion con la patente =" + camion.getPatente());
-				cargar(camion.getId()); 									// tira excepcion sino no lo encuentra
+	public Camion agregar(Camion camion) throws NegocioException, EncontradoException, BadRequest {
+		//si es nulo esta bien
+		String msjCheck = camion.checkBasicData();
+		if(msjCheck!=null){
+			System.out.println("Hubo un error :"+ msjCheck);
+			throw new BadRequest();
+		}
+		else {
+			try {
+				if (null != findCamionByPatente(camion.getPatente()))
+					throw new EncontradoException("Ya existe un camion con la patente =" + camion.getPatente());
+				cargar(camion.getId());                                    // tira excepcion sino no lo encuentra
 				throw new EncontradoException("Ya existe un camion con id=" + camion.getId());
 			} catch (NoEncontradoException e) {
 			}
@@ -65,6 +75,7 @@ public class CamionNegocio implements ICamionNegocio{
 				log.error(e.getMessage(), e);
 				throw new NegocioException(e);
 			}
+		}
 	}
 	
 	public Camion findCamionByPatente(String patente) {
@@ -117,18 +128,23 @@ public class CamionNegocio implements ICamionNegocio{
 			log.error(e.getMessage(), e);
 			throw new NegocioException(e);
 		}
-
 	}
 
 	@Override
-	public Camion setearPesoIni(Camion camionRecibido, Camion camionBD) throws NoEncontradoException, NegocioException {
-			if(!camionBD.getPatente().equals(camionRecibido.getPatente()))
-				throw new NegocioException("La patente enviada :"+ camionRecibido.getPatente()+" no esta asociada a la orden enviada");
+	public Camion setearPesoIni(Camion camionRecibido, Camion camionBD) throws  NegocioException, BadRequest, ConflictException {
+			if(!camionBD.getPatente().equalsIgnoreCase(camionRecibido.getPatente()))
+				throw new ConflictException("La patente enviada :"+ camionRecibido.getPatente()+" no esta asociada a la orden enviada");
 			if(camionRecibido.getTara()<= 0)
-				throw new NegocioException("La tara no puede ser negativa");
+				throw new BadRequest("El atributo 'tara' tiene que ser mayor a cero");
 			camionBD.setTara(camionRecibido.getTara());
 
-			return modificar(camionBD);
+			return saveCamion(camionBD);
+	}
+
+	public Camion setearPesoFinalCamion(Orden orden) throws NoEncontradoException, NegocioException {
+		Camion camionBD = findCamionByPatente(orden.getCamion().getPatente());	//validarlo sino colocar que busque por dni
+		camionBD.setPesoFinalCamion(orden.getCamion().getPesoFinalCamion());
+		return modificar(camionBD);
 	}
 
 }

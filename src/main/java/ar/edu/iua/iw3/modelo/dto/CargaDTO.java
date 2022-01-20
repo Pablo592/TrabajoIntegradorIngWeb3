@@ -1,10 +1,16 @@
 package ar.edu.iua.iw3.modelo.dto;
 
+import io.swagger.annotations.ApiModelProperty;
+
 public class CargaDTO {
+    @ApiModelProperty(notes = "Densidad promedio del combustible (kg/m^3).", example = "0,874")
     private float promedDensidadProductoKilogramoMetroCub;
+    @ApiModelProperty(notes = "Temperatura promedio del combustible (°C).", example = "16")
     private float promedioTemperaturaProductoCelcius;
+    @ApiModelProperty(notes = "Cantidad promedio de combustible cargado por segundo (litro/segundo).", example = "0,16")
     private float promedioCaudalLitroSegundo;
 
+    public CargaDTO(){}
 
     public CargaDTO(float promedDensidadProductoKilogramoMetroCub, float promedioTemperaturaProductoCelcius, float promedioCaudalLitroSegundo) {
         this.promedDensidadProductoKilogramoMetroCub = promedDensidadProductoKilogramoMetroCub;
@@ -36,4 +42,12 @@ public class CargaDTO {
         this.promedioCaudalLitroSegundo = promedioCaudalLitroSegundo;
     }
 
+    @Override
+    public String toString() {
+        return "CargaDTO{" +
+                "promedDensidadProductoKilogramoMetroCub=" + promedDensidadProductoKilogramoMetroCub +
+                ", promedioTemperaturaProductoCelcius=" + promedioTemperaturaProductoCelcius +
+                ", promedioCaudalLitroSegundo=" + promedioCaudalLitroSegundo +
+                '}';
+    }
 }

@@ -3,13 +3,12 @@ package ar.edu.iua.iw3.modelo;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
 import java.io.Serializable;
 import java.util.List;
-
 import javax.persistence.*;
 
-@ApiModel(description = "Class representing a client in the application.")
+
+@ApiModel(description = "Esta clase representa al cliente que sera abastecido de combustible.")
 @Entity
 @Table(name = "cliente")
 public class Cliente implements Serializable {
@@ -64,5 +63,13 @@ public class Cliente implements Serializable {
 
 	public void setOrdenList(List<Orden> ordenList) {
 		this.ordenList = ordenList;
+	}
+
+	public String checkBasicData(){
+		if(getRazonSocial().trim().length()==0)
+			return "El atributo 'Razon Social' es obligatorio";
+		if(getContacto()<1000000000)
+			return "El atributo 'contacto' tiene que ser un numero de telefono valido";
+		return null;
 	}
 }
