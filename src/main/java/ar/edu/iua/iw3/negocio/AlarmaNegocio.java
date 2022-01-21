@@ -17,7 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Service
 public class AlarmaNegocio implements IAlarmaNegocio{
 
-    private Logger log = LoggerFactory.getLogger(ClienteNegocio.class);
+    private Logger log = LoggerFactory.getLogger(AlarmaNegocio.class);
 
     @Autowired
     private AlarmaRepository alarmaDAO;
