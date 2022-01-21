@@ -98,7 +98,6 @@ public class AlarmaNegocio implements IAlarmaNegocio{
     @Override
     public void eliminar(long id) throws NegocioException, NoEncontradoException {
         Alarma alarma = cargar(id);
-        int posicion = 0;
         try {
             //primero tengo que eliminar la asocioacion entre el autor y la alarma
             Usuario u = usuarioNegocio.findByid(alarma.getAutor().getId());
