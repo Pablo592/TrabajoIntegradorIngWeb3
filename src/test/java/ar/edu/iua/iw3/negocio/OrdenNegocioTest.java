@@ -3,10 +3,7 @@ package ar.edu.iua.iw3.negocio;
 import ar.edu.iua.iw3.modelo.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import ar.edu.iua.iw3.modelo.persistencia.OrdenRepository;
-import ar.edu.iua.iw3.negocio.excepciones.BadRequest;
-import ar.edu.iua.iw3.negocio.excepciones.EncontradoException;
-import ar.edu.iua.iw3.negocio.excepciones.NegocioException;
-import ar.edu.iua.iw3.negocio.excepciones.NoEncontradoException;
+import ar.edu.iua.iw3.negocio.excepciones.*;
 import ar.edu.iua.iw3.util.MensajeRespuesta;
 import ar.edu.iua.iw3.util.RespuestaGenerica;
 
@@ -69,7 +66,7 @@ public class OrdenNegocioTest {
         producto.setNombre("nuevoproducto");
         ///////
         camion = new Camion();
-        camion.setPatente("ad057ya");
+        camion.setPatente("ad123as");
         camion.setCisternadoLitros(1000);
         camion.setPreset(3000);
         ///////
@@ -91,6 +88,21 @@ public class OrdenNegocioTest {
         ordenNegocio.eliminar(ordenBD.getId());
 
         //assertThrows(NoEncontradoException.class, () -> ordenNegocio.findByCodigoExterno(orden.getCodigoExterno()));
+    }
+
+    @Test
+    public void segundoEnvio() throws EncontradoException, BadRequest, NegocioException, ConflictException, NoEncontradoException {
+       ordenNegocio.agregar(orden);
+       Orden ordenBD = ordenNegocio.findByCodigoExterno(orden.getCodigoExterno());
+       Date date = new Date();
+       ordenBD.setFechaPesajeInicial(date);
+       Orden ordenConPesoInicial = ordenNegocio.modificar(ordenBD);
+       if(ordenConPesoInicial.getFechaPesajeInicial().equals(date))
+           System.out.println("se guardo correctamente la fecha de pesaje");
+       else
+           System.out.println("No se creo la orden correctamente");
+
+        ordenNegocio.eliminar(ordenBD.getId());
     }
 
 
