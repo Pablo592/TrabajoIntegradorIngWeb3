@@ -22,7 +22,7 @@ public class AlarmaRestController {
 
     private Logger log = LoggerFactory.getLogger(AlarmaNegocio.class);
 
-    @GetMapping(value="/alarmas")
+    @GetMapping(value="/alarmas/listar")
     public ResponseEntity<List<Alarma>> listado() {
         try {
             return new ResponseEntity<List<Alarma>>(alarmaNegocio.listado(), HttpStatus.OK);

@@ -135,15 +135,11 @@ public class Orden implements Serializable{
 	@JsonBackReference
 	private List<Carga> cargaList;
 
-	@ApiModelProperty(notes = "Una orden tiene muchas alarmas")
-	@OneToMany(targetEntity=Alarma.class, mappedBy= "ordenAlarma", fetch = FetchType.LAZY)
-	@JsonBackReference
-	private List<Alarma> alarmaList;
-
 	@ApiModelProperty(notes = "Temperatura maxima aceptable del combustible.", example = "21,874")
 	private float umbralTemperaturaCombustible = 25;
 
 	@ApiModelProperty(notes = "Representa si la orden tiene su alarma prendida o no, para no enviar muchas alarmas", example = "true||false")
+	@Column(columnDefinition = "boolean default false", nullable = false)
 	boolean alarmaActiva = false;
 
 	public float getUmbralTemperaturaCombustible() {
@@ -330,24 +326,12 @@ public class Orden implements Serializable{
 		this.cargaList = cargaList;
 	}
 
-
-	//aca tengo que hacer un metodo que chequee basicamente el contenido de los valores que me llegan en el json
-	// tanto para el insert como en el update
-
 	public String checkBasicData(){
 		if(getFrecuencia() <1)
 			return "El atributo 'Frecuencia' tiene que ser mayor a 0(cero)";
 		if(getCodigoExterno().trim().length() == 0)
 			return "El atributo 'codigo externo' no puede ser nulo";
 		return null;
-	}
-
-	public List<Alarma> getAlarmaList() {
-		return alarmaList;
-	}
-
-	public void setAlarmaList(List<Alarma> alarmaList) {
-		this.alarmaList = alarmaList;
 	}
 
 	public boolean isAlarmaActiva() {
