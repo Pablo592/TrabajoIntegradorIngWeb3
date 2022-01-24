@@ -1,31 +1,21 @@
 package ar.edu.iua.iw3.negocio;
-
-<<<<<<< HEAD
-public class OrdenNegocioTest {
-=======
 import ar.edu.iua.iw3.modelo.*;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import ar.edu.iua.iw3.util.RespuestaGenerica;
+import org.springframework.test.context.junit4.SpringRunner;
 import ar.edu.iua.iw3.modelo.persistencia.OrdenRepository;
 import ar.edu.iua.iw3.negocio.excepciones.*;
-import ar.edu.iua.iw3.util.MensajeRespuesta;
-import ar.edu.iua.iw3.util.RespuestaGenerica;
-
-import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @ActiveProfiles("mysqldev")
 @RunWith(SpringRunner.class)
@@ -40,6 +30,8 @@ public class OrdenNegocioTest {
     @Autowired
     private OrdenRepository ordenDAO;
 
+    private Orden orden3;
+    private Orden orden2;
     private Orden orden ;
     private Cliente cliente ;
     private Chofer chofer;
@@ -52,7 +44,7 @@ public class OrdenNegocioTest {
     @Before
     public void crearOrden(){
         orden = new Orden();
-        orden.setCodigoExterno("1");
+        orden.setCodigoExterno("45");
         orden.setFechaTurno(new Date());
         orden.setFrecuencia(30);
         ///////
@@ -77,6 +69,8 @@ public class OrdenNegocioTest {
         orden.setChofer(chofer);
         orden.setProducto(producto);
         orden.setCamion(camion);
+        orden.setCargaList(new ArrayList<Carga>());
+
     }
     @Test
     public void primerEnvio() throws EncontradoException, BadRequest, NegocioException, NoEncontradoException {
@@ -88,28 +82,74 @@ public class OrdenNegocioTest {
         else
             System.out.println("No se creo la orden correctamente");
         
-        ordenNegocio.eliminar(ordenBD.getId());
+       ordenNegocio.eliminar(ordenBD.getId());
 
         //assertThrows(NoEncontradoException.class, () -> ordenNegocio.findByCodigoExterno(orden.getCodigoExterno()));
     }
 
     @Test
     public void segundoEnvio() throws EncontradoException, BadRequest, NegocioException, ConflictException, NoEncontradoException {
-       ordenNegocio.agregar(orden);
-       Orden ordenBD = ordenNegocio.findByCodigoExterno(orden.getCodigoExterno());
-       Date date = new Date();
-       ordenBD.setFechaPesajeInicial(date);
-       Orden ordenConPesoInicial = ordenNegocio.modificar(ordenBD);
-       if(ordenConPesoInicial.getFechaPesajeInicial().equals(date))
+
+       Orden o =  primero();
+       Orden ordenConPesoInicial = ordenNegocio.cargar(orden2.getId());
+       if(ordenConPesoInicial.getFechaPesajeInicial().getTime() == o.getFechaPesajeInicial().getTime())
            System.out.println("se guardo correctamente la fecha de pesaje");
        else
            System.out.println("No se creo la orden correctamente");
 
-        ordenNegocio.eliminar(ordenBD.getId());
+        ordenNegocio.eliminar(orden2.getId());
     }
 
 
+    @Test
+    public void tercerEnvio() throws EncontradoException, BadRequest, NegocioException, ConflictException, NoEncontradoException, UnprocessableException {
 
+        Orden o =  primero();
+        ordenNegocio.frenarCargar(o.getCodigoExterno());
+        Orden ordenBD = ordenNegocio.findByCodigoExterno(o.getCodigoExterno());
+        if(ordenBD.getEstado() == 3)
+            System.out.println("Las cargas se detuvieron correctamente");
+        else
+            System.out.println("Las cargas no se detuvieron, tiene estado: " + ordenBD.getEstado());
 
->>>>>>> 65b856d42a0fdb2fcd3f82b39f880bc998a750ac
+        ordenNegocio.eliminar(ordenBD.getId());
+    }
+
+    @Test
+    public void cuartoEnvio() throws EncontradoException, BadRequest, NegocioException, ConflictException, NoEncontradoException, UnprocessableException {
+
+        Orden o =  segundo();
+
+        o.setFechaRecepcionPesajeFinal(new Date());
+        o.getCamion().setPesoFinalCamion(4541485456l);
+        ordenNegocio.establecerPesajeFinal(o);
+        Orden ordenBD = ordenNegocio.findByCodigoExterno(o.getCodigoExterno());
+        if(ordenBD.getEstado() == 4)
+            System.out.println("La orden se encuentra en estado 4");
+        else
+            System.out.println("Algo salio mal, tiene estado: " + ordenBD.getEstado());
+
+        ordenNegocio.eliminar(ordenBD.getId());
+
+    }
+
+    private Orden primero() throws EncontradoException, BadRequest, NegocioException, ConflictException, NoEncontradoException {
+        ordenNegocio.agregar(orden);
+        Orden o = ordenNegocio.findByCodigoExterno(orden.getCodigoExterno());
+        orden2 = o.clone();
+        orden2.setFechaPesajeInicial(new Date());
+        orden2.getCamion().setTara(1400);
+        RespuestaGenerica<Orden> ordenBD = ordenNegocio.establecerPesajeInicial(orden2);
+
+        return ordenBD.getEntidad();
+    }
+
+    private Orden segundo() throws EncontradoException, BadRequest, NegocioException, ConflictException, NoEncontradoException, UnprocessableException {
+        Orden o =  primero();
+        ordenNegocio.frenarCargar(o.getCodigoExterno());
+        Orden ordenBD = ordenNegocio.findByCodigoExterno(o.getCodigoExterno());
+
+        return ordenBD;
+    }
+
 }
