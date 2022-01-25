@@ -1,18 +1,13 @@
 package ar.edu.iua.iw3.negocio;
 
-import ar.edu.iua.iw3.modelo.Camion;
-import ar.edu.iua.iw3.modelo.Carga;
-import ar.edu.iua.iw3.modelo.Orden;
+import ar.edu.iua.iw3.modelo.*;
 import ar.edu.iua.iw3.modelo.dto.CargaDTO;
 import ar.edu.iua.iw3.modelo.persistencia.CargaRepository;
 import ar.edu.iua.iw3.modelo.persistencia.OrdenRepository;
 import ar.edu.iua.iw3.negocio.excepciones.*;
 import ar.edu.iua.iw3.util.MensajeRespuesta;
 import ar.edu.iua.iw3.util.RespuestaGenerica;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +19,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -37,69 +34,80 @@ public class cargaNegocioTest {
     private Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    CargaNegocio cargaNegocio;
-
-    @MockBean
-    CargaRepository cargaDao;
-
-    @MockBean
-    OrdenRepository ordenDAO;
-
-    @Rule
-    public ExpectedException expectedEx = ExpectedException.none();
+    private OrdenNegocio ordenNegocio;
 
     @Autowired
-    private static Carga cargaTest;
+    private CargaNegocio cargaNegocio;
+
 
     @Autowired
-    private static Orden orden;
+    private OrdenRepository ordenDAO;
 
-    @Autowired
-    private static Camion camion;
+    private Orden orden3;
+    private Orden orden2;
+    private Orden orden;
+    private Cliente cliente;
+    private Chofer chofer;
+    private Producto producto;
+    private Camion camion;
+    private Carga carga;
 
-    @Autowired
-    private static CargaDTO cargaDTO;
 
-    @Autowired
-    private static RespuestaGenerica<Carga>  respuesta;
+    /*@MockBean
+    OrdenRepository ordenDAO;*/
 
-    @BeforeClass
-    public static void setup() throws ParseException {
-        camion = new Camion();
+    @Before
+    public void crearOrden() {
         orden = new Orden();
-        cargaTest = new Carga();
-        orden.setEstado(2);
-        camion.setPatente("ff888ff");
+        orden.setCodigoExterno("45");
+        orden.setFechaTurno(new Date());
+        orden.setFrecuencia(30);
+        ///////
+        cliente = new Cliente();
+        cliente.setRazonSocial("SA");
+        cliente.setContacto(3512151243L);
+        ///////
+        chofer = new Chofer();
+        chofer.setNombre("nuevo chofer nombre");
+        chofer.setApellido("apellidochofer");
+        chofer.setDocumento(40211001L);
+        ///////
+        producto = new Producto();
+        producto.setNombre("nuevoproducto");
+        ///////
+        camion = new Camion();
+        camion.setPatente("ad123as");
+        camion.setCisternadoLitros(1000);
+        camion.setPreset(3000);
+        ///////
+        orden.setCliente(cliente);
+        orden.setChofer(chofer);
+        orden.setProducto(producto);
         orden.setCamion(camion);
-        orden.setUmbralTemperaturaCombustible(5000);
-        orden.setCodigoExterno("10");
+        orden.setCargaList(new ArrayList<Carga>());
 
-        orden.setId(10);
-        SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
-        cargaTest.setFechaSalidaHW(formato.parse("01/01/2000"));
-        cargaTest.setFechaEntradaBackEnd(formato.parse("02/01/2000"));
-        cargaTest.setCaudalLitroSegundo(54);
-        cargaTest.setOrden(orden);
-        camion.setPreset(5000);
 
-        cargaTest.setTemperaturaProductoCelcius(10);
-        cargaTest.setCaudalLitroSegundo(10);
-        cargaTest.setDensidadProductoKilogramoMetroCub(544);
-        cargaTest.setMasaAcumuladaKg(10);
-        respuesta = new RespuestaGenerica<Carga>(cargaTest,new MensajeRespuesta());
-        respuesta.setEntidad(cargaTest);
-        cargaTest.getOrden().setCodigoExterno("10");
-        cargaDTO = new CargaDTO();
 
-        cargaDTO.setPromedDensidadProductoKilogramoMetroCub(545);
-        cargaDTO.setPromedioCaudalLitroSegundo(45);
-        cargaDTO.setPromedioTemperaturaProductoCelcius(10);
+        carga = new Carga();
+        carga.setMasaAcumuladaKg(10);
+        carga.setDensidadProductoKilogramoMetroCub(454);
+        carga.setTemperaturaProductoCelcius(25);
+        carga.setCaudalLitroSegundo(3);
+        carga.setFechaSalidaHW(new Date());
+
+        /*{"orden":{
+   "codigoExterno": "454"
+},
+"masaAcumuladaKg": {{masaAcumuladaKg}},
+"densidadProductoKilogramoMetroCub": 0.85,
+"temperaturaProductoCelcius": 25.0,
+"caudalLitroSegundo": 0.3,
+"fechaSalidaHW":"{{tiempoOutHw}}"
+}*/
     }
 
 
-
-
-    @Test
+  /*  @Test
     public void testLoadSuccess2() throws NoEncontradoException, NegocioException {
         //given
         long id = 50;
@@ -111,48 +119,33 @@ public class cargaNegocioTest {
 
         //then
         assertEquals(10, cargaRecibida.getTemperaturaProductoCelcius());
-        assertTrue(cargaRecibida.getDensidadProductoKilogramoMetroCub() == 544 );
+        assertTrue(cargaRecibida.getDensidadProductoKilogramoMetroCub() == 544);
     }
 
-
-    @Ignore
-    @Test
-    public void testLoadSuccess3() throws NoEncontradoException, NegocioException, BadRequest, UnprocessableException, ConflictException {
-        //given
-        Optional<Orden> givenOrden = Optional.of(cargaTest.getOrden());
-        givenOrden.get().setCodigoExterno("10");
-        //when
-        when(cargaDao.save(cargaTest)).thenReturn(cargaTest);
-        when((cargaNegocio.getPromedioDensidadAndTemperaturaAndCaudal(orden.getCodigoExterno()))).thenReturn(cargaDTO);
-        when(ordenDAO.findByCodigoExterno(orden.getCodigoExterno())).thenReturn(givenOrden);
-        when(ordenDAO.findById(orden.getId())).thenReturn(givenOrden).thenReturn(givenOrden);
-        RespuestaGenerica<Carga> cargaRecibida = cargaNegocio.agregar(cargaTest);
-
-        //then
-        assertEquals(0, cargaRecibida.getMensaje().getCodigo());
-        assertTrue(cargaTest.equals(cargaRecibida.getEntidad()) );
-    }
-
-
-
-/*
-    @Test
-    public void testListSuccess()
-            throws NegocioException, Exception {
-
-        //given
-        List<Producto> allProducts = new ArrayList<Producto>();
-        allProducts.add(prod1);
-
-//when
-        when(productoBusiness.list()).thenReturn(allProducts);
-
-//then
-        mvc.perform(get("/api/v1/productos/")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$[0].id", is(prod1.getId())));
-    }
 */
+
+    @Test
+    public void testLoadSuccess2() throws NoEncontradoException, NegocioException, EncontradoException, BadRequest, ConflictException, UnprocessableException {
+
+     String codExt =  establecerOrdenEnEstadoDos();
+
+
+     carga.setFechaEntradaBackEnd(new Date());
+     carga.setOrden(new Orden());
+     carga.getOrden().setCodigoExterno(codExt);
+     cargaNegocio.agregar(carga);
+    }
+
+
+    public String establecerOrdenEnEstadoDos() throws EncontradoException, BadRequest, NegocioException, ConflictException, NoEncontradoException {
+        ordenNegocio.agregar(orden);
+        Orden o = ordenNegocio.findByCodigoExterno(orden.getCodigoExterno());
+        orden2 = o.clone();
+        orden2.setFechaPesajeInicial(new Date());
+        orden2.getCamion().setTara(1400);
+        RespuestaGenerica<Orden> ordenBD = ordenNegocio.establecerPesajeInicial(orden2);
+        o = ordenBD.getEntidad();
+        Orden ordenConPesoInicial = ordenNegocio.cargar(orden2.getId());
+        return ordenConPesoInicial.getCodigoExterno();
+    }
 }
