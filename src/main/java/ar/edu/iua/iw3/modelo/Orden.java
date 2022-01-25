@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -348,6 +349,8 @@ public class Orden implements Serializable{
 
 	@Override
 	public String toString() {
+		cargaList = new ArrayList<Carga>();
+
 		return "Orden{" +
 				"id=" + id +
 				", codigoExterno='" + codigoExterno + '\'' +
@@ -373,6 +376,42 @@ public class Orden implements Serializable{
 				", cargaList=" + cargaList +
 				", umbralTemperaturaCombustible=" + umbralTemperaturaCombustible +
 				'}';
+	}
+
+	public Orden clone(){
+
+		Orden orden = new Orden();
+
+		orden.setId(this.id);
+		orden.setCodigoExterno(this.codigoExterno);
+		orden.setFechaTurno(this.fechaTurno);
+		if(this.fechaPesajeInicial  != null)
+			orden.setFechaPesajeInicial(this.fechaPesajeInicial);
+		if(this.fechaInicioProcesoCarga  != null)
+			orden.setFechaInicioProcesoCarga(this.fechaInicioProcesoCarga);
+		if(this.fechaFinProcesoCarga  != null)
+			orden.setFechaFinProcesoCarga(this.fechaFinProcesoCarga);
+		if(this.fechaRecepcionPesajeFinal  != null)
+			orden.setFechaRecepcionPesajeFinal(this.fechaRecepcionPesajeFinal);
+		orden.setEstado(this.estado);
+		if(this.password != null)
+			orden.setPassword(this.password);
+		orden.setFrecuencia(this.frecuencia);
+		orden.setMasaAcumuladaKg(this.masaAcumuladaKg);
+		orden.setPromedDensidadProductoKilogramoMetroCub(this.promedDensidadProductoKilogramoMetroCub);
+		orden.setPromedioTemperaturaProductoCelcius(this.promedioTemperaturaProductoCelcius);
+		orden.setPromedioCaudalLitroSegundo(this.promedioCaudalLitroSegundo);
+		orden.setUltimaDensidadProductoKilogramoMetroCub(this.ultimaDensidadProductoKilogramoMetroCub);
+		orden.setUltimaTemperaturaProductoCelcius(this.ultimaTemperaturaProductoCelcius);
+		orden.setUltimoCaudalLitroSegundo(this.ultimoCaudalLitroSegundo);
+		orden.setCamion(this.getCamion());
+		orden.setCliente(this.cliente);
+		orden.setChofer(this.chofer);
+		orden.setProducto(this.producto);
+		if(this.cargaList != null)
+			orden.setCargaList(this.cargaList);
+		orden.setUmbralTemperaturaCombustible(this.umbralTemperaturaCombustible);
+		return orden;
 	}
 }
 
