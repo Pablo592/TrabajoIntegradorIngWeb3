@@ -84,7 +84,7 @@ public class cargaNegocioTest {
         orden.setChofer(chofer);
         orden.setProducto(producto);
         orden.setCamion(camion);
-        orden.setCargaList(new ArrayList<Carga>());
+        //orden.setCargaList(new ArrayList<Carga>());
 
 
 
@@ -143,7 +143,7 @@ public class cargaNegocioTest {
         orden2 = o.clone();
         orden2.setFechaPesajeInicial(new Date());
         orden2.getCamion().setTara(1400);
-        RespuestaGenerica<Orden> ordenBD = ordenNegocio.establecerPesajeInicial(orden2);
+        RespuestaGenerica<Orden> ordenBD = ordenNegocio.establecerPesajeInicial(orden2);    //estado 2
         o = ordenBD.getEntidad();
         Orden ordenConPesoInicial = ordenNegocio.cargar(orden2.getId());
         return ordenConPesoInicial.getCodigoExterno();

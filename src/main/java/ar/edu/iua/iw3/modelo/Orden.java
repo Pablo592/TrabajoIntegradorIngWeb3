@@ -132,7 +132,7 @@ public class Orden implements Serializable{
 	private Producto producto;
 
 	@ApiModelProperty(notes = "Las cargas de combustible introducidas en el camión")
-	@OneToMany(targetEntity=Carga.class, mappedBy= "orden", fetch = FetchType.LAZY)
+	@OneToMany(targetEntity=Carga.class, mappedBy= "orden",fetch = FetchType.EAGER)
 	@JsonBackReference
 	private List<Carga> cargaList = new ArrayList<Carga>();
 
@@ -373,7 +373,7 @@ public class Orden implements Serializable{
 				", cliente=" + cliente +
 				", chofer=" + chofer +
 				", producto=" + producto +
-				", cargaList=" + cargaList +
+				//", cargaList=" + cargaList +
 				", umbralTemperaturaCombustible=" + umbralTemperaturaCombustible +
 				'}';
 	}
