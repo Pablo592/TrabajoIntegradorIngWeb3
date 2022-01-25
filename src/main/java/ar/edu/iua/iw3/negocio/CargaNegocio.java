@@ -109,9 +109,9 @@ public class CargaNegocio implements ICargaNegocio {
             orden.setMasaAcumuladaKg(0);      //digo que la carga inicial de la orden es "cero" si es la primera carga de la orden
         }
 
-        if(carga.getTemperaturaProductoCelcius() > orden.getUmbralTemperaturaCombustible()){
+        if(carga.getTemperaturaProductoCelcius() > orden.getUmbralTemperaturaCombustible())
             generarEvento(carga, CargaEvent.Tipo.SUPERADO_UMBRAL_DE_TEMPERATURA);
-        }
+
 
         //controlo que la carga acumulada actual sea mayor que la anterior, tirar excepcion
         if (!isValidoMasaAcumuadaActualCargaConLaAnterior(orden, carga))
@@ -131,12 +131,11 @@ public class CargaNegocio implements ICargaNegocio {
         if(listado().size()==0 || proximoTiempoLimite == null) { //en caso de que se corte la luz
             cargaNueva = cargaDAO.save(carga);
             proximoTiempoLimite = sumarFrecuenciaConTiempo(orden.getFrecuencia(), orden.getFechaInicioProcesoCarga());
-        }//
+        }
         if(proximoTiempoLimite.compareTo(carga.getFechaEntradaBackEnd())<0) {
             cargaNueva = cargaDAO.save(carga);
             proximoTiempoLimite = sumarFrecuenciaConTiempo(orden.getFrecuencia(),proximoTiempoLimite);
         }
-        System.out.println("No se guarda la carga porque ya paso su frecuencia");
         m.setCodigo(0);
         m.setMensaje(cargaNueva.toString());
         return r;

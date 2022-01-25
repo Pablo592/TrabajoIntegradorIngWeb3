@@ -130,7 +130,6 @@ public class CamionNegocio implements ICamionNegocio{
 		}
 	}
 
-	@Override
 	public Camion setearPesoIni(Camion camionRecibido, Camion camionBD) throws  NegocioException, BadRequest, ConflictException {
 			if(!camionBD.getPatente().equalsIgnoreCase(camionRecibido.getPatente()))
 				throw new ConflictException("La patente enviada :"+ camionRecibido.getPatente()+" no esta asociada a la orden enviada");

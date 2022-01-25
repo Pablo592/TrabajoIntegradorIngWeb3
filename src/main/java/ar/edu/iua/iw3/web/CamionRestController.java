@@ -3,6 +3,7 @@ package ar.edu.iua.iw3.web;
 import java.util.List;
 import ar.edu.iua.iw3.modelo.Camion;
 import ar.edu.iua.iw3.negocio.excepciones.BadRequest;
+import ar.edu.iua.iw3.util.Constantes;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -21,7 +22,7 @@ import ar.edu.iua.iw3.negocio.excepciones.NegocioException;
 import ar.edu.iua.iw3.negocio.excepciones.NoEncontradoException;
 
 @RestController
-@RequestMapping(Constantes.URL_BASE)
+@RequestMapping(Constantes.URL_CAMION)
 public class CamionRestController {
 
 	@Autowired
@@ -36,7 +37,7 @@ public class CamionRestController {
 	})
 
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@GetMapping(value="/camiones")
+	@GetMapping(value="/listar")
 	public ResponseEntity<List<Camion>> listado() {
 		try {
 			return new ResponseEntity<List<Camion>>(camionNegocio.listado(), HttpStatus.OK);
@@ -54,7 +55,7 @@ public class CamionRestController {
 	})
 
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@PostMapping(value="/camiones")
+	@PostMapping(value="")
 	public ResponseEntity<String> agregar(@RequestBody Camion camion) {
 		try {
 			Camion respuesta=camionNegocio.agregar(camion);
@@ -81,7 +82,7 @@ public class CamionRestController {
 	})
 
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@PutMapping(value="/camiones")
+	@PutMapping(value="")
 	public ResponseEntity<String> modificar(@RequestBody Camion camion) {
 		try {
 			camionNegocio.modificar(camion);
@@ -103,7 +104,7 @@ public class CamionRestController {
 	})
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@DeleteMapping(value="/camiones/{id}")
+	@DeleteMapping(value="/{id}")
 	public ResponseEntity<String> eliminar(@PathVariable("id") long id) {
 		try {
 			camionNegocio.eliminar(id);

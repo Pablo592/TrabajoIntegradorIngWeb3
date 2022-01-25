@@ -2,6 +2,7 @@ package ar.edu.iua.iw3.web;
 
 import java.util.List;
 
+import ar.edu.iua.iw3.util.Constantes;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -22,7 +23,7 @@ import ar.edu.iua.iw3.negocio.excepciones.NegocioException;
 import ar.edu.iua.iw3.negocio.excepciones.NoEncontradoException;
 
 @RestController
-@RequestMapping(Constantes.URL_BASE)
+@RequestMapping(Constantes.URL_CHOFER)
 public class ChoferRestController {
 
 	@Autowired
@@ -37,7 +38,7 @@ public class ChoferRestController {
 	})
 
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@GetMapping(value="/choferes")
+	@GetMapping(value="")
 	public ResponseEntity<List<Chofer>> listado() {
 		try {
 			return new ResponseEntity<List<Chofer>>(choferNegocio.listado(), HttpStatus.OK);
@@ -54,7 +55,7 @@ public class ChoferRestController {
 	})
 
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@PostMapping(value="/choferes")
+	@PostMapping(value="")
 	public ResponseEntity<String> agregar(@RequestBody Chofer chofer) {
 		try {
 			Chofer respuesta=choferNegocio.agregar(chofer);
@@ -78,7 +79,7 @@ public class ChoferRestController {
 	})
 
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@PutMapping(value="/choferes")
+	@PutMapping(value="")
 	public ResponseEntity<String> modificar(@RequestBody Chofer chofer) {
 		try {
 			choferNegocio.modificar(chofer);
@@ -99,7 +100,7 @@ public class ChoferRestController {
 	})
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@DeleteMapping(value="/choferes/{id}")
+	@DeleteMapping(value="/{id}")
 	public ResponseEntity<String> eliminar(@PathVariable("id") long id) {
 		try {
 			choferNegocio.eliminar(id);

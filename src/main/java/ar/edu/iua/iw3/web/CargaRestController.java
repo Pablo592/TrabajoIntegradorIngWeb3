@@ -5,6 +5,7 @@ import ar.edu.iua.iw3.modelo.dto.CargaDTO;
 import ar.edu.iua.iw3.negocio.CargaNegocio;
 import ar.edu.iua.iw3.negocio.ICargaNegocio;
 import ar.edu.iua.iw3.negocio.excepciones.*;
+import ar.edu.iua.iw3.util.Constantes;
 import ar.edu.iua.iw3.util.MensajeRespuesta;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -12,7 +13,6 @@ import io.swagger.annotations.ApiResponses;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +22,7 @@ import java.util.Date;
 import java.util.List;
 
 @RestController
-@RequestMapping(Constantes.URL_BASE)
+@RequestMapping(Constantes.URL_CARGAS)
 public class CargaRestController {
 
     @Autowired
@@ -37,7 +37,7 @@ public class CargaRestController {
     })
 
     @PreAuthorize("hasRole('ROLE_USER')")
-    @GetMapping(value= "/cargas")
+    @GetMapping(value= "")
     public ResponseEntity<List<Carga>> listado() {
         try {
             return new ResponseEntity<List<Carga>>(cargaNegocio.listado(), HttpStatus.OK);
@@ -76,40 +76,31 @@ public class CargaRestController {
     })
 
     @PreAuthorize("hasRole('ROLE_USER')")
-    @PostMapping(value= "/cargas",produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value= "",produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<MensajeRespuesta> agregar(@RequestBody Carga carga) {
         try {
             carga.setFechaEntradaBackEnd(new Date());
-            /*Carga respuesta=cargaNegocio.agregar(carga);
-            HttpHeaders responseHeaders=new HttpHeaders();
-            responseHeaders.set("location", "/carga/"+respuesta.getId());
-            return new ResponseEntity<String>(responseHeaders, HttpStatus.CREATED);*/
             MensajeRespuesta r=cargaNegocio.agregar(carga).getMensaje();
             return new ResponseEntity<MensajeRespuesta>(r, HttpStatus.OK);
 
         } catch (NegocioException e) {
             log.error(e.getMessage(), e);
-            //return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
             MensajeRespuesta r=new MensajeRespuesta(-1,e.getMessage());
             return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.INTERNAL_SERVER_ERROR);
         }catch (NoEncontradoException e) {
             log.error(e.getMessage(), e);
-            //return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
             MensajeRespuesta r=new MensajeRespuesta(-1,e.getMessage());
             return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.NOT_FOUND);
         } catch (BadRequest e) {
             log.error(e.getMessage(), e);
-            //return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
             MensajeRespuesta r=new MensajeRespuesta(-1,e.getMessage());
             return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.BAD_REQUEST);
         } catch (UnprocessableException e) {
             log.error(e.getMessage(), e);
-            //return new ResponseEntity<String>(HttpStatus.UNPROCESSABLE_ENTITY);
             MensajeRespuesta r=new MensajeRespuesta(-1,e.getMessage());
             return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.UNPROCESSABLE_ENTITY);
         } catch (ConflictException e) {
             log.error(e.getMessage(), e);
-            //return new ResponseEntity<String>(HttpStatus.CONFLICT);
             MensajeRespuesta r=new MensajeRespuesta(-1,e.getMessage());
             return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.CONFLICT);
         }
@@ -123,7 +114,7 @@ public class CargaRestController {
     })
 
     @PreAuthorize("hasRole('ROLE_USER')")
-    @PutMapping(value= "/cargas")
+    @PutMapping(value= "")
     public ResponseEntity<String> modificar(@RequestBody Carga carga) {
         try {
             cargaNegocio.modificar(carga);
@@ -145,7 +136,7 @@ public class CargaRestController {
     })
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @DeleteMapping(value= "/cargas/{id}")
+    @DeleteMapping(value= "/{id}")
     public ResponseEntity<String> eliminar(@PathVariable("id") long id) {
         try {
             cargaNegocio.eliminar(id);

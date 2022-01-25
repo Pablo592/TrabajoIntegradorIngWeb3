@@ -4,6 +4,7 @@ import ar.edu.iua.iw3.modelo.Alarma;
 import ar.edu.iua.iw3.negocio.AlarmaNegocio;
 import ar.edu.iua.iw3.negocio.IAlarmaNegocio;
 import ar.edu.iua.iw3.negocio.excepciones.*;
+import ar.edu.iua.iw3.util.Constantes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(Constantes.URL_BASE)
+@RequestMapping(Constantes.URL_ALARMAS)
 public class AlarmaRestController {
 
     @Autowired
@@ -22,7 +23,7 @@ public class AlarmaRestController {
 
     private Logger log = LoggerFactory.getLogger(AlarmaNegocio.class);
 
-    @GetMapping(value="/alarmas/listar")
+    @GetMapping(value="/listar")
     public ResponseEntity<List<Alarma>> listado() {
         try {
             return new ResponseEntity<List<Alarma>>(alarmaNegocio.listado(), HttpStatus.OK);
@@ -32,7 +33,7 @@ public class AlarmaRestController {
         }
     }
 
-    @PostMapping(value="/alarmas")
+    @PostMapping(value="")
     public ResponseEntity<String> agregar(@RequestBody Alarma alarma) {
         try {
             Alarma respuesta=alarmaNegocio.agregar(alarma);
@@ -54,7 +55,7 @@ public class AlarmaRestController {
         }
     }
 
-    @PutMapping(value="/alarmas")
+    @PutMapping(value="")
     public ResponseEntity<String> modificar(@RequestBody Alarma alarma) {
         try {
             alarmaNegocio.modificar(alarma);
@@ -71,7 +72,7 @@ public class AlarmaRestController {
         }
     }
 
-    @DeleteMapping(value="/alarmas/{id}")
+    @DeleteMapping(value="/{id}")
     public ResponseEntity<String> eliminar(@PathVariable("id") long id) {
         try {
             alarmaNegocio.eliminar(id);
