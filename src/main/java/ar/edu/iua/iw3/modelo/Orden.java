@@ -371,8 +371,8 @@ public class Orden implements Serializable{
 				", cliente=" + cliente +
 				", chofer=" + chofer +
 				", producto=" + producto +
-				", cargaList=" + cargaList +
 				", umbralTemperaturaCombustible=" + umbralTemperaturaCombustible +
+				", alarmaActiva=" + alarmaActiva +
 				'}';
 	}
 }

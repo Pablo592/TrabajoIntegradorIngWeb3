@@ -75,7 +75,6 @@ public class CargaNegocio implements ICargaNegocio {
     }
 
     @Override
-    //public Carga agregar(Carga carga) throws NegocioException, NoEncontradoException, BadRequest, UnprocessableException, ConflictException {
     public RespuestaGenerica<Carga> agregar(Carga carga) throws NegocioException, NoEncontradoException, BadRequest, UnprocessableException, ConflictException {
         MensajeRespuesta m=new MensajeRespuesta();
         RespuestaGenerica<Carga> r = new RespuestaGenerica<Carga>(carga, m);

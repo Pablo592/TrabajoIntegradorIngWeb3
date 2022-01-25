@@ -1,6 +1,8 @@
 package ar.edu.iua.iw3.eventos;
 
 import ar.edu.iua.iw3.modelo.Carga;
+import ar.edu.iua.iw3.modelo.Orden;
+import ar.edu.iua.iw3.negocio.OrdenNegocio;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,12 +10,18 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationListener;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public class CargaEventListener implements ApplicationListener<CargaEvent> {
 
     private Logger log = LoggerFactory.getLogger(this.getClass());
+
+    @Autowired
+    private OrdenNegocio ordenNegocio;
 
     @Value("${mail.carga.umbralTemperatura.to:pgaido524@alumnos.iua.edu.ar}")
     private String to;
@@ -33,6 +41,12 @@ public class CargaEventListener implements ApplicationListener<CargaEvent> {
     private void manejaEventoSuperadoUmbralTemperatura(Carga carga){
         String mensaje = String.format("El combustible abastecido en la orden %s, supero el umbral de temperatura al tener %.2f Cª"
                 ,carga.getOrden().getCodigoExterno(),carga.getTemperaturaProductoCelcius());
+
+        if(carga.getOrden().isAlarmaActiva()){
+            System.out.println("como la alarma esta activada no se puede enviar el mail hasta que lo acepte");
+            return;
+        }
+
         log.info("Enviando mensaje '{}'",mensaje);
 
         try {
@@ -43,6 +57,10 @@ public class CargaEventListener implements ApplicationListener<CargaEvent> {
             message.setText(mensaje);
             emailSender.send(message);
             log.trace("Mail enviado a: '{}'",to);
+
+            Orden ordenConMailEnviado = carga.getOrden();
+            ordenConMailEnviado.setAlarmaActiva(true);
+            ordenNegocio.modificar(ordenConMailEnviado);
         }catch (Exception e){
             log.error(e.getMessage(),e);
         }
