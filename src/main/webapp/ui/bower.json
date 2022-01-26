@@ -1,0 +1,7 @@
+{
+  "name":"Trabajo Integrador iw3",
+  "Version":"0.0.1",
+  "dependencies": {
+    "angular":"~1.8.0"
+  }
+}
