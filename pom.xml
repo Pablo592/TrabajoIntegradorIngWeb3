@@ -97,7 +97,14 @@
 			<version>4.12</version>
 			<scope>test</scope>
 		</dependency>
+<<<<<<< HEAD
 
+=======
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-websocket</artifactId>
+		</dependency>
+>>>>>>> main
 	</dependencies>
 	<profiles>
 	    <profile>

@@ -67,6 +67,7 @@ public class Carga implements Serializable {
 
     @ApiModelProperty(notes = "Pueden haber muchas cargas en una orden.")
     @ManyToOne(cascade=CascadeType.MERGE)
+
     @JoinColumn(name = "orden_id")
     private Orden orden;
 
@@ -133,7 +134,6 @@ public class Carga implements Serializable {
     public void setFechaEntradaBackEnd(Date fechaEntradaBackEnd) {
         this.fechaEntradaBackEnd = fechaEntradaBackEnd;
     }
-
 
     public String checkBasicData(){
         if(getMasaAcumuladaKg()<=0)

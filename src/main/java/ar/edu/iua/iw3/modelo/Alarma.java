@@ -19,15 +19,18 @@ public class Alarma {
 
     private String descripcion;
 
-    /*@ApiModelProperty(notes = "Una alarma tiene un unico autor.")
+
+    @ApiModelProperty(notes = "Una alarma tiene un unico autor.")
     @ManyToOne(cascade=CascadeType.ALL)
+    @JoinColumn(name = "autor_id")
     private Usuario autor;
 
-    @ApiModelProperty(notes = "Una Orden puede tener muchas alarmas.")
-    @ManyToOne(cascade=CascadeType.ALL)
-    private Orden orden;*/
+    @ApiModelProperty(notes = "Una alarma se asocia a una unica orden")
+    @OneToOne(cascade =  CascadeType.ALL)
+    @JoinColumn(name = "id_orden")
+    private Orden orden;
 
-    private Date  fechaAceptada;
+    private Date  fechaAceptacion;
 
     public long getId() {
         return id;
@@ -45,11 +48,28 @@ public class Alarma {
         this.descripcion = descripcion;
     }
 
-    public Date getFechaAceptada() {
-        return fechaAceptada;
+
+    public Usuario getAutor() {
+        return autor;
     }
 
-    public void setFechaAceptada(Date fechaAceptada) {
-        this.fechaAceptada = fechaAceptada;
+    public void setAutor(Usuario autor) {
+        this.autor = autor;
+    }
+
+    public Date getFechaAceptacion() {
+        return fechaAceptacion;
+    }
+
+    public void setFechaAceptacion(Date fechaAceptacion) {
+        this.fechaAceptacion = fechaAceptacion;
+    }
+
+    public Orden getOrden() {
+        return orden;
+    }
+
+    public void setOrden(Orden ordenAlarma) {
+        this.orden = ordenAlarma;
     }
 }

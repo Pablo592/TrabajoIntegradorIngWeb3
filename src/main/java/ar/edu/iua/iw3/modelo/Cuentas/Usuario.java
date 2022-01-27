@@ -50,10 +50,19 @@ public class Usuario implements UserDetails, Serializable {
 	@Column(columnDefinition = "TINYINT DEFAULT 1")
 	private boolean enabled = true;
 
-	/*@ApiModelProperty(notes = "Un usuario puede crear varias alarmas")
+
+	@ApiModelProperty(notes = "Un usuario puede crear varias alarmas")
 	@OneToMany(targetEntity= Alarma.class, mappedBy= "autor", fetch = FetchType.LAZY)
 	@JsonBackReference
-	private List<Alarma> alarmaList;*/
+	private List<Alarma> alarmaList;
+
+	public List<Alarma> getAlarmaList() {
+		return alarmaList;
+	}
+
+	public void setAlarmaList(List<Alarma> alarmaList) {
+		this.alarmaList = alarmaList;
+	}
 
 	public int getId() {
 		return id;

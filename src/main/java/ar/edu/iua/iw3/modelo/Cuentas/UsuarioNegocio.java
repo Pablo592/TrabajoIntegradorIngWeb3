@@ -145,4 +145,9 @@ public class UsuarioNegocio implements IUsuarioNegocio {
 		}
 	}
 
+
+	public Usuario findByid(int id){
+		return 	userDAO.findById(id).orElse(null);
+	}
+
 }
