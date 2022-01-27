@@ -5,14 +5,20 @@
     <meta name="author" content="Spitale-Gaido">
     <link rel="icon" type="image/ico" href="/ui/favicon.ico" sizes="32x32">
     <script type="text/javascript" src="ui/lib/angular/angular.min.js"></script>
+    <script type="text/javascript" src="ui/lib/angular-route/angular-route.min.js"></script>
     <script type="text/javascript" src="ui/app.js"></script>
+
+
+    <script type="text/javascript" src="ui/controladores/loginController.js"></script>
+    <script type="text/javascript" src="ui/rutas.js"></script>
+
 
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
 <body ng-app="trabajoIntegrador">
-    <h1>Holaaaaaa</h1>
-{{1 + 2}}
+
+<div style="height: 100%; width: 100%" ng-view=""></div>
 </body>
 </html>
