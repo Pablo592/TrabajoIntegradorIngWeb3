@@ -1,8 +1,8 @@
 package ar.edu.iua.iw3.modelo.Cuentas;
 
 import ar.edu.iua.iw3.negocio.excepciones.*;
+import ar.edu.iua.iw3.util.Constantes;
 import ar.edu.iua.iw3.util.MensajeRespuesta;
-import ar.edu.iua.iw3.web.Constantes;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
