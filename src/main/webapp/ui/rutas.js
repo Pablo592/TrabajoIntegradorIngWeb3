@@ -2,7 +2,7 @@ angular.module('trabajoIntegrador').config(function ($routeProvider,$locationPro
     $locationProvider.hashPrefix('!');
     $routeProvider
         .when('/login',{
-            templateUrl : 'ui/vistas/login.html',
+            templateUrl : 'ui/vistas/crearUsuario.html',
             controller: 'Login'
         })	.otherwise({
         redirectTo: '/login'
