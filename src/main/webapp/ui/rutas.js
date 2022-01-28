@@ -4,7 +4,10 @@ angular.module('trabajoIntegrador').config(function ($routeProvider,$locationPro
         .when('/login',{
             templateUrl : 'ui/vistas/crearUsuario.html',
             controller: 'Login'
-        })	.otherwise({
+        }).when('/perfil',{
+        templateUrl : 'ui/vistas/perfil.html',
+        controller: 'Perfil'
+    }).otherwise({
         redirectTo: '/login'
     });
 });

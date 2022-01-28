@@ -31,7 +31,7 @@
 
 .boton{
     display: flex;
-    width: 50%;
+    width: 30%;
     justify-content: center;
     margin-left: 30px;
     border-radius: 5px;
@@ -49,21 +49,21 @@
 
 .seccion{
     display: flex;
-    width: 50%;
+    width: 33%;
     height: 50px;
     align-items: center;
 }
 
 .spam{
     display: flex;
-    width: 25%;
+    width: 33%;
     height: 50px;
     align-items: center;
 }
 
 .textos{
     display: flex;
-    width: 25%;
+    width: 33%;
     height: 50px;
     align-items: center;
     margin-left: 30px;
