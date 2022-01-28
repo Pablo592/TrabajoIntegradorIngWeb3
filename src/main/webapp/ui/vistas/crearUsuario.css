@@ -38,6 +38,10 @@
     background: rgb(194, 194, 194);
 }
 
+.boton:hover{
+    background: rgb(155, 154, 154);
+}
+
 .entrada{
     display: flex;
     width: 100%;
