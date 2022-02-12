@@ -36,7 +36,7 @@ public class OrdenRestController {
     })
 
 
-    @PreAuthorize("hasRole('ROLE_USER')")
+    //@PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping(value= "/ordenes",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Orden>> listado() {
         try {

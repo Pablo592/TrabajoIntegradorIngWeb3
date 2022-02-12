@@ -1,9 +1,9 @@
 {
-  "name":"Trabajo Integrador iw3",
-  "Version":"0.0.1",
+  "name": "final-iw3",
+  "Version": "0.0.1",
   "dependencies": {
-    "angular":"~1.8.0",
-    "angular-route":"~1.8.0",
+    "angular": "~1.8.0",
+    "angular-route": "~1.8.0",
     "bootstrap": "~3.3.0",
     "angular-sanitize": "~1.8.0",
     "angular-animate": "~1.8.0",

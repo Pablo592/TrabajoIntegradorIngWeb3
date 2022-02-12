@@ -75,18 +75,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests().antMatchers("/swagger-ui.html").permitAll();
 		http.authorizeRequests().antMatchers("/swagger-ui/*").permitAll();
 		http.authorizeRequests().antMatchers("/webjars/**").permitAll();
-		http.authorizeRequests().antMatchers("/favicon.ico").permitAll();
-		//http.authorizeRequests().antMatchers(HttpMethod.POST, "/login*").permitAll();
+
+
+		//autorizo a todos a consumir este archivo que esta fuera de la carpeta y sus imagenes
 		http.authorizeRequests().antMatchers("/index.html").permitAll();
+		http.authorizeRequests().antMatchers("/sisterna.png").permitAll();
+		//autorizo para que se acceda a este end-point para facilitar desde el front  evitar loguearme
+		//http.authorizeRequests().antMatchers("/test/api/v1/ordenes").permitAll();
 
 
-
+		//autorizo a que se accedan a los archivos que estan en los directorios hijos de ui
 		http.authorizeRequests().antMatchers("/ui/**").permitAll();
 		http.authorizeRequests().antMatchers("/").permitAll();
 
-		// http.authorizeRequests().antMatchers("/productos*").permitAll();
+		//autorizo para que se acceda a este end-point para facilitar desde el front  evitar loguearme
+		//http.authorizeRequests().antMatchers("/test/api/v1/ordenes*").permitAll();
 		// //.hasRole("ADMIN");
-		http.authorizeRequests().antMatchers("/test*").hasAnyRole("ADMIN", "USER");
+		//http.authorizeRequests().antMatchers("/test*").hasAnyRole("ADMIN", "USER");
 
 		http.authorizeRequests().antMatchers("/login*").permitAll();
 
