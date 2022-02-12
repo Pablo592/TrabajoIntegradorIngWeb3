@@ -81,7 +81,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests().antMatchers("/index.html").permitAll();
 		http.authorizeRequests().antMatchers("/sisterna.png").permitAll();
 		//autorizo para que se acceda a este end-point para facilitar desde el front  evitar loguearme
-		//http.authorizeRequests().antMatchers("/test/api/v1/ordenes").permitAll();
+		http.authorizeRequests().antMatchers("/test/api/v1/ordenes").permitAll();
 
 
 		//autorizo a que se accedan a los archivos que estan en los directorios hijos de ui

@@ -1,4 +1,4 @@
-angular.module('ordenes').controller('Ordenes',function($scope,OrdenesService){
+angular.module('ordenes').controller('Ordenes',function($scope, OrdenesService){
     $scope.titulo="Hola desde el controller Ordenes";
     $scope.listaOrdenes = [];//lo defino vacio al arreglo porque voy a usar este arreglo
                             //para obtener la lista de ordenes del back-end

@@ -1,14 +1,44 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+
 sdfsdfsdsfs
 {{titulo}}
 
-
-
-</body>
-</html>
+<table >
+    <thead>
+    <tr>
+        <td>codigoExterno</td>
+        <td>fechaTurno</td>
+        <td>fechaPesajeInicial</td>
+        <td>fechaInicioProcesoCarga</td>
+        <td>fechaFinProcesoCarga</td>
+        <td>fechaRecepcionPesajeFinal</td>
+        <td>password</td>
+        <td>frecuencia</td>
+        <td>masaAcumuladaKg</td>
+        <td>promedDensidadProductoKilogramoMetroCub</td>
+        <td>promedioTemperaturaProductoCelcius</td>
+        <td>promedioCaudalLitroSegundo</td>
+        <td>promedioCaudalLitroSegundo</td>
+        <td>ultimaTemperaturaProductoCelcius</td>
+        <td>ultimaTemperaturaProductoCelcius</td>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="p in listaOrdenes">
+        <td>{{p.codigoExterno}}</td>
+        <td>{{p.fechaTurno}}</td>
+        <td>{{p.fechaPesajeInicial}}</td>
+        <td>{{p.fechaInicioProcesoCarga}}</td>
+        <td>{{p.fechaFinProcesoCarga}}</td>
+        <td>{{p.fechaRecepcionPesajeFinal}}</td>
+        <td>{{p.password}}</td>
+        <td>{{p.frecuencia}}</td>
+        <td>{{p.masaAcumuladaKg}}</td>
+        <td>{{p.promedDensidadProductoKilogramoMetroCub}}</td>
+        <td>{{p.promedioTemperaturaProductoCelcius}}</td>
+        <td>{{p.promedioCaudalLitroSegundo}}</td>
+        <td>{{p.promedioCaudalLitroSegundo}}</td>
+        <td>{{p.ultimaTemperaturaProductoCelcius}}</td>
+        <td>{{p.ultimaTemperaturaProductoCelcius}}</td>
+    </tr>
+    </tbody>
+</table>
