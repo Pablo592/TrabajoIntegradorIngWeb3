@@ -2,6 +2,7 @@ package ar.edu.iua.iw3.web;
 
 
 import ar.edu.iua.iw3.modelo.Orden;
+import ar.edu.iua.iw3.modelo.dto.ConciliacionDTO;
 import ar.edu.iua.iw3.negocio.IOrdenNegocio;
 import ar.edu.iua.iw3.negocio.OrdenNegocio;
 import ar.edu.iua.iw3.negocio.excepciones.*;
@@ -21,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(Constantes.URL_ORDENES)
+@RequestMapping(Constantes.URL_BASE)
 public class OrdenRestController {
     @Autowired
     private IOrdenNegocio ordenNegocio;
@@ -34,8 +35,9 @@ public class OrdenRestController {
             @ApiResponse(code = 500 , message = "Información incorrecta recibida")
     })
 
-    @PreAuthorize("hasRole('ROLE_USER')")
-    @GetMapping(value= "",produces = MediaType.APPLICATION_JSON_VALUE)
+
+    //@PreAuthorize("hasRole('ROLE_USER')")
+    @GetMapping(value= "/ordenes",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Orden>> listado() {
         try {
             return new ResponseEntity<List<Orden>>(ordenNegocio.listado(), HttpStatus.OK);
@@ -46,7 +48,7 @@ public class OrdenRestController {
     }
 
     @PreAuthorize("hasRole('ROLE_USER')")
-    @GetMapping(value= "/conciliacion/{codigoExterno}")
+    @GetMapping(value= "/ordenes/conciliacion/{codigoExterno}")
     public ResponseEntity<MensajeRespuesta>  getConciliacion(@PathVariable("codigoExterno") String codigoExterno) {
         try {
             MensajeRespuesta r = ordenNegocio.obtenerConciliacion(codigoExterno).getMensaje();
@@ -74,7 +76,7 @@ public class OrdenRestController {
     })
 
     @PreAuthorize("hasRole('ROLE_USER')")
-    @GetMapping(value= "/buscar-una/{id}")    //es el id de orden
+    @GetMapping(value= "/ordenes/buscar-una/{id}")    //es el id de orden
     public ResponseEntity<Orden> buscarOrden(@PathVariable("id") long id) {
         try {
             return new ResponseEntity<Orden>(ordenNegocio.cargar(id), HttpStatus.OK);
@@ -94,8 +96,9 @@ public class OrdenRestController {
             @ApiResponse(code = 404 , message = "No es posible localizar la orden")
     })
 
+
     @PreAuthorize("hasRole('ROLE_USER')")
-    @GetMapping(value= "/ultima-carga/{codigoExterno}")
+    @GetMapping(value= "/ordenes/ultima-carga/{codigoExterno}")
     public ResponseEntity<Orden> ultimaCarga(@PathVariable("codigoExterno") String codigoExterno) {
         try {
             return new ResponseEntity<Orden>(ordenNegocio.traerUltimaCarga(codigoExterno), HttpStatus.OK);
@@ -116,7 +119,7 @@ public class OrdenRestController {
     })
 
     @PreAuthorize("hasRole('ROLE_USER')")
-    @PostMapping(value= "/primer-envio")
+    @PostMapping(value= "/ordenes/primer-envio")
     public ResponseEntity<MensajeRespuesta> agregarPrimerRequest(@RequestBody Orden orden) {
         try {
             MensajeRespuesta r=ordenNegocio.agregar(orden).getMensaje();
@@ -144,7 +147,7 @@ public class OrdenRestController {
     })
 
     @PreAuthorize("hasRole('ROLE_USER')")
-    @PutMapping(value= "/tara")
+    @PutMapping(value= "/ordenes/tara")
     public ResponseEntity<MensajeRespuesta> pesoInicialCamion(@RequestBody Orden orden) {
         try {
             MensajeRespuesta r=ordenNegocio.establecerPesajeInicial(orden).getMensaje();
@@ -176,7 +179,7 @@ public class OrdenRestController {
     })
 
     @PreAuthorize("hasRole('ROLE_USER')")
-    @PutMapping(value= "/frenar-carga")
+    @PutMapping(value= "/ordenes/frenar-carga")
     public  ResponseEntity<MensajeRespuesta> frenarCargar(@RequestBody Orden orden) {
         try {
             MensajeRespuesta r=ordenNegocio.frenarCargar(orden.getCodigoExterno()).getMensaje();
@@ -196,6 +199,7 @@ public class OrdenRestController {
         }
     }
 
+
     @ApiOperation("Señal para setear el pesaje final y pasar al estado 4")
     @ApiResponses( value = {
             @ApiResponse(code = 200 , message = "Orden actualizada correctamente"),
@@ -204,7 +208,7 @@ public class OrdenRestController {
     })
 
     @PreAuthorize("hasRole('ROLE_USER')")
-    @PutMapping(value= "/peso-final")
+    @PutMapping(value= "/ordenes/peso-final")
     public ResponseEntity<MensajeRespuesta> pesoFinalCamion(@RequestBody Orden orden) {
         try {
             MensajeRespuesta r=ordenNegocio.establecerPesajeFinal(orden).getMensaje();
@@ -233,7 +237,7 @@ public class OrdenRestController {
     })
 
     @PreAuthorize("hasRole('ROLE_USER')")
-    @PutMapping(value= "")
+    @PutMapping(value= "/ordenes")
     public ResponseEntity<Orden> modificar(@RequestBody Orden orden) {
         try {
            return new ResponseEntity<Orden>( ordenNegocio.modificar(orden),HttpStatus.OK);
@@ -257,7 +261,7 @@ public class OrdenRestController {
     })
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PutMapping(value= "/umbral-temperatura")
+    @PutMapping(value= "/ordenes/umbral-temperatura")
     public ResponseEntity<MensajeRespuesta> modificarUmbralTemperatura(@RequestBody Orden orden) {
         try {
             MensajeRespuesta r = ordenNegocio.cambiarUmbralTemperatura(orden).getMensaje();
@@ -289,7 +293,7 @@ public class OrdenRestController {
     })
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @DeleteMapping(value= "/{id}")
+    @DeleteMapping(value= "/ordenes/{id}")
     public ResponseEntity<String> eliminar(@PathVariable("id") long id) {
         try {
             ordenNegocio.eliminar(id);

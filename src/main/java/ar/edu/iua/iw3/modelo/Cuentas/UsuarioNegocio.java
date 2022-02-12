@@ -54,10 +54,11 @@ public class UsuarioNegocio implements IUsuarioNegocio {
 		MensajeRespuesta m=new MensajeRespuesta();
 		//si es nulo esta bien
 		String msjCheck = usuario.checkBasicData();
-		if (msjCheck != null)
+		if (msjCheck != null) {
 			throw new BadRequest(msjCheck);
-		else {
-			if(usuario.getEmail() != null && userDAO.findFirstByEmail(usuario.getEmail()).isPresent() )
+		} else {
+			if(usuario.getEmail() != null)
+				if (userDAO.findFirstByEmail(usuario.getEmail()).isPresent() )
 					throw new EncontradoException("El email " + usuario.getEmail() + " ya se encuentra registrado");
 
 			if (userDAO.findFirstByUsername(usuario.getUsername()).isPresent())
@@ -143,6 +144,7 @@ public class UsuarioNegocio implements IUsuarioNegocio {
 			throw new NegocioException(e);
 		}
 	}
+
 
 	public Usuario findByid(int id){
 		return 	userDAO.findById(id).orElse(null);

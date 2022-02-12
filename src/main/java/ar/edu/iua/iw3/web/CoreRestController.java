@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+
 import static ar.edu.iua.iw3.util.Constantes.*;
 
 @RestController
@@ -28,6 +29,7 @@ public class CoreRestController extends BaseRestController{
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	
+
 	@PostMapping(value=URL_LOGIN_SOLO_TOKEN)
 	public ResponseEntity<String> loginToken(@RequestParam(value = "username") String username,
 			@RequestParam(value = "password") String password) {
@@ -62,6 +64,7 @@ public class CoreRestController extends BaseRestController{
 
 	}
 	
+
 	@PostMapping(value=URL_LOGIN_TOKEN_CON_DATOS)
 	public ResponseEntity<String> loginTokenFullJson(@RequestParam(value = "username") String username,
 			@RequestParam(value = "password") String password) {
@@ -96,6 +99,7 @@ public class CoreRestController extends BaseRestController{
 
 	}
 	
+
 	@GetMapping(value = URL_AUTH_INFO)
 	public ResponseEntity<String> authInfo() {
 		return new ResponseEntity<String>(userToJson(getUserLogged()).toString(), HttpStatus.OK);

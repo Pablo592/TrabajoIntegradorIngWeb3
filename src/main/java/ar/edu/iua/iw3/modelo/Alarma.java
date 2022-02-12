@@ -19,6 +19,7 @@ public class Alarma {
 
     private String descripcion;
 
+
     @ApiModelProperty(notes = "Una alarma tiene un unico autor.")
     @ManyToOne(cascade=CascadeType.ALL)
     @JoinColumn(name = "autor_id")
@@ -46,6 +47,7 @@ public class Alarma {
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
+
 
     public Usuario getAutor() {
         return autor;

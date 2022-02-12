@@ -1,0 +1,75 @@
+.cuerpo{
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+    justify-content: center;
+}
+.paquete{
+    border-style: solid;
+    border-radius: 5px;
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+}
+
+.items{
+    display: flex;
+    height: 50px;
+    flex-direction: row;
+    font-size: calc(0.3em + 0.8vw);
+
+}
+
+.registrase{
+    display: flex;
+    width: 100%;
+    height: 50px;
+    align-items: center;
+    justify-content: center;
+}
+
+.boton{
+    display: flex;
+    width: 30%;
+    justify-content: center;
+    margin-left: 30px;
+    border-radius: 5px;
+    background: rgb(194, 194, 194);
+}
+
+.boton:hover{
+    background: rgb(155, 154, 154);
+}
+
+.entrada{
+    display: flex;
+    width: 100%;
+}
+
+.seccion{
+    display: flex;
+    width: 33%;
+    height: 50px;
+    align-items: center;
+}
+
+.spam{
+    display: flex;
+    width: 33%;
+    height: 50px;
+    align-items: center;
+}
+
+.textos{
+    display: flex;
+    width: 33%;
+    height: 50px;
+    align-items: center;
+    margin-left: 30px;
+}
+
+.alertas{
+    display: flex;
+    margin-left: 30px;
+}

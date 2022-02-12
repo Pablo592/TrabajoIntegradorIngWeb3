@@ -10,15 +10,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationListener;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @Component
 public class CargaEventListener implements ApplicationListener<CargaEvent> {
 
     private Logger log = LoggerFactory.getLogger(this.getClass());
+
 
     @Autowired
     private OrdenNegocio ordenNegocio;
@@ -57,6 +55,7 @@ public class CargaEventListener implements ApplicationListener<CargaEvent> {
             message.setText(mensaje);
             emailSender.send(message);
             log.trace("Mail enviado a: '{}'",to);
+
 
             Orden ordenConMailEnviado = carga.getOrden();
             ordenConMailEnviado.setAlarmaActiva(true);

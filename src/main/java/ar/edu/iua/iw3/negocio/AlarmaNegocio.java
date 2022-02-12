@@ -112,7 +112,4 @@ public class AlarmaNegocio implements IAlarmaNegocio{
             throw new NegocioException(e);
         }
     }
-
-
-
 }
