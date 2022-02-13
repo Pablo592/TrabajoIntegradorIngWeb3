@@ -1,4 +1,4 @@
-angular.module('trabajoIntegrador').config(function ($routeProvider,$locationProvider){
+angular.module('trabajoIntegrador').config(function ($routeProvider, $locationProvider){
     $locationProvider.hashPrefix('!');  //se o coloco antes del # para que me lo indexen los robots de google, osea se de cuenta que esta en un servidor la pagina
     $routeProvider  //creamos las rutas
         .when('/login',{

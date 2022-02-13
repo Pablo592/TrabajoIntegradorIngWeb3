@@ -6,6 +6,7 @@
     <link rel="icon" type="image/png" href="/sisterna.png" sizes="32x32">
     <script type="text/javascript" src="ui/lib/angular/angular.min.js"></script>
     <script type="text/javascript" src="ui/lib/angular-route/angular-route.min.js"></script>
+
     <link href="ui/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="ui/lib/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet">
     <link href="ui/lib/font-awesome/css/fontawesome.min.css" rel="stylesheet">
@@ -24,16 +25,23 @@
     <script type="text/javascript" src="ui/lib/jquery-ui/jquery-ui.min.js"></script>
     <script type="text/javascript" src="ui/lib/bootstrap/dist/js/bootstrap.min.js"></script>
 
+
     <script type="text/javascript" src="ui/app.js"></script>
+    <script type="text/javascript" src="ui/rutas.js"></script>
+
     <script type="text/javascript" src="ui/modulos/ordenes/ordenes-modulo.js"></script>
     <script type="text/javascript" src="ui/modulos/ordenes/ordenes-controller.js"></script>
     <script type="text/javascript" src="ui/modulos/ordenes/ordenes-service.html.js"></script>
 
+    <script type="text/javascript" src="ui/controladores/loginController.js"></script>
+    <script type="text/javascript" src="ui/servicios/core-service.js"></script>
 
     <script type="text/javascript" src="ui/controladores/perfilController.js"></script>
-    <script type="text/javascript" src="ui/controladores/loginController.js"></script>
 
-    <script type="text/javascript" src="ui/rutas.js"></script>
+
+
+
+
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" type="text/css" href="ui/vistas/crearUsuario.css">
     <link rel="stylesheet" type="text/css" href="ui/vistas/perfil.css">
@@ -93,8 +101,8 @@
                     </ul>
                 </li>
             </ul>
-        </div><!-- /.navbar-collapse -->
-    </div><!-- /.container-fluid -->
+        </div>
+    </div>
 </nav>
 <body ng-app="trabajoIntegrador">  <!--Modulo de Angular I> -->
 <div style="height: 100%; width: 100%" ng-view=""></div>

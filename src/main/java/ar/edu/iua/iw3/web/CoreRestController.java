@@ -3,6 +3,7 @@ package ar.edu.iua.iw3.web;
 import ar.edu.iua.iw3.modelo.Cuentas.IUsuarioNegocio;
 import ar.edu.iua.iw3.modelo.Cuentas.Usuario;
 import ar.edu.iua.iw3.negocio.excepciones.*;
+import ar.edu.iua.iw3.util.Constantes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,14 +12,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 import static ar.edu.iua.iw3.util.Constantes.*;
 
+@RequestMapping(Constantes.URL_AUTH)
 @RestController
 public class CoreRestController extends BaseRestController{
 	private Logger log = LoggerFactory.getLogger(this.getClass());
