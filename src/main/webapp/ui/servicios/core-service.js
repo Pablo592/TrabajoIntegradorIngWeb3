@@ -1,9 +1,9 @@
-angular.module('trabajoIntegrador').factory('CoreService',function($http,URL_BASE,$log,$localStorage){
+angular.module('trabajoIntegrador').factory('CoreService',function($http,URL_BASE,$log,$localStorage,URL_TOKEN){
 	return {
 		login: function(usuario) {
 			const config={
 				method:'POST',
-				url: URL_BASE+'/login-json',
+				url: URL_TOKEN+'/login',
 				headers : { 'Content-Type': 'application/x-www-form-urlencoded' },
 				data: `username=${usuario.username}&password=${usuario.password}`
 			};

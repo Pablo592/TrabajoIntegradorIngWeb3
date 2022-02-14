@@ -7,7 +7,7 @@ angular.module('trabajoIntegrador',['ngRoute']); ---> Crea
 angular.module('trabajoIntegrador'); --> Solo obtenemos
 */
 app.constant('URL_BASE','http://localhost:8080/test/api/v1');
-
+app.constant('URL_TOKEN','http://localhost:8080/test/api/v1/auth');
 
 
 app.run(['$rootScope','$uibModal','CoreService','$location','$log','$localStorage', '$stomp',
@@ -46,6 +46,6 @@ app.run(['$rootScope','$uibModal','CoreService','$location','$log','$localStorag
         $rootScope.openLoginForm();
 
         //CoreService.authInfo();
-
     }
 ]);
+

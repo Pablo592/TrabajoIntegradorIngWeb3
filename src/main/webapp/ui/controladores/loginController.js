@@ -7,8 +7,9 @@ angular.module('trabajoIntegrador').controller('Login',
 
             $scope.usuario={username:"",password:""};
             $scope.login = function() {
-                CoreService.login($scope.username).then(
+                CoreService.login($scope.usuario).then(
                     function(resp){
+                        console.log(resp)
                         if(resp.status===200) {
                             $localStorage.userdata=resp.data;
                             $localStorage.logged=true;

@@ -93,7 +93,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		// //.hasRole("ADMIN");
 		//http.authorizeRequests().antMatchers("/test*").hasAnyRole("ADMIN", "USER");
 
-		http.authorizeRequests().antMatchers("/login*").permitAll();
+		http.authorizeRequests().antMatchers("/test/api/v1/auth/login*").permitAll();
 
 
 		http.authorizeRequests().anyRequest().authenticated();
