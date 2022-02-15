@@ -60,7 +60,6 @@ public class CoreRestController extends BaseRestController{
 		} catch (NoEncontradoException e) {
 			return new ResponseEntity<String>("BAD_ACCOUNT_NAME", HttpStatus.UNAUTHORIZED);
 		}
-
 	}
 	
 

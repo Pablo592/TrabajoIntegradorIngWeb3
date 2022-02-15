@@ -36,7 +36,7 @@ app.run(['$rootScope','$uibModal','CoreService','$location','$log','$localStorag
                     animation : true,
                     backdrop : 'static',                //no se me cierra el modal sin importar que me haga click en la pantalla de atras
                     keyboard : false,
-                    templateUrl : 'ui/vistas/loguin.html',//tengo que tener si o si este html
+                    templateUrl : 'ui/vistas/login.html',//tengo que tener si o si este html
                     controller: 'Login', //tengo que crear este controlador
                     size : size
                 });
