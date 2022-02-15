@@ -106,6 +106,7 @@ public class UsuarioNegocio implements IUsuarioNegocio {
 
 	public  Usuario saveUser(Usuario usuario) throws NegocioException {
 		try {
+			if(!cargar(usuario.getId()).getPassword().equals(usuario.getPassword()))
 			usuario.setPassword(pwdEncoder.encode(usuario.getPassword()));
 			return userDAO.save(usuario);
 		} catch (Exception e) {
