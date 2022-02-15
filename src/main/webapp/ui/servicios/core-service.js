@@ -3,7 +3,7 @@ angular.module('trabajoIntegrador').factory('CoreService',function($http,URL_BAS
 		login: function(usuario) {
 			const config={
 				method:'POST',
-				url: URL_TOKEN+'/login',
+				url: URL_TOKEN+'/login-json',
 				headers : { 'Content-Type': 'application/x-www-form-urlencoded' },
 				data: `username=${usuario.username}&password=${usuario.password}`
 			};
