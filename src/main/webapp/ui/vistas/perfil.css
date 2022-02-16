@@ -1,56 +1,60 @@
-.paquetePerfil{
+.tabla{
     display: flex;
     width: 100%;
-    min-height: 100vh;    display: flex;
-    max-height: 100vh;    display: flex;
     flex-direction: column;
-    overflow-y:hidden;
+    height: 100%;
 }
 
-.headerPerfil{
+
+.encabezadoTabla{
     display: flex;
-    margin-top: 5px;
-    background: red;
-    height: 5vh;
     width: 100%;
     flex-direction: row;
-
+    height: 100%;
 }
 
-.headerPerfil1{
-    display: flex;
-    background: yellow;
-    height: 5vh;
-    width: 80%;
-}
-.headerPerfil2{
-    display: flex;
-    background: #0b3e6f;
-    height: 5vh;
-    width: 10%;
-}
-.headerPerfil3{
-    display: flex;
-    background: #1b6d85;
-    height: 5vh;
-    width: 10%;
-}
 
-.bodyPerfil{
+.filasTabla{
     display: flex;
-    height: 95vh;
     width: 100%;
     flex-direction: row;
-    overflow-y: auto;
-    overflow-x:hidden;
+    height: 100%;
 }
 
-.celdaPerfil{
+
+.titulo{
     display: flex;
-    height: 50px;
     width: 100%;
+    min-width: 1vh;
+    background-color: rgb(207, 206, 206);
+    height: 3vh;
+    border: black solid;
+    border-width: 1px;
+    font-size: 2vh;
+    justify-content: center;
 }
 
-th,td{
-    width: 100px;
+.celda{
+    display: flex;
+    width: 100%;
+    min-width: 1vh;
+    background-color: rgb(240, 239, 239);
+    height: 3vh;
+    border-left: black solid;
+    border-right: black solid;
+    border-width: 1px;
+   justify-content: center;
+}
+
+.espacioVacio{
+    display: flex;
+    width: 100%;
+    min-width: 1vh;
+    background-color: transparent;
+    height: 3vh;
+    border-width: 1px;
+}
+
+.imagen{
+    cursor: pointer;
 }
