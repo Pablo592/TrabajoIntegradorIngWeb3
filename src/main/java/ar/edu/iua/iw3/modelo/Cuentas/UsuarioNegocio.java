@@ -106,7 +106,7 @@ public class UsuarioNegocio implements IUsuarioNegocio {
 
 	public  Usuario saveUser(Usuario usuario) throws NegocioException {
 		try {
-			if(!cargar(usuario.getId()).getPassword().equals(usuario.getPassword()))
+			if(!cargar(usuario.getId()).getPassword().equals(usuario.getPassword()))	//si no coinciden los encriptados
 			usuario.setPassword(pwdEncoder.encode(usuario.getPassword()));
 			return userDAO.save(usuario);
 		} catch (Exception e) {
@@ -127,7 +127,6 @@ public class UsuarioNegocio implements IUsuarioNegocio {
 		if (!o.isPresent())
 			throw new NoEncontradoException(
 					String.format("No se encuentra un user con nombre o email = '%s'", nombreOEmail));
-
 		return o.get();
 	}
 
@@ -136,7 +135,6 @@ public class UsuarioNegocio implements IUsuarioNegocio {
 		Usuario u = cargar(id);
 		if(u == null)
 			throw new NoEncontradoException("El usuario que desea eliminar no se encuentra registrado");
-
 		try {
 			userDAO.deleteById(id);
 			return new RespuestaGenerica<Usuario>(u, m);

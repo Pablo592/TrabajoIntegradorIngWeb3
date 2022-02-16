@@ -61,7 +61,6 @@ public class CoreRestController extends BaseRestController{
 			return new ResponseEntity<String>("BAD_ACCOUNT_NAME", HttpStatus.UNAUTHORIZED);
 		}
 	}
-	
 
 	@PostMapping(value=URL_LOGIN_TOKEN_CON_DATOS)
 	public ResponseEntity<String> loginTokenFullJson(@RequestParam(value = "username") String username,
@@ -96,9 +95,8 @@ public class CoreRestController extends BaseRestController{
 		}
 
 	}
-	
 
-	@GetMapping(value = URL_AUTH_INFO)
+	@GetMapping(value = URL_AUTH_INFO)	//si no estoy logueado me devuelve un 403 y sino me devuelve el usuario logueado
 	public ResponseEntity<String> authInfo() {
 		return new ResponseEntity<String>(userToJson(getUserLogged()).toString(), HttpStatus.OK);
 	}

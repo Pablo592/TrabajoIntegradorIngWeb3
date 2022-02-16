@@ -11,7 +11,7 @@ angular.module('trabajoIntegrador').factory('CoreService',function($http,URL_BAS
 		},
 		authInfo:function(){
 			//$log.log()
-			return $http.get(URL_BASE+"/auth-info");
+			return $http.get(URL_TOKEN+"/auth-info"); //metodo protegio, que sea protegido indica que si al tratar de consumirlo me devuelve un 403 y si estoy logueado me devuelve un 200
 		},
 		logout: function() {
 			delete $localStorage.userdata;
