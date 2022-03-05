@@ -4,7 +4,7 @@ angular.module('ordenes').factory('OrdenesService',function($http, URL_BASE){
             return $http.get(URL_BASE+'/ordenes');  //el http es una interfaz de angular
         },
         add:function(p) {
-            return $http.post(URL_BASE+'/ordenes',p);
+            return $http.post(URL_BASE+'/ordenes/primer-envio',p);
         },
         edit:function(p) {
             return $http.put(URL_BASE+'/ordenes',p);

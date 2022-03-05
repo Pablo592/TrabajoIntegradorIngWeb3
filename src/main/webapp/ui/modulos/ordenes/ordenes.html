@@ -1,44 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+</head>
+<body>
+    <div class="tabla">
+      <br>
+        <div class="filasTabla">
+          <div class="sector">Codigo Externo:<input class="inputs" type="number" ng-model="orden.codigoExterno"></div>
+          <div class="sector">Fecha del turno:<input class="inputs" type="date" ng-model="orden.fechaTurno"></div>
+          <div class="sector">Frecuencia:<input class="inputs" type="number" ng-model="orden.frecuencia"></div>
+          <div class="espacioVacio"></div>
+          <div class="espacioVacio"></div>
+        </div>
+        <br>
+        <div class="linea"></div>
 
-sdfsdfsdsfs
-{{titulo}}
+        <div class="filasTabla"> 
+          <div class="titulo">Camion</div>
+          <div class="espacioVacio"></div>
+        </div>
+        <br>
+        <div class="filasTabla">
+            <div class="sector">Patente:<input class="inputs" type="text" placeholder="letra letra numero numero numero letra letra" ng-model="orden.camion.patente"></div>
+            <div class="sector">Cisternado (litros):<input class="inputs" type="number" ng-model="orden.camion.cisternadoLitros"></div>
+            <div class="sector">Preset (kg):<input class="inputs" type="number" ng-model="orden.camion.preset"></div>
+            <div class="espacioVacio"></div>
+            <div class="espacioVacio"></div>
+          </div>
+          <br>
+          <div class="linea"></div>
+          <div class="filasTabla">
+            <div class="titulo">Cliente</div>
+            <div class="espacioVacio"></div>
+          </div>
+          <br>
+          <div class="filasTabla">
+            <div class="sector">Razon social:<input class="inputs" type="text" ng-model="orden.cliente.razonSocial"></div>
+            <div class="sector">N° Cel:<input class="inputs" type="number" ng-model="orden.cliente.contacto"></div>
+            <div class="espacioVacio"></div>
+            <div class="espacioVacio"></div>
+          </div>
+          <br>
+          <div class="linea"></div>
+          <div class="filasTabla">
+            <div class="titulo">Chofer</div>
+            <div class="espacioVacio"></div>
+          </div>
+          <br>
+          <div class="filasTabla">
+            <div class="sector">Nombre:<input class="inputs" type="text" ng-model="orden.chofer.nombre"></div>
+            <div class="sector">Apellido:<input class="inputs" type="text" ng-model="orden.chofer.apellido"></div>
+            <div class="sector">DNI:<input class="inputs" type="number" ng-model="orden.chofer.documento"></div>
+            <div class="espacioVacio"></div>
+            <div class="espacioVacio"></div>
+          </div>
+          <br>
+          <div class="linea"></div>
+          <div class="filasTabla">
+            <div class="titulo">Producto</div>
+            <div class="espacioVacio"></div>
+          </div>
+          <br>
+          <div class="filasTabla">
+            <div class="sector">Nombre:<input class="inputs" type="text" ng-model="orden.producto.nombre"></div>
+            <div class="espacioVacio"></div>
+            <div class="espacioVacio"></div>
+          </div>
+          <div class="filasTabla">
+            <div class="espacioVacio"></div>
+            <div class="sector"><button class="botonGuardar" ng-click="crear()">Guardar</button></div>
+            <div class="espacioVacio"></div>
+            <div class="espacioVacio"></div>
+          </div>
+      </div>
+</body>
+</html>
+<!--
+número, estado, camión, preset, carga actual, última temperatura,
+última densidad, último caudal
+-->
 
-<table >
-    <thead>
-    <tr>
-        <td>codigoExterno</td>
-        <td>fechaTurno</td>
-        <td>fechaPesajeInicial</td>
-        <td>fechaInicioProcesoCarga</td>
-        <td>fechaFinProcesoCarga</td>
-        <td>fechaRecepcionPesajeFinal</td>
-        <td>password</td>
-        <td>frecuencia</td>
-        <td>masaAcumuladaKg</td>
-        <td>promedDensidadProductoKilogramoMetroCub</td>
-        <td>promedioTemperaturaProductoCelcius</td>
-        <td>promedioCaudalLitroSegundo</td>
-        <td>promedioCaudalLitroSegundo</td>
-        <td>ultimaTemperaturaProductoCelcius</td>
-        <td>ultimaTemperaturaProductoCelcius</td>
-    </tr>
-    </thead>
-    <tbody>
-    <tr ng-repeat="p in listaOrdenes">
-        <td>{{p.codigoExterno}}</td>
-        <td>{{p.fechaTurno}}</td>
-        <td>{{p.fechaPesajeInicial}}</td>
-        <td>{{p.fechaInicioProcesoCarga}}</td>
-        <td>{{p.fechaFinProcesoCarga}}</td>
-        <td>{{p.fechaRecepcionPesajeFinal}}</td>
-        <td>{{p.password}}</td>
-        <td>{{p.frecuencia}}</td>
-        <td>{{p.masaAcumuladaKg}}</td>
-        <td>{{p.promedDensidadProductoKilogramoMetroCub}}</td>
-        <td>{{p.promedioTemperaturaProductoCelcius}}</td>
-        <td>{{p.promedioCaudalLitroSegundo}}</td>
-        <td>{{p.promedioCaudalLitroSegundo}}</td>
-        <td>{{p.ultimaTemperaturaProductoCelcius}}</td>
-        <td>{{p.ultimaTemperaturaProductoCelcius}}</td>
-    </tr>
-    </tbody>
-</table>

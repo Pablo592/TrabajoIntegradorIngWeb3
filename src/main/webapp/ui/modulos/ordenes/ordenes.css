@@ -1,0 +1,48 @@
+.titulo{
+    display: flex;
+    width: 100%;
+    min-width: 1vh;
+    height: 3vh;
+    font-size: 2vh;
+    justify-content: center;
+    align-items: center;
+}
+
+.sector{
+    display: flex;
+    width: 100%;
+    min-width: 1vh;
+    height: 3vh;
+   justify-content: start;
+   align-items: center;
+}
+.linea{
+    display: flex;
+    width: 60%;
+    height: 2px;
+   justify-content: start;
+   background-color: black;
+}
+
+.imagen{
+    cursor: pointer;
+}
+
+.inputs{
+    display: flex;
+    width: 65%;
+    margin-left: 5px;
+}
+
+.botonGuardar{
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(230, 230, 230);
+    cursor: pointer;
+}
+
+.botonGuardar:hover{
+    background-color: rgb(192, 189, 189);
+}
