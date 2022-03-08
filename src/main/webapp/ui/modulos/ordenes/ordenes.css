@@ -1,9 +1,19 @@
+.fuente{
+    display: flex;
+    font-size: 2vh !important;
+    width: 50%;
+    justify-content: start;
+    align-items: center;
+    min-width: 1vh;
+    height: 3vh;
+}
+
 .titulo{
     display: flex;
     width: 100%;
     min-width: 1vh;
     height: 3vh;
-    font-size: 2vh;
+    font-size: 1.5vh;
     justify-content: center;
     align-items: center;
 }
@@ -13,15 +23,15 @@
     width: 100%;
     min-width: 1vh;
     height: 3vh;
-   justify-content: start;
-   align-items: center;
+    justify-content: start;
+    align-items: center;
 }
 .linea{
     display: flex;
-    width: 60%;
+    width: 100%;
     height: 2px;
-   justify-content: start;
-   background-color: black;
+    justify-content: start;
+    background-color: black;
 }
 
 .imagen{
@@ -31,12 +41,13 @@
 .inputs{
     display: flex;
     width: 65%;
-    margin-left: 5px;
+    height: 3vh;
 }
 
 .botonGuardar{
     display: flex;
     width: 100%;
+    height: 3vh;
     align-items: center;
     justify-content: center;
     background-color: rgb(230, 230, 230);
@@ -45,4 +56,20 @@
 
 .botonGuardar:hover{
     background-color: rgb(192, 189, 189);
+}
+
+.espacioVacio{
+    display: flex;
+    width: 50%;
+    min-width: 1vh;
+    background-color: transparent;
+    height: 3vh;
+}
+
+.espacioPequenio{
+    display: flex;
+    width: 10%;
+    min-width: 1vh;
+    background-color: transparent;
+    height: 3vh;
 }

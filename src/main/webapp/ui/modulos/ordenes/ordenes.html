@@ -6,71 +6,80 @@
     <div class="tabla">
       <br>
         <div class="filasTabla">
-          <div class="sector">Codigo Externo:<input class="inputs" type="number" ng-model="orden.codigoExterno"></div>
-          <div class="sector">Fecha del turno:<input class="inputs" type="date" ng-model="orden.fechaTurno"></div>
-          <div class="sector">Frecuencia:<input class="inputs" type="number" ng-model="orden.frecuencia"></div>
-          <div class="espacioVacio"></div>
-          <div class="espacioVacio"></div>
+          <div class="espacioPequenio"></div>
+          <div class="fuente">Codigo Externo:</div>
+          <div class="sector"><input class="inputs" type="number" ng-model="orden.codigoExterno"></div>
+          <div class="fuente">Fecha del turno:</div>
+          <div class="sector"><input class="inputs" type="date" ng-model="orden.fechaTurno"></div>
+          <div class="fuente">Frecuencia:</div>
+          <div class="sector"><input class="inputs" type="number" ng-model="orden.frecuencia"></div>
         </div>
         <br>
         <div class="linea"></div>
-
         <div class="filasTabla"> 
           <div class="titulo">Camion</div>
-          <div class="espacioVacio"></div>
         </div>
         <br>
         <div class="filasTabla">
-            <div class="sector">Patente:<input class="inputs" type="text" placeholder="letra letra numero numero numero letra letra" ng-model="orden.camion.patente"></div>
-            <div class="sector">Cisternado (litros):<input class="inputs" type="number" ng-model="orden.camion.cisternadoLitros"></div>
-            <div class="sector">Preset (kg):<input class="inputs" type="number" ng-model="orden.camion.preset"></div>
-            <div class="espacioVacio"></div>
-            <div class="espacioVacio"></div>
+          <div class="espacioPequenio"></div>
+          <div class="fuente">Patente:</div>
+            <div class="sector"><input class="inputs" type="text" placeholder="letra letra numero numero numero letra letra" ng-model="orden.camion.patente"></div>
+          <div class="fuente">Cisternado (litros):</div>
+            <div class="sector"><input class="inputs" type="number" ng-model="orden.camion.cisternadoLitros"></div>
+          <div class="fuente">Preset (kg):</div>
+          <div class="sector"><input class="inputs" type="number" ng-model="orden.camion.preset"></div>
           </div>
           <br>
           <div class="linea"></div>
           <div class="filasTabla">
             <div class="titulo">Cliente</div>
-            <div class="espacioVacio"></div>
           </div>
           <br>
           <div class="filasTabla">
-            <div class="sector">Razon social:<input class="inputs" type="text" ng-model="orden.cliente.razonSocial"></div>
-            <div class="sector">N° Cel:<input class="inputs" type="number" ng-model="orden.cliente.contacto"></div>
-            <div class="espacioVacio"></div>
+            <div class="espacioPequenio"></div>
+            <div class="fuente">Razon social:</div>
+            <div class="sector"><input class="inputs" type="text" ng-model="orden.cliente.razonSocial"></div>
+            <div class="fuente">N° Cel:</div>
+            <div class="sector"><input class="inputs" type="number" ng-model="orden.cliente.contacto"></div>
+            <div class="espacio"></div>
             <div class="espacioVacio"></div>
           </div>
           <br>
           <div class="linea"></div>
           <div class="filasTabla">
             <div class="titulo">Chofer</div>
-            <div class="espacioVacio"></div>
           </div>
           <br>
           <div class="filasTabla">
-            <div class="sector">Nombre:<input class="inputs" type="text" ng-model="orden.chofer.nombre"></div>
-            <div class="sector">Apellido:<input class="inputs" type="text" ng-model="orden.chofer.apellido"></div>
-            <div class="sector">DNI:<input class="inputs" type="number" ng-model="orden.chofer.documento"></div>
-            <div class="espacioVacio"></div>
-            <div class="espacioVacio"></div>
+            <div class="espacioPequenio"></div>
+            <div class="fuente">Nombre:</div>
+            <div class="sector"><input class="inputs" type="text" ng-model="orden.chofer.nombre"></div>
+            <div class="fuente">Apellido:</div>
+            <div class="sector"><input class="inputs" type="text" ng-model="orden.chofer.apellido"></div>
+            <div class="fuente">DNI:</div>
+            <div class="sector"><input class="inputs" type="number" ng-model="orden.chofer.documento"></div>
           </div>
           <br>
           <div class="linea"></div>
           <div class="filasTabla">
             <div class="titulo">Producto</div>
-            <div class="espacioVacio"></div>
           </div>
           <br>
           <div class="filasTabla">
-            <div class="sector">Nombre:<input class="inputs" type="text" ng-model="orden.producto.nombre"></div>
-            <div class="espacioVacio"></div>
-            <div class="espacioVacio"></div>
+            <div class="espacioPequenio"></div>
+            <div class="fuente">Nombre:</div>
+            <div class="sector"><input class="inputs" type="text" ng-model="orden.producto.nombre"></div>
+            <div class="espacio"></div>
+            <div class="espacio"></div>
+            <div class="espacio"></div>
           </div>
+          <br>
           <div class="filasTabla">
-            <div class="espacioVacio"></div>
+            <div class="espacio"></div>
+            <div class="espacio"></div>
             <div class="sector"><button class="botonGuardar" ng-click="crear()">Guardar</button></div>
-            <div class="espacioVacio"></div>
-            <div class="espacioVacio"></div>
+            <div class="espacio"></div>
+            <div class="espacio"></div>
           </div>
       </div>
 </body>

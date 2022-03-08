@@ -46,13 +46,12 @@
    justify-content: center;
 }
 
-.espacioVacio{
+.espacio{
     display: flex;
     width: 100%;
     min-width: 1vh;
     background-color: transparent;
     height: 3vh;
-    border-width: 1px;
 }
 
 .imagen{
