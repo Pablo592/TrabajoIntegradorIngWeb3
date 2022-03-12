@@ -3,8 +3,10 @@ angular.module('ordenes').controller('Ordenes',function($scope, OrdenesService){
     $scope.orden = {
         codigoExterno :'',
         fechaTurno :'',
+        fechaPesajeInicial:'',
+        fechaRecepcionPesajeFinal:'',
         frecuencia: '',
-        camion: {patente:'',cisternadoLitros:'',preset:''},
+        camion: {patente:'',cisternadoLitros:'',preset:'',tara:'',pesoFinalCamion:''},
         cliente: {razonSocial:'',contacto:''},
         chofer: {nombre:'',apellido:'',documento:''},
         producto: {nombre:''}

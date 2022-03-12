@@ -3,6 +3,7 @@
 <head>
 </head>
 <body>
+  <div ng-show="true">
     <div class="tabla">
       <br>
         <div class="filasTabla">
@@ -14,6 +15,7 @@
           <div class="fuente">Frecuencia:</div>
           <div class="sector"><input class="inputs" type="number" ng-model="orden.frecuencia"></div>
         </div>
+        <br>
         <br>
         <div class="linea"></div>
         <div class="filasTabla"> 
@@ -82,6 +84,113 @@
             <div class="espacio"></div>
           </div>
       </div>
+    </div>
+
+
+    <div ng-show="true">
+      <div class="tabla">
+        <br>
+          <div class="filasTabla">
+            <div class="espacioPequenio"></div>
+            <div class="fuente">Codigo Externo:</div>
+            <div class="sector"><input class="inputs" type="number" ng-model=""></div>
+            <div class="fuente">Fecha pesaje inicial:</div>
+            <div class="sector"><input class="inputs" type="date" ng-model=""></div>
+            <div class="espacio"></div>
+            <div class="espacioVacio"></div>
+          </div>
+          <br>
+          <br>
+          <div class="linea"></div>
+          <div class="filasTabla"> 
+            <div class="titulo">Camion</div>
+          </div>
+          <br>
+          <div class="filasTabla">
+            <div class="espacioPequenio"></div>
+            <div class="fuente">Patente:</div>
+            <div class="sector"><input class="inputs" type="text" placeholder="letra letra numero numero numero letra letra" ng-model="orden.camion.patente"></div>
+            <div class="fuente">tara (kg):</div>
+            <div class="sector"><input class="inputs" type="number" ng-model=""></div>
+            <div class="espacio"></div>
+            <div class="espacioVacio"></div>
+          </div>
+          <br>
+            <div class="filasTabla">
+              <div class="espacio"></div>
+              <div class="espacio"></div>
+              <div class="sector"><button class="botonGuardar" ng-click="crear()">Guardar</button></div>
+              <div class="espacio"></div>
+              <div class="espacio"></div>
+            </div>
+        </div>
+      </div>
+
+
+
+      <div ng-show="true">
+        <div class="tabla">
+          <br>
+            <div class="filasTabla">
+              <div class="espacioPequenio"></div>
+              <div class="fuente">Codigo Externo:</div>
+              <div class="sector"><input class="inputs" type="number" ng-model=""></div>
+              <div class="espacio"></div>
+              <div class="espacioVacio"></div>
+              <div class="espacio"></div>
+              <div class="espacioVacio"></div>
+            </div>
+            <br>
+              <div class="filasTabla">
+                <div class="espacio"></div>
+                <div class="espacio"></div>
+                <div class="sector"><button class="botonGuardar" ng-click="crear()">Guardar</button></div>
+                <div class="espacio"></div>
+                <div class="espacio"></div>
+              </div>
+          </div>
+        </div>
+
+
+        <div ng-show="true">
+          <div class="tabla">
+            <br>
+              <div class="filasTabla">
+                <div class="espacioPequenio"></div>
+                <div class="fuente">Codigo Externo:</div>
+                <div class="sector"><input class="inputs" type="number" ng-model=""></div>
+                <div class="fuente">Fecha pesaje final:</div>
+                <div class="sector"><input class="inputs" type="date" ng-model=""></div>
+                <div class="espacio"></div>
+                <div class="espacioVacio"></div>
+              </div>
+              <br>
+              <br>
+              <div class="linea"></div>
+              <div class="filasTabla"> 
+                <div class="titulo">Camion</div>
+              </div>
+              <br>
+              <div class="filasTabla">
+                <div class="espacioPequenio"></div>
+                <div class="fuente">Patente:</div>
+                <div class="sector"><input class="inputs" type="text" placeholder="letra letra numero numero numero letra letra" ng-model="orden.camion.patente"></div>
+                <div class="fuente">Peso final (kg):</div>
+                <div class="sector"><input class="inputs" type="number" ng-model=""></div>
+                <div class="espacio"></div>
+                <div class="espacioVacio"></div>
+              </div>
+              <br>
+                <div class="filasTabla">
+                  <div class="espacio"></div>
+                  <div class="espacio"></div>
+                  <div class="sector"><button class="botonGuardar" ng-click="crear()">Guardar</button></div>
+                  <div class="espacio"></div>
+                  <div class="espacio"></div>
+                </div>
+            </div>
+          </div>
+
 </body>
 </html>
 <!--
