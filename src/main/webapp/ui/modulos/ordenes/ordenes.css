@@ -73,3 +73,12 @@
     background-color: transparent;
     height: 3vh;
 }
+
+.encabezado{
+    margin-top: 5vh;
+    border-style: 10px black solid;
+}
+
+.formulario{
+    margin-top: 5vh;
+}
