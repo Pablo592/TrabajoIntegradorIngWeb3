@@ -2,38 +2,27 @@
     display: flex;
     align-items: center;
     width: 100%;
-    height: 100vh;
+    height: 100%;
     justify-content: center;
 }
 .paquete{
     border-style: solid;
     border-radius: 5px;
-    width: 60%;
+    width: 100%;
     display: flex;
     flex-direction: column;
-}
-
-.items{
-    display: flex;
-    height: 50px;
-    flex-direction: row;
-    font-size: calc(0.3em + 0.8vw);
-
-}
-
-.registrase{
-    display: flex;
-    width: 100%;
-    height: 50px;
-    align-items: center;
+    height: 40%;
     justify-content: center;
+    align-items: center;
+    font-size: 1.5vh;
+    text-align: center;
 }
 
 .boton{
+    margin-top: 20px;
     display: flex;
-    width: 30%;
+    width: 100%;
     justify-content: center;
-    margin-left: 30px;
     border-radius: 5px;
     background: rgb(194, 194, 194);
 }
@@ -44,32 +33,20 @@
 
 .entrada{
     display: flex;
-    width: 100%;
+    width: 35vh;
 }
 
-.seccion{
+.portaFoto{
+    justify-content: center;
     display: flex;
-    width: 33%;
-    height: 50px;
-    align-items: center;
 }
 
-.spam{
+.foto{
     display: flex;
-    width: 33%;
-    height: 50px;
-    align-items: center;
+    width: 50%;
+    height: 50%;    
 }
 
-.textos{
-    display: flex;
-    width: 33%;
-    height: 50px;
-    align-items: center;
-    margin-left: 30px;
-}
-
-.alertas{
-    display: flex;
-    margin-left: 30px;
+.espaciado{
+    height: 20px;
 }
