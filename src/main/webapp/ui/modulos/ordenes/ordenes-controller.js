@@ -1,5 +1,5 @@
 angular.module('ordenes').controller('Ordenes', function($scope, OrdenesService, SweetAlert) {
-    $scope.titulo = "Hola desde el controller Ordenes";
+    
     $scope.orden = {
         codigoExterno: '',
         fechaTurno: '',
