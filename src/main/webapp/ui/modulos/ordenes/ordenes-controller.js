@@ -1,5 +1,5 @@
 angular.module('ordenes').controller('Ordenes', function($scope, OrdenesService, SweetAlert) {
-    
+
     $scope.orden = {
         codigoExterno: '',
         fechaTurno: '',
@@ -14,9 +14,25 @@ angular.module('ordenes').controller('Ordenes', function($scope, OrdenesService,
     var ordenVacia = $scope.orden;
     $scope.situacion = 0;
     $scope.elegido = '';
+    $scope.listaOrdenes = [];
+    $scope.eliminar = 0;        //1 elimino, 0 actualizo ó creo
+
+    //lo utilizo para cargar las listas automaticamente apenas se carga en la pagina
+    OrdenesService.listaOrdenes().then(
+        //va la funcion en caso de que se hizo el request y se hizo el response todo bien
+        function(resp) {
+            if (resp.status == 200) { //lo deduje del console.log
+                $scope.listaOrdenes = resp.data;
+            }
+            console.log(resp);
+        },
+        function(err) {
+            console.log(err);
+        }
+        //va la funcion que se ejecuta cuando no se pudo hacer el request bien
+    );
 
     $scope.hacerNada = function() {}
-
 
     $scope.necesitoCrear = function() {
         console.log("check elegido necesitoCrear")
@@ -30,6 +46,14 @@ angular.module('ordenes').controller('Ordenes', function($scope, OrdenesService,
         console.log("check elegido necesitoActualizar")
         $scope.situacion = 10;
         $scope.buscarOrdenes();
+        $scope.eliminar = 0;
+    }
+
+    $scope.necesitoEliminar= function() {
+        console.log("check elegido necesitoEliminar")
+        $scope.situacion = 11;
+        $scope.buscarOrdenes();
+        $scope.eliminar = 1;
     }
 
     $scope.ordenParaActualizar = function() {
@@ -43,11 +67,13 @@ angular.module('ordenes').controller('Ordenes', function($scope, OrdenesService,
 
     $scope.crear = function() {
         console.log($scope.orden);
-
+        if($scope.elegido = ''){
+            $scope.notificacionError("Se debe de seleccionar una orden");
+            return;
+        }
         OrdenesService.add($scope.orden).then(
-            //va la funcion en caso de que se hizo el request y se hizo el response todo bien
             function(resp) {
-                if (resp.status == 201) { //lo deduje del console.log
+                if (resp.status == 201) {
                     $scope.ordenAgregada = resp.data;
                     $scope.notificacionAprobacion(resp.xhrStatus);
                 }
@@ -57,17 +83,20 @@ angular.module('ordenes').controller('Ordenes', function($scope, OrdenesService,
                 console.log(err);
                 $scope.notificacionError(err.data.mensaje);
             }
-            //va la funcion que se ejecuta cuando no se pudo hacer el request bien
         );
+        $scope.elegido = '';
     }
+
 
     $scope.segundoEnvio = function() {
         console.log($scope.orden);
-
+        if($scope.elegido = ''){
+            $scope.notificacionError("Se debe de seleccionar una orden");
+            return;
+        }
         OrdenesService.establecerTara($scope.orden).then(
-            //va la funcion en caso de que se hizo el request y se hizo el response todo bien
             function(resp) {
-                if (resp.status == 200) { //lo deduje del console.log
+                if (resp.status == 200) {
                     $scope.ordenAgregada = resp.data;
                     $scope.notificacionAprobacion(resp.xhrStatus);
                     $scope.buscarOrdenes();
@@ -78,18 +107,20 @@ angular.module('ordenes').controller('Ordenes', function($scope, OrdenesService,
                 console.log(err);
                 $scope.notificacionError(err.data.mensaje);
             }
-            //va la funcion que se ejecuta cuando no se pudo hacer el request bien
         );
+        $scope.elegido = '';
     }
 
 
     $scope.tercerEnvio = function() {
         console.log($scope.orden);
-
+        if($scope.elegido = ''){
+            $scope.notificacionError("Se debe de seleccionar una orden");
+            return;
+        }
         OrdenesService.frenarCarga($scope.orden).then(
-            //va la funcion en caso de que se hizo el request y se hizo el response todo bien
             function(resp) {
-                if (resp.status == 200) { //lo deduje del console.log
+                if (resp.status == 200) {
                     $scope.ordenAgregada = resp.data;
                     $scope.notificacionAprobacion(resp.xhrStatus);
                     $scope.buscarOrdenes();
@@ -100,14 +131,54 @@ angular.module('ordenes').controller('Ordenes', function($scope, OrdenesService,
                 console.log(err);
                 $scope.notificacionError(err.data.mensaje);
             }
-            //va la funcion que se ejecuta cuando no se pudo hacer el request bien
         );
+        $scope.elegido = '';
     }
 
     $scope.cuartoEnvio = function() {
         console.log($scope.orden);
+        if($scope.elegido = ''){
+            $scope.notificacionError("Se debe de seleccionar una orden");
+            return;
+        }
         OrdenesService.pesoFinal($scope.orden).then(
-            //va la funcion en caso de que se hizo el request y se hizo el response todo bien
+            function(resp) {
+                if (resp.status == 200) {
+                    $scope.ordenAgregada = resp.data;
+                    $scope.notificacionAprobacion(resp.xhrStatus);
+                    $scope.buscarOrdenes();
+                }
+                console.log(resp);
+            },
+            function(err) {
+                console.log(err);
+                $scope.notificacionError(err.data.mensaje);
+            }
+        );
+        $scope.elegido = '';
+    }
+
+    $scope.buscarOrdenes = function() {
+        OrdenesService.listaOrdenes($scope.orden).then(
+            function(resp) {
+                if (resp.status == 200) {
+                    $scope.listaOrdenes = resp.data;
+                }
+                console.log(resp);
+            },
+            function(err) {
+                console.log(err);
+            }
+        );
+    }
+
+    $scope.eliminarOrden = function() {
+        console.log($scope.orden);
+        if($scope.elegido = ''){
+            $scope.notificacionError("Se debe de seleccionar una orden");
+            return;
+        }
+        OrdenesService.remove($scope.orden).then(
             function(resp) {
                 if (resp.status == 200) { //lo deduje del console.log
                     $scope.ordenAgregada = resp.data;
@@ -120,29 +191,9 @@ angular.module('ordenes').controller('Ordenes', function($scope, OrdenesService,
                 console.log(err);
                 $scope.notificacionError(err.data.mensaje);
             }
-            //va la funcion que se ejecuta cuando no se pudo hacer el request bien
         );
+        $scope.elegido = '';
     }
-
-
-
-    $scope.buscarOrdenes = function() {
-        OrdenesService.listaOrdenes($scope.orden).then(
-            //va la funcion en caso de que se hizo el request y se hizo el response todo bien
-            function(resp) {
-                if (resp.status == 200) { //lo deduje del console.log
-                    $scope.listaOrdenes = resp.data;
-
-                }
-                console.log(resp);
-            },
-            function(err) {
-                console.log(err);
-            }
-            //va la funcion que se ejecuta cuando no se pudo hacer el request bien
-        );
-    }
-
 
     $scope.notificacionError = function(mensaje) {
         SweetAlert.swal({

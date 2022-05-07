@@ -228,8 +228,12 @@ public class OrdenNegocio implements IOrdenNegocio{
 
     @Override
     public void eliminar(long id) throws NegocioException, NoEncontradoException {
-        cargar(id);
+        Orden o = cargar(id);
         try {
+            /*camionNegocio.eliminar(o.getCamion().getId());
+            productoNegocio.eliminar(o.getProducto().getId());
+            clienteNegocio.eliminar(o.getCliente().getId());
+            choferNegocio.eliminar(o.getChofer().getId());*/
             ordenDAO.deleteById(id);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
