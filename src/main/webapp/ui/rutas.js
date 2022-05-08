@@ -9,10 +9,10 @@ angular.module('trabajoIntegrador').config(function ($routeProvider, $locationPr
             controller: 'Login' //tengo que crear este controlador
         })
 
-        .when('/home',{
+        /*.when('/home',{
         templateUrl : 'ui/vistas/home.html',
         controller: 'Home'
-        })
+        })*/
 
         .when('/ordenes',{
         templateUrl : 'ui/modulos/ordenes/ordenes.html',
@@ -20,7 +20,7 @@ angular.module('trabajoIntegrador').config(function ($routeProvider, $locationPr
         })
 
         .otherwise({
-        redirectTo: '/home'
+        redirectTo: '/ordenes'
     });
 });
 

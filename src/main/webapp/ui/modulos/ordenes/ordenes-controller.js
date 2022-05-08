@@ -1,4 +1,4 @@
-angular.module('ordenes').controller('Ordenes', function($scope, OrdenesService, SweetAlert) {
+angular.module('ordenes').controller('Ordenes', function($scope, OrdenesService, SweetAlert,$rootScope) {
 
     $scope.orden = {
         codigoExterno: '',
@@ -14,9 +14,8 @@ angular.module('ordenes').controller('Ordenes', function($scope, OrdenesService,
     var ordenVacia = $scope.orden;
     $scope.situacion = 0;
     $scope.elegido = '';
-    $scope.soyAdmin = true;
+    $scope.soyAdmin = false;
     $scope.listaOrdenes = [];
-   // $scope.listaRoles = [];
     $scope.eliminar = 0;        //1 elimino, 0 actualizo ó creo
 
     //lo utilizo para cargar las listas automaticamente apenas se carga en la pagina
@@ -172,20 +171,12 @@ angular.module('ordenes').controller('Ordenes', function($scope, OrdenesService,
         );
     }
 
-    $scope.eliminaAdmin = function() {
-       
-        $scope.buscarUsuario()
-
-        console.log($scope.listaRoles)
-
-        for (let i = 0; i < listaRoles.length; i++) {
-            if(listaRoles[i] === "ROLE_ADMIN"){
-                $scope.soyAdmin = true
-                return;
-            } 
-            
+    $scope.getRole = function() {
+        for (let i = 0; i < $rootScope.listaRoles.length; i++) {
+            if($rootScope.listaRoles[i] === 'ROLE_ADMIN')
+                return 'ROLE_ADMIN';
         }
-        $scope.soyAdmin = false
+        return 'ROLE_USER'
     }
 
     $scope.notificacionError = function(mensaje) {

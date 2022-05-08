@@ -20,7 +20,6 @@ app.run(['$rootScope','$uibModal','CoreService','$location','$log','$localStorag
 
         $rootScope.listaRoles = [];
 
-
         $rootScope.stomp=$stomp;
 
         $rootScope.relocate = function(loc) {   //manejar el direccionamiento en el cliente

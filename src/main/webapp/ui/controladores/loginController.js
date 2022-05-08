@@ -3,7 +3,7 @@ angular.module('trabajoIntegrador').controller('Login',
         $rootScope, $scope, $localStorage,
         $uibModalInstance, SweetAlert,
         CoreService,$log) {
-            $scope.title="Ingreso Loguin";
+            $scope.title="Ingreso Login";
 
             $scope.usuario={username:"",password:""};
             $scope.login = function() {
@@ -13,9 +13,9 @@ angular.module('trabajoIntegrador').controller('Login',
                         if(resp.status===200) {
                             $localStorage.userdata=resp.data;
                             $rootScope.listaRoles=resp.data.roles;
-                            console.log(resp.data.roles)
+                            console.log("la lista de los roles del usuario es: " + resp.data.roles)
                             $localStorage.logged=true;
-                            $rootScope.loginOpen = false;       //lo uso como flag, antes de cerrar el modal del loguin indico que esta cerrado
+                            $rootScope.loginOpen = false;       //lo uso como flag, antes de cerrar el modal del loguin indsico que esta cerrado
                             $uibModalInstance.dismiss(true);  //oculto el modal
                         }else{
                             delete $localStorage.userdata;      // si me logueo mal borro los datos del usuario en el localstore

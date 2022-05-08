@@ -18,7 +18,7 @@
             <div class="espacio"></div>
             <div class="espacio"></div>
         </div>
-        <div ng-show="($rootScope.listaRoles[0] === 'ROLE_ADMIN') || $rootScope.listaRoles[1] === 'ROLE_ADMIN'" class="form-check filasTabla">
+        <div ng-show="getRole()=='ROLE_ADMIN'" class="form-check filasTabla">
             <input class="form-check-input fuente" type="radio" name="exampleRadios" ng-click="necesitoEliminar()"
                    id="exampleRadios3" value="option3">
             <label class="form-check-label fuente" for="exampleRadios3">Eliminar Orden</label>
