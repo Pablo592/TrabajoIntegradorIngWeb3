@@ -12,6 +12,8 @@ angular.module('trabajoIntegrador').controller('Login',
                         console.log(resp)
                         if(resp.status===200) {
                             $localStorage.userdata=resp.data;
+                            $rootScope.listaRoles=resp.data.roles;
+                            console.log(resp.data.roles)
                             $localStorage.logged=true;
                             $rootScope.loginOpen = false;       //lo uso como flag, antes de cerrar el modal del loguin indico que esta cerrado
                             $uibModalInstance.dismiss(true);  //oculto el modal

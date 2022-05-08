@@ -9,8 +9,8 @@
       <div class="titulo">Temperatura</div>
       <div class="titulo">Densidad</div>
       <div class="titulo">Caudal</div>
-      <div class="titulo">Tiempo transcurrido</div>
-      <div class="titulo">Tiempo restante</div>
+      <div class="titulo">Tiempo transcurrido (Minutos)</div>
+      <div class="titulo">Tiempo restante (Minutos)</div>
       <div class="titulo">Estadisticas</div>
       <div class="titulo">Gráfica</div>
       <div class="espacioVacio"></div>
@@ -21,12 +21,12 @@
       <div class="celda">{{list.estado}}</div>
       <div class="celda">{{list.camion.patente}}</div>
       <div class="celda">{{list.camion.preset}}</div>
-      <div class="celda"></div>
-      <div class="celda"></div>
-      <div class="celda"></div>
-      <div class="celda"></div>
-      <div class="celda"></div>
-      <div class="celda"></div>
+      <div class="celda">{{list.masaAcumuladaKg}} kg</div>
+      <div class="celda">{{list.ultimaTemperaturaProductoCelcius}}</div>
+      <div class="celda">{{list.ultimaDensidadProductoKilogramoMetroCub}}</div>
+      <div class="celda">{{list.ultimoCaudalLitroSegundo}}</div>
+      <div class="celda">{{calculoTiempoTranscurrido(list.fechaPesajeInicial,list.fechaFinProcesoCarga)}}</div>
+      <div class="celda">{{calculoTiempoRestante(list.ultimoCaudalLitroSegundo,list.ultimaDensidadProductoKilogramoMetroCub,list.camion.preset,list.masaAcumuladaKg)}}</div>
       <div class="celda"><img class="imagen" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvpt6spFV3pDKV36GRdIijPno83SjH9mKa_A&usqp=CAU" alt=""></div>
       <div class="celda"><img class="imagen" src="https://cdn-icons-png.flaticon.com/512/58/58976.png" alt=""></div>
       <div class="espacioVacio"></div>

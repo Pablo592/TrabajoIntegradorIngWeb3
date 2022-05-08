@@ -14,7 +14,9 @@ angular.module('ordenes').controller('Ordenes', function($scope, OrdenesService,
     var ordenVacia = $scope.orden;
     $scope.situacion = 0;
     $scope.elegido = '';
+    $scope.soyAdmin = true;
     $scope.listaOrdenes = [];
+   // $scope.listaRoles = [];
     $scope.eliminar = 0;        //1 elimino, 0 actualizo ó creo
 
     //lo utilizo para cargar las listas automaticamente apenas se carga en la pagina
@@ -31,8 +33,6 @@ angular.module('ordenes').controller('Ordenes', function($scope, OrdenesService,
         }
         //va la funcion que se ejecuta cuando no se pudo hacer el request bien
     );
-
-    $scope.hacerNada = function() {}
 
     $scope.necesitoCrear = function() {
         console.log("check elegido necesitoCrear")
@@ -172,27 +172,20 @@ angular.module('ordenes').controller('Ordenes', function($scope, OrdenesService,
         );
     }
 
-    $scope.eliminarOrden = function() {
-        console.log($scope.orden);
-        if($scope.elegido = ''){
-            $scope.notificacionError("Se debe de seleccionar una orden");
-            return;
+    $scope.eliminaAdmin = function() {
+       
+        $scope.buscarUsuario()
+
+        console.log($scope.listaRoles)
+
+        for (let i = 0; i < listaRoles.length; i++) {
+            if(listaRoles[i] === "ROLE_ADMIN"){
+                $scope.soyAdmin = true
+                return;
+            } 
+            
         }
-        OrdenesService.remove($scope.orden).then(
-            function(resp) {
-                if (resp.status == 200) { //lo deduje del console.log
-                    $scope.ordenAgregada = resp.data;
-                    $scope.notificacionAprobacion(resp.xhrStatus);
-                    $scope.buscarOrdenes();
-                }
-                console.log(resp);
-            },
-            function(err) {
-                console.log(err);
-                $scope.notificacionError(err.data.mensaje);
-            }
-        );
-        $scope.elegido = '';
+        $scope.soyAdmin = false
     }
 
     $scope.notificacionError = function(mensaje) {

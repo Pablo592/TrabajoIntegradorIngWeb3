@@ -18,6 +18,9 @@ app.config(function($localStorageProvider){
 app.run(['$rootScope','$uibModal','CoreService','$location','$log','$localStorage', '$stomp',
     function($rootScope, $uibModal, CoreService, $location, $log, $localStorage, $stomp) {
 
+        $rootScope.listaRoles = [];
+
+
         $rootScope.stomp=$stomp;
 
         $rootScope.relocate = function(loc) {   //manejar el direccionamiento en el cliente
