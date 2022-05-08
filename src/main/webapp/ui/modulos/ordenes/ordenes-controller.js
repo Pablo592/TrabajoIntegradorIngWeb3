@@ -171,14 +171,6 @@ angular.module('ordenes').controller('Ordenes', function($scope, OrdenesService,
         );
     }
 
-    $scope.getRole = function() {
-        for (let i = 0; i < $rootScope.listaRoles.length; i++) {
-            if($rootScope.listaRoles[i] === 'ROLE_ADMIN')
-                return 'ROLE_ADMIN';
-        }
-        return 'ROLE_USER'
-    }
-
     $scope.notificacionError = function(mensaje) {
         SweetAlert.swal({
             title: mensaje,

@@ -52,6 +52,14 @@ app.run(['$rootScope','$uibModal','CoreService','$location','$log','$localStorag
 
         //$rootScope.openLoginForm();
 
+        $rootScope.getRole = function() {
+            for (let i = 0; i < $rootScope.listaRoles.length; i++) {
+                if($rootScope.listaRoles[i] === 'ROLE_ADMIN')
+                    return 'ROLE_ADMIN';
+            }
+            return 'ROLE_USER'
+        }
+
         CoreService.authInfo();
     }
 ]);
