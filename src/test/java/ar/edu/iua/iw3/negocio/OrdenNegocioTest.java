@@ -1,51 +1,48 @@
 package ar.edu.iua.iw3.negocio;
+
 import ar.edu.iua.iw3.modelo.*;
-import ar.edu.iua.iw3.util.RespuestaGenerica;
-import org.junit.Ignore;
-import org.springframework.test.context.junit4.SpringRunner;
 import ar.edu.iua.iw3.modelo.persistencia.OrdenRepository;
-import ar.edu.iua.iw3.negocio.excepciones.*;
+import ar.edu.iua.iw3.negocio.excepciones.BadRequest;
+import ar.edu.iua.iw3.negocio.excepciones.EncontradoException;
+import ar.edu.iua.iw3.negocio.excepciones.NegocioException;
+import ar.edu.iua.iw3.negocio.excepciones.NoEncontradoException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.Optional;
 
-@ActiveProfiles("mysqldev")
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.when;
 @RunWith(SpringRunner.class)
-@SpringBootTest
-@Ignore
+//@ActiveProfiles("mysqldev")
+@SpringBootTest //lo utilizo para indicar que son test de negocio
 public class OrdenNegocioTest {
 
-    private Logger log = LoggerFactory.getLogger(this.getClass());
-
-    @Autowired
-    private OrdenNegocio ordenNegocio;
-
-    @Autowired
-    private OrdenRepository ordenDAO;
-
-    private Orden orden3;
-    private Orden orden2;
-    private Orden orden ;
+    private  Orden orden;
     private Cliente cliente ;
     private Chofer chofer;
     private Producto producto;
     private Camion camion;
 
-    /*@MockBean
-    OrdenRepository ordenDAO;*/
+    long id = 1;
+
+    @MockBean
+    OrdenRepository ordenRepositoryMock;
+    @Autowired
+    OrdenNegocio ordenNegocio;
 
     @Before
-    public void crearOrden(){
+    public  void setup_init() {
         orden = new Orden();
+        orden.setId(id);
         orden.setCodigoExterno("45");
         orden.setFechaTurno(new Date());
         orden.setFrecuencia(30);
@@ -72,86 +69,56 @@ public class OrdenNegocioTest {
         orden.setProducto(producto);
         orden.setCamion(camion);
         orden.setCargaList(new ArrayList<Carga>());
-
-    }
-    @Test
-    public void primerEnvio() throws EncontradoException, BadRequest, NegocioException, NoEncontradoException {
-        ordenNegocio.agregar(orden);
-        Orden ordenBD = ordenNegocio.findByCodigoExterno(orden.getCodigoExterno());
-        if( ordenBD.getCodigoExterno().equals(orden.getCodigoExterno()) &&
-                ordenBD.getEstado() == 1)
-            System.out.println("Se creo la orden correctamente");
-        else
-            System.out.println("No se creo la orden correctamente");
-
-        ordenNegocio.eliminar(ordenBD.getId());
-
-        //assertThrows(NoEncontradoException.class, () -> ordenNegocio.findByCodigoExterno(orden.getCodigoExterno()));
     }
 
     @Test
-    public void segundoEnvio() throws EncontradoException, BadRequest, NegocioException, ConflictException, NoEncontradoException {
-
-        Orden o =  primero();
-        Orden ordenConPesoInicial = ordenNegocio.cargar(orden2.getId());
-        if(ordenConPesoInicial.getFechaPesajeInicial().getTime() == o.getFechaPesajeInicial().getTime())
-            System.out.println("se guardo correctamente la fecha de pesaje");
-        else
-            System.out.println("No se creo la orden correctamente");
-
-        ordenNegocio.eliminar(orden2.getId());
-    }
-
-
-    @Test
-    public void tercerEnvio() throws EncontradoException, BadRequest, NegocioException, ConflictException, NoEncontradoException, UnprocessableException {
-
-        Orden o =  primero();
-        ordenNegocio.frenarCargar(o.getCodigoExterno());
-        Orden ordenBD = ordenNegocio.findByCodigoExterno(o.getCodigoExterno());
-        if(ordenBD.getEstado() == 3)
-            System.out.println("Las cargas se detuvieron correctamente");
-        else
-            System.out.println("Las cargas no se detuvieron, tiene estado: " + ordenBD.getEstado());
-
-        ordenNegocio.eliminar(ordenBD.getId());
+    public void buscarOrdenPorCodigoExterno() {
+        //given
+        Optional<Orden> givenOrden = Optional.of(orden);
+        //when
+        when(ordenRepositoryMock.findByCodigoExterno("45")).thenReturn(givenOrden);
+        Orden ordenBuscada = ordenNegocio.findByCodigoExterno("45");
+        //then
+        assertEquals(id,ordenBuscada.getId());
+        assertEquals("45",ordenBuscada.getCodigoExterno());
+        assertEquals(30,ordenBuscada.getFrecuencia());
     }
 
     @Test
-    public void cuartoEnvio() throws EncontradoException, BadRequest, NegocioException, ConflictException, NoEncontradoException, UnprocessableException {
-
-        Orden o =  segundo();
-
-        o.setFechaRecepcionPesajeFinal(new Date());
-        o.getCamion().setPesoFinalCamion(4541485456l);
-        ordenNegocio.establecerPesajeFinal(o);
-        Orden ordenBD = ordenNegocio.findByCodigoExterno(o.getCodigoExterno());
-        if(ordenBD.getEstado() == 4)
-            System.out.println("La orden se encuentra en estado 4");
-        else
-            System.out.println("Algo salio mal, tiene estado: " + ordenBD.getEstado());
-
-        ordenNegocio.eliminar(ordenBD.getId());
-
+    public void buscarOrdenPorId() throws NoEncontradoException, NegocioException {
+        //given
+        Optional<Orden> givenOrden = Optional.of(orden);
+        //when
+        when(ordenRepositoryMock.findById(id)).thenReturn(givenOrden);
+        Orden ordenBuscada = ordenNegocio.cargar(id);
+        //then
+        assertEquals(id,ordenBuscada.getId());
+        assertEquals("45",ordenBuscada.getCodigoExterno());
+        assertEquals(30,ordenBuscada.getFrecuencia());
+        assertEquals(cliente.getRazonSocial(),ordenBuscada.getCliente().getRazonSocial());
+        assertEquals(chofer.getDocumento(),ordenBuscada.getChofer().getDocumento());
+        assertEquals(producto.getNombre(),ordenBuscada.getProducto().getNombre());
+        assertEquals(camion.getPatente(),ordenBuscada.getCamion().getPatente());
     }
 
-    private Orden primero() throws EncontradoException, BadRequest, NegocioException, ConflictException, NoEncontradoException {
-        ordenNegocio.agregar(orden);
-        Orden o = ordenNegocio.findByCodigoExterno(orden.getCodigoExterno());
-        orden2 = o.clone();
-        orden2.setFechaPesajeInicial(new Date());
-        orden2.getCamion().setTara(1400);
-        RespuestaGenerica<Orden> ordenBD = ordenNegocio.establecerPesajeInicial(orden2);
-
-        return ordenBD.getEntidad();
+    @Test
+    public void primerEnvioConMetadatosSuficientes() throws EncontradoException, BadRequest, NegocioException, NoEncontradoException {
+        //when + given
+        when(ordenRepositoryMock.save(orden)).thenReturn(orden);
+        Orden ordenCreada = ordenNegocio.agregar(orden).getEntidad();
+        //then
+        assertEquals(ordenCreada.getCodigoExterno(),orden.getCodigoExterno());
+        assertEquals(1,ordenCreada.getEstado());
     }
 
-    private Orden segundo() throws EncontradoException, BadRequest, NegocioException, ConflictException, NoEncontradoException, UnprocessableException {
-        Orden o =  primero();
-        ordenNegocio.frenarCargar(o.getCodigoExterno());
-        Orden ordenBD = ordenNegocio.findByCodigoExterno(o.getCodigoExterno());
-
-        return ordenBD;
+    @Test
+    public void primerEnvioSinCamionAsociado() throws EncontradoException, BadRequest, NegocioException, NoEncontradoException {
+        orden.setCamion(new Camion());
+        //when + given + then
+        when(ordenRepositoryMock.save(orden)).thenReturn(orden);
+        assertThrows(BadRequest.class, () -> ordenNegocio.agregar(orden));
+        //System.out.println(ordenNegocio.agregar(orden).getMensaje().getMensaje()); --> Se debe completar el campo 'patente'
     }
+
 
 }

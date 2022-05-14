@@ -1,5 +1,6 @@
 package ar.edu.iua.iw3.modelo;
 
+import ar.edu.iua.iw3.negocio.excepciones.BadRequest;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -138,14 +139,16 @@ public class Camion  implements Serializable {
     }
 
     public String checkBasicData(){
-        if(getPatente().trim().length()!=7)
-            return "El atributo 'patente' debe tener una longitud de 7 caracteres";
-        if(!checkPatente(getPatente()))
-            return "El atributo 'patente' tiene un mal formato";
-        if(getCisternadoLitros()<=0)
-            return "El atributo 'cisternadoLitros' tiene que ser mayor a cero";
-        if(getPreset()<=0)
-            return "El atributo 'preset' tiene que ser mayor a cero";
+            if(getPatente() == null)
+                return "Se debe completar el campo 'patente' ";
+            if(getPatente().trim().length()!=7)
+                return "El atributo 'patente' debe tener una longitud de 7 caracteres";
+            if(!checkPatente(getPatente()))
+                return "El atributo 'patente' tiene un mal formato";
+            if(getCisternadoLitros()<=0)
+                return "El atributo 'cisternadoLitros' tiene que ser mayor a cero";
+            if(getPreset()<=0)
+                return "El atributo 'preset' tiene que ser mayor a cero";
     return null;
     }
 }

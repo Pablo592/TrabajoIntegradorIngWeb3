@@ -188,11 +188,14 @@ public class OrdenNegocio implements IOrdenNegocio{
     }
 
     private void validarMetadata(Camion camion,Cliente cliente,Chofer chofer,Producto producto) throws BadRequest{
-        if(camion.checkBasicData() != null
-            || cliente.checkBasicData()!= null
-            || chofer.checkBasicData()!= null
-            || producto.checkBasicData() != null)
+        if(camion.checkBasicData() != null)
             throw new BadRequest(camion.checkBasicData());
+        if (cliente.checkBasicData()!= null)
+            throw new BadRequest(cliente.checkBasicData());
+        if(chofer.checkBasicData()!= null)
+            throw new BadRequest(chofer.checkBasicData());
+        if(producto.checkBasicData() != null)
+            throw new BadRequest(producto.checkBasicData());
     }
     private void convertirMayusculasPatenteCamionYnombreProducto(Camion camionJson,Producto productoJson) {
         camionJson.setPatente(camionJson.getPatente().toUpperCase());

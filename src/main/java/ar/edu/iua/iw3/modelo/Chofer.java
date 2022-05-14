@@ -78,7 +78,7 @@ public class Chofer implements Serializable {
 	}
 
 	public String checkBasicData(){
-		if(getNombre().trim().length()==0)
+		if(getNombre() == null || getNombre().trim().length()==0)
 			return "El atributo 'nombre' es obligatorio";
 		if(getApellido().trim().length()==0)
 			return "El atributo 'apellido' es obligatorio";

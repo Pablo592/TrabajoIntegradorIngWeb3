@@ -66,7 +66,7 @@ public class Cliente implements Serializable {
 	}
 
 	public String checkBasicData(){
-		if(getRazonSocial().trim().length()==0)
+		if(getRazonSocial() == null || getRazonSocial().trim().length()==0)
 			return "El atributo 'Razon Social' es obligatorio";
 		if(getContacto()<1000000000)
 			return "El atributo 'contacto' tiene que ser un numero de telefono valido";

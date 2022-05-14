@@ -66,7 +66,7 @@ public class Producto implements Serializable {
 	}
 
 	public String checkBasicData(){
-		if(getNombre().trim().length()==0)
+		if(getNombre() == null || getNombre().trim().length()==0)
 			return "El atributo 'Producto' es obligatorio";
 		return null;
 	}
