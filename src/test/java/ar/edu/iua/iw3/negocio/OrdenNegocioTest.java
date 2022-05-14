@@ -101,8 +101,9 @@ public class OrdenNegocioTest {
         assertEquals(camion.getPatente(),ordenBuscada.getCamion().getPatente());
     }
 
+    //primer envio
     @Test
-    public void primerEnvioConMetadatosSuficientes() throws EncontradoException, BadRequest, NegocioException, NoEncontradoException {
+    public void crearOrdenConMetadatosSuficientes() {
         //when + given
         when(ordenRepositoryMock.save(orden)).thenReturn(orden);
         Orden ordenCreada = ordenNegocio.agregar(orden).getEntidad();
@@ -112,12 +113,39 @@ public class OrdenNegocioTest {
     }
 
     @Test
-    public void primerEnvioSinCamionAsociado() throws EncontradoException, BadRequest, NegocioException, NoEncontradoException {
+    public void crearOrdenSinCamionAsociado() {
         orden.setCamion(new Camion());
         //when + given + then
         when(ordenRepositoryMock.save(orden)).thenReturn(orden);
         assertThrows(BadRequest.class, () -> ordenNegocio.agregar(orden));
         //System.out.println(ordenNegocio.agregar(orden).getMensaje().getMensaje()); --> Se debe completar el campo 'patente'
+    }
+
+    @Test
+    public void crearOrdenSinClienteAsociado() {
+        orden.setCliente(new Cliente());
+        //when + given + then
+        when(ordenRepositoryMock.save(orden)).thenReturn(orden);
+        assertThrows(BadRequest.class, () -> ordenNegocio.agregar(orden));
+        //System.out.println(ordenNegocio.agregar(orden).getMensaje().getMensaje()); //El atributo 'Razon Social' es obligatorio
+    }
+
+    @Test
+    public void crearOrdenSinChoferAsociado(){
+        orden.setChofer(new Chofer());
+        //when + given + then
+        when(ordenRepositoryMock.save(orden)).thenReturn(orden);
+        assertThrows(BadRequest.class, () -> ordenNegocio.agregar(orden));
+        //System.out.println(ordenNegocio.agregar(orden).getMensaje().getMensaje()); //El atributo 'nombre' es obligatorio,etc
+    }
+
+    @Test
+    public void crearOrdenSinProductoAsociado() {
+        orden.setProducto(new Producto());
+        //when + given + then
+        when(ordenRepositoryMock.save(orden)).thenReturn(orden);
+        assertThrows(BadRequest.class, () -> ordenNegocio.agregar(orden));
+        //System.out.println(ordenNegocio.agregar(orden).getMensaje().getMensaje()); //El atributo 'Producto' es obligatorio
     }
 
 
