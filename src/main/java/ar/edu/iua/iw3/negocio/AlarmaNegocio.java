@@ -7,6 +7,8 @@ import ar.edu.iua.iw3.modelo.Orden;
 import ar.edu.iua.iw3.modelo.persistencia.AlarmaRepository;
 import ar.edu.iua.iw3.negocio.excepciones.*;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -52,6 +54,28 @@ public class AlarmaNegocio implements IAlarmaNegocio{
         }
         return o.get();
     }
+
+    @Override
+    public List<Alarma> listarPorAutor(long id) throws NegocioException, NoEncontradoException {
+        Optional<List<Alarma>> o;
+        List<Alarma> alarmaActiva = new ArrayList<Alarma>();
+        try {
+            o = alarmaDAO.findAllByAutor_Id((int)id);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            throw new NegocioException(e);
+        }
+        if (!o.isPresent()) {
+            throw new NoEncontradoException("No hay alarmas pertenecientes a este autor" + id);
+        }
+        for(Alarma a :o.get()){
+           if(a.getOrden().isAlarmaActiva())
+               alarmaActiva.add(a);
+        }
+
+        return alarmaActiva;
+    }
+
 
     @Override   //recibe los datos de una alarma con 2 datos mas, el id del autor y el codigo externo de la orden de la alarma, jutnto con los datos de la alarma
     public Alarma agregar(Alarma alarma) throws NegocioException, EncontradoException, BadRequest,NoEncontradoException {

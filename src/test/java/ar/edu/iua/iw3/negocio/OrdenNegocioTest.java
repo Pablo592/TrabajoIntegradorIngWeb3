@@ -103,7 +103,7 @@ public class OrdenNegocioTest {
 
     //primer envio
     @Test
-    public void crearOrdenConMetadatosSuficientes() {
+    public void crearOrdenConMetadatosSuficientes() throws EncontradoException, BadRequest, NegocioException {
         //when + given
         when(ordenRepositoryMock.save(orden)).thenReturn(orden);
         Orden ordenCreada = ordenNegocio.agregar(orden).getEntidad();

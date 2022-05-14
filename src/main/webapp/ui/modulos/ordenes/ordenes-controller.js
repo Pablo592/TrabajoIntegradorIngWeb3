@@ -194,6 +194,26 @@ angular.module('ordenes').controller('Ordenes', function($scope, OrdenesService,
         );
     }
 
+    $scope.calculoTiempoRestante = function(caudal,densidad,preset,masa) {
+
+        if(densidad === 0)
+        return "";
+
+    let cargaSegundo  =  Math.pow(caudal,-3)*densidad
+    return ((preset - masa)/(cargaSegundo*60)).toFixed(2);
+    };
+
+    $scope.calculoTiempoTranscurrido = function(fechaI,fechaF) {
+
+        if(fechaF === null)
+        return "";
+
+        var fechaInicio = new Date(fechaI).getTime();
+        var fechaFin    = new Date(fechaF).getTime();
+        return  Math.abs(fechaFin - fechaInicio)/(1000*60);
+    };
+
+
     $scope.notificacionError = function(mensaje) {
         SweetAlert.swal({
             title: mensaje,

@@ -14,6 +14,8 @@ public interface IAlarmaNegocio {
 
     Alarma modificar(Alarma alarma) throws NegocioException, NoEncontradoException, ConflictException;
 
+    List<Alarma> listarPorAutor(long id) throws NegocioException, NoEncontradoException;
+
     void eliminar(long id) throws NegocioException, NoEncontradoException;
 
 }

@@ -80,6 +80,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		//autorizo a todos a consumir este archivo que esta fuera de la carpeta y sus imagenes
 		http.authorizeRequests().antMatchers("/index.html").permitAll();
 		http.authorizeRequests().antMatchers("/sisterna.png").permitAll();
+		http.authorizeRequests().antMatchers("/campana*").permitAll();
 		//autorizo para que se acceda a este end-point para facilitar desde el front  evitar loguearme
 		http.authorizeRequests().antMatchers("/test/api/v1/ordenes").permitAll();
 

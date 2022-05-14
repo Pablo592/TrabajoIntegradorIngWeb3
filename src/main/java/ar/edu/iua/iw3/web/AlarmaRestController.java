@@ -33,6 +33,20 @@ public class AlarmaRestController {
         }
     }
 
+
+    @GetMapping(value="/listar-author/{id}")
+    public ResponseEntity<List<Alarma>> listadoAuthor(@PathVariable("id") Long id) {
+        try {
+            return new ResponseEntity<List<Alarma>>(alarmaNegocio.listarPorAutor(id), HttpStatus.OK);
+        } catch (NegocioException e) {
+            log.error(e.getMessage(), e);
+            return new ResponseEntity<List<Alarma>>(HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (NoEncontradoException e) {
+            log.error(e.getMessage(), e);
+            return new ResponseEntity<List<Alarma>>(HttpStatus.NOT_FOUND);
+        }
+    }
+
     @PostMapping(value="")
     public ResponseEntity<String> agregar(@RequestBody Alarma alarma) {
         try {

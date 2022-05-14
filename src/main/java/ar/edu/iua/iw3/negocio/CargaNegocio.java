@@ -112,7 +112,7 @@ public class CargaNegocio implements ICargaNegocio {
         }
 
         if(carga.getTemperaturaProductoCelcius() > orden.getUmbralTemperaturaCombustible())
-            generarEvento(carga, CargaEvent.Tipo.SUPERADO_UMBRAL_DE_TEMPERATURA);
+            generarEvento(carga, CargaEvent.Tipo.SUPERADO_UMBRAL_DE_TEMPERATURA,orden);
 
 
         //controlo que la carga acumulada actual sea mayor que la anterior, tirar excepcion
@@ -144,7 +144,14 @@ public class CargaNegocio implements ICargaNegocio {
     }
 
 
-    private void  generarEvento(Carga carga, CargaEvent.Tipo tipo){
+    private void  generarEvento(Carga carga, CargaEvent.Tipo tipo,Orden orden) throws ConflictException, NoEncontradoException, NegocioException {
+        Alarma a = new Alarma();
+        a.setOrden(orden);
+        a.setAutor();
+        a.setDescripcion("Humbral de temperatura superado de la orden " + orden.getId() + " con una temperatura de " + carga.getTemperaturaProductoCelcius());
+        a.setFechaAceptacion(new Date());
+        orden.setAlarmaActiva(true);
+        ordenNegocio.modificar(orden);
         appEventPublisher.publishEvent(new CargaEvent(carga,tipo));
     }
 

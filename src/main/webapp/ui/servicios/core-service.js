@@ -17,6 +17,9 @@ angular.module('trabajoIntegrador').factory('CoreService',function($http,URL_BAS
 			delete $localStorage.userdata;
 			$localStorage.logged=false;
 			$http.get(URL_BASE+"/auth-info");
-		}
+		},
+		alarmas:function(p) {
+            return $http.get(URL_BASE+'/alarmas/listar-author/'+p);
+        }
 	};
 });
