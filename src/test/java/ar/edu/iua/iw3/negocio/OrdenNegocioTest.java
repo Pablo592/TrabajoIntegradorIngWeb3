@@ -1,6 +1,7 @@
 package ar.edu.iua.iw3.negocio;
 import ar.edu.iua.iw3.modelo.*;
 import ar.edu.iua.iw3.util.RespuestaGenerica;
+import org.junit.Ignore;
 import org.springframework.test.context.junit4.SpringRunner;
 import ar.edu.iua.iw3.modelo.persistencia.OrdenRepository;
 import ar.edu.iua.iw3.negocio.excepciones.*;
@@ -20,6 +21,7 @@ import java.util.List;
 @ActiveProfiles("mysqldev")
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@Ignore
 public class OrdenNegocioTest {
 
     private Logger log = LoggerFactory.getLogger(this.getClass());

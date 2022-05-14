@@ -1,0 +1,104 @@
+package ar.edu.iua.iw3.persistencia;
+
+import ar.edu.iua.iw3.modelo.*;
+import ar.edu.iua.iw3.modelo.persistencia.OrdenRepository;
+import ar.edu.iua.iw3.negocio.OrdenNegocio;
+import ar.edu.iua.iw3.negocio.excepciones.NegocioException;
+import ar.edu.iua.iw3.negocio.excepciones.NoEncontradoException;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.when;
+@RunWith(SpringRunner.class)
+//@ActiveProfiles("mysqldev")
+@SpringBootTest
+public class OrderRepositoryTest {
+
+    private  Orden orden;
+    private Cliente cliente ;
+    private Chofer chofer;
+    private Producto producto;
+    private Camion camion;
+
+    long id = 1;
+
+    @MockBean
+    OrdenRepository ordenRepositoryMock;
+    @Autowired
+    OrdenNegocio ordenNegocio;
+
+    @Before
+    public  void setup_init() {
+        orden = new Orden();
+        orden.setId(id);
+        orden.setCodigoExterno("45");
+        orden.setFechaTurno(new Date());
+        orden.setFrecuencia(30);
+        ///////
+        cliente = new Cliente();
+        cliente.setRazonSocial("SA");
+        cliente.setContacto(3512151243L);
+        ///////
+        chofer = new Chofer();
+        chofer.setNombre("nuevo chofer nombre");
+        chofer.setApellido("apellidochofer");
+        chofer.setDocumento(40211001L);
+        ///////
+        producto = new Producto();
+        producto.setNombre("nuevoproducto");
+        ///////
+        camion = new Camion();
+        camion.setPatente("ad123as");
+        camion.setCisternadoLitros(1000);
+        camion.setPreset(3000);
+        ///////
+        orden.setCliente(cliente);
+        orden.setChofer(chofer);
+        orden.setProducto(producto);
+        orden.setCamion(camion);
+        orden.setCargaList(new ArrayList<Carga>());
+    }
+
+    @Test
+    public void buscarOrdenPorCodigoExterno() throws NoEncontradoException, NegocioException {
+        //given
+        Optional<Orden> givenOrden = Optional.of(orden);
+        //when
+        when(ordenRepositoryMock.findByCodigoExterno("45")).thenReturn(givenOrden);
+        Orden ordenBuscada = ordenNegocio.findByCodigoExterno("45");
+        //then
+        assertEquals(id,ordenBuscada.getId());
+        assertEquals("45",ordenBuscada.getCodigoExterno());
+        assertEquals(30,ordenBuscada.getFrecuencia());
+    }
+
+    @Test
+    public void crearOrdenCompleta() throws NoEncontradoException, NegocioException {
+        //given
+        Optional<Orden> givenOrden = Optional.of(orden);
+        //when
+        when(ordenRepositoryMock.findById(id)).thenReturn(givenOrden);
+        Orden ordenBuscada = ordenNegocio.cargar(id);
+        //then
+        assertEquals(id,ordenBuscada.getId());
+        assertEquals("45",ordenBuscada.getCodigoExterno());
+        assertEquals(30,ordenBuscada.getFrecuencia());
+        assertEquals(cliente.getRazonSocial(),ordenBuscada.getCliente().getRazonSocial());
+        assertEquals(chofer.getDocumento(),ordenBuscada.getChofer().getDocumento());
+        assertEquals(producto.getNombre(),ordenBuscada.getProducto().getNombre());
+        assertEquals(camion.getPatente(),ordenBuscada.getCamion().getPatente());
+    }
+}
