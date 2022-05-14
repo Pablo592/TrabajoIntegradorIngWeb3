@@ -20,6 +20,10 @@ app.run(['$rootScope','$uibModal','CoreService','$location','$log','$localStorag
 
         $rootScope.listaRoles = [];
 
+        let logueado = localStorage.getItem('iw3/userdata');
+        let logueadoJson = JSON.parse(logueado);
+        $rootScope.listaRoles = logueadoJson.roles;
+
         $rootScope.stomp=$stomp;
 
         $rootScope.relocate = function(loc) {   //manejar el direccionamiento en el cliente
@@ -59,7 +63,6 @@ app.run(['$rootScope','$uibModal','CoreService','$location','$log','$localStorag
             }
             return 'ROLE_USER'
         }
-
         CoreService.authInfo();
     }
 ]);

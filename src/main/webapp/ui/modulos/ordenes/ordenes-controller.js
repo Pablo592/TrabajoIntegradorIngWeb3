@@ -157,6 +157,29 @@ angular.module('ordenes').controller('Ordenes', function($scope, OrdenesService,
         $scope.elegido = '';
     }
 
+    $scope.eliminarOrden = function() {
+        console.log($scope.orden);
+        if($scope.elegido = ''){
+            $scope.notificacionError("Se debe de seleccionar una orden");
+            return;
+        }
+        OrdenesService.remove($scope.orden).then(
+            function(resp) {
+                if (resp.status == 200) { //lo deduje del console.log
+                    $scope.ordenAgregada = resp.data;
+                    $scope.notificacionAprobacion(resp.xhrStatus);
+                    $scope.buscarOrdenes();
+                }
+                console.log(resp);
+            },
+            function(err) {
+                console.log(err);
+                $scope.notificacionError(err.data.mensaje);
+            }
+        );
+        $scope.elegido = '';
+    }
+
     $scope.buscarOrdenes = function() {
         OrdenesService.listaOrdenes($scope.orden).then(
             function(resp) {
