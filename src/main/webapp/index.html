@@ -70,10 +70,10 @@
                     </ul>
                 </li>
             </ul>
-            <ul class="nav navbar-nav navbar-right">
+            <ul ng-init="pedirAlarmas()" class="nav navbar-nav navbar-right">
         
-                 <li style="margin-top: 5px;"><img src="campanaNotificacion.png" style="width:40px;" alt=""></li>
-                 <li style="margin-top: 5px;"><img src="campana.png" style="width:40px;" alt=""></li>
+                 <li ng-show="existeAlarma()" style="margin-top: 5px;"><img src="campanaNotificacion.png" style="width:40px;" alt=""></li>
+                 <li ng-show="!existeAlarma()" style="margin-top: 5px;"><img src="campana.png" style="width:40px;" alt=""></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ userData().username || 'No autenticad@'}} <span class="caret"></span></a>
                     <ul class="dropdown-menu">

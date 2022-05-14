@@ -26,6 +26,7 @@ app.run(['$rootScope', '$uibModal', 'CoreService', '$location', '$log', '$localS
         let logueadoJson = JSON.parse(logueado);
         $rootScope.listaRoles = logueadoJson.roles;
         $rootScope.idLogueado = logueadoJson.idUser;
+        $rootScope.alarmas = false;
         $rootScope.stomp = $stomp;
 
         $rootScope.relocate = function (loc) {   //manejar el direccionamiento en el cliente
@@ -42,20 +43,32 @@ app.run(['$rootScope', '$uibModal', 'CoreService', '$location', '$log', '$localS
         };
 
 
-        CoreService.alarmas($rootScope.idLogueado).then(
-            //va la funcion en caso de que se hizo el request y se hizo el response todo bien
-            function (resp) {
-                if (resp.status == 200) { //lo deduje del console.log
-                    $rootScope.listaAlarmas = resp.data;
-                }
-                console.log(resp.data);
-            },
-            function (err) {
-                console.log(resp.data);
-            }
-            //va la funcion que se ejecuta cuando no se pudo hacer el request bien
-        );
+        $rootScope.pedirAlarmas = function () {
+            CoreService.alarmas($rootScope.idLogueado).then(
+                //va la funcion en caso de que se hizo el request y se hizo el response todo bien
+                function (resp) {
+                    if (resp.status == 200) { //lo deduje del console.log
+                        $rootScope.listaAlarmas = resp.data;
 
+                        if ($rootScope.listaAlarmas.length > 0) {
+                            $rootScope.alarmas = true;
+                        }else{
+                            $rootScope.alarmas = false;
+                        }
+                        console.log($rootScope.alarmas)
+                    }
+                    console.log(resp.data);
+                },
+                function (err) {
+                    console.log(resp.data);
+                }
+                //va la funcion que se ejecuta cuando no se pudo hacer el request bien
+            );
+        }
+
+        $rootScope.existeAlarma = function () {
+            return  $rootScope.alarmas;
+        }
 
 
         $rootScope.openLoginForm = function (size) {     // funcion para llamar al formulario de nuestro loguien desde cualquier lugar de nuestra app

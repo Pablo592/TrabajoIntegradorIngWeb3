@@ -2,6 +2,7 @@ package ar.edu.iua.iw3.negocio;
 
 import ar.edu.iua.iw3.eventos.CargaEvent;
 import ar.edu.iua.iw3.modelo.*;
+import ar.edu.iua.iw3.modelo.Cuentas.Usuario;
 import ar.edu.iua.iw3.modelo.dto.CargaDTO;
 import ar.edu.iua.iw3.modelo.persistencia.CargaRepository;
 import ar.edu.iua.iw3.negocio.excepciones.*;
@@ -11,6 +12,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import java.util.Calendar;
 import java.util.Date;
@@ -31,6 +34,9 @@ public class CargaNegocio implements ICargaNegocio {
 
     @Autowired
     private OrdenNegocio ordenNegocio;
+
+    @Autowired
+    private AlarmaNegocio alarmaNegocio;
 
     @Autowired
     private ApplicationEventPublisher appEventPublisher;
@@ -77,7 +83,7 @@ public class CargaNegocio implements ICargaNegocio {
     }
 
     @Override
-    public RespuestaGenerica<Carga> agregar(Carga carga) throws NegocioException, NoEncontradoException, BadRequest, UnprocessableException, ConflictException {
+    public RespuestaGenerica<Carga> agregar(Carga carga) throws NegocioException, NoEncontradoException, BadRequest, UnprocessableException, ConflictException, EncontradoException {
         MensajeRespuesta m=new MensajeRespuesta();
         RespuestaGenerica<Carga> r = new RespuestaGenerica<Carga>(carga, m);
 
@@ -144,12 +150,15 @@ public class CargaNegocio implements ICargaNegocio {
     }
 
 
-    private void  generarEvento(Carga carga, CargaEvent.Tipo tipo,Orden orden) throws ConflictException, NoEncontradoException, NegocioException {
+    private void  generarEvento(Carga carga, CargaEvent.Tipo tipo,Orden orden) throws ConflictException, NoEncontradoException, NegocioException, EncontradoException, BadRequest {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Usuario user = (Usuario) auth.getPrincipal();
         Alarma a = new Alarma();
         a.setOrden(orden);
-        a.setAutor();
-        a.setDescripcion("Humbral de temperatura superado de la orden " + orden.getId() + " con una temperatura de " + carga.getTemperaturaProductoCelcius());
+        a.setAutor(user);
+        a.setDescripcion("Humbral de temperatura superado de la orden (codigo externo) " + orden.getCodigoExterno() + " con una temperatura de " + carga.getTemperaturaProductoCelcius());
         a.setFechaAceptacion(new Date());
+        alarmaNegocio.agregar(a);
         orden.setAlarmaActiva(true);
         ordenNegocio.modificar(orden);
         appEventPublisher.publishEvent(new CargaEvent(carga,tipo));

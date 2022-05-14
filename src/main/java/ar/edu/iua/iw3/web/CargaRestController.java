@@ -103,6 +103,10 @@ public class CargaRestController {
             log.error(e.getMessage(), e);
             MensajeRespuesta r=new MensajeRespuesta(-1,e.getMessage());
             return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.CONFLICT);
+        } catch (EncontradoException e) {
+            log.error(e.getMessage(), e);
+            MensajeRespuesta r=new MensajeRespuesta(-1,e.getMessage());
+            return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.CONFLICT);
         }
     }
 
