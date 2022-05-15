@@ -157,7 +157,6 @@ public class CargaNegocio implements ICargaNegocio {
         a.setOrden(orden);
         a.setAutor(user);
         a.setDescripcion("Humbral de temperatura superado de la orden (codigo externo) " + orden.getCodigoExterno() + " con una temperatura de " + carga.getTemperaturaProductoCelcius());
-        a.setFechaAceptacion(new Date());
         alarmaNegocio.agregar(a);
         orden.setAlarmaActiva(true);
         ordenNegocio.modificar(orden);

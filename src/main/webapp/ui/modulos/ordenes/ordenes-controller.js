@@ -1,4 +1,4 @@
-angular.module('ordenes').controller('Ordenes', function($scope, OrdenesService, SweetAlert,$rootScope) {
+angular.module('ordenes').controller('Ordenes', function($scope, OrdenesService, SweetAlert,$scope) {
 
     $scope.orden = {
         codigoExterno: '',
@@ -235,6 +235,8 @@ angular.module('ordenes').controller('Ordenes', function($scope, OrdenesService,
             confirmButtonText: "Aceptar",
             closeOnConfirm: true,
             html: true
-        }, function(confirm) {});
+        }, function(confirm) {
+            console.log(mensaje)
+        });
     };
 });

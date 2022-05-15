@@ -69,7 +69,7 @@ public class AlarmaNegocio implements IAlarmaNegocio{
             throw new NoEncontradoException("No hay alarmas pertenecientes a este autor" + id);
         }
         for(Alarma a :o.get()){
-           if(a.getOrden().isAlarmaActiva())
+           if(a.getOrden().isAlarmaActiva() && (a.getFechaAceptacion() == null))
                alarmaActiva.add(a);
         }
 
@@ -92,7 +92,6 @@ public class AlarmaNegocio implements IAlarmaNegocio{
             alarma.setAutor(autor);
             alarma.setOrden(orden);
             //actualizo la fecha de aceptacion
-            alarma.setFechaAceptacion(new Date());
             return alarmaDAO.save(alarma);
         } catch (Exception e) {
             log.error(e.getMessage(), e);

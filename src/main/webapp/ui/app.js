@@ -16,7 +16,7 @@ app.config(function ($localStorageProvider) {
 
 
 app.run(['$rootScope', '$uibModal', 'CoreService', '$location', '$log', '$localStorage', '$stomp',
-    function ($rootScope, $uibModal, CoreService, $location, $log, $localStorage, $stomp) {
+    function ($rootScope, $uibModal, CoreService, $location, $log, $localStorage, $stomp, SweetAlert,$scope) {
 
         $rootScope.listaRoles = [];
 
@@ -70,7 +70,6 @@ app.run(['$rootScope', '$uibModal', 'CoreService', '$location', '$log', '$localS
             return  $rootScope.alarmas;
         }
 
-
         $rootScope.openLoginForm = function (size) {     // funcion para llamar al formulario de nuestro loguien desde cualquier lugar de nuestra app
             if (!$rootScope.loginOpen) {
                 //$rootScope.cleanLoginData();
@@ -95,6 +94,7 @@ app.run(['$rootScope', '$uibModal', 'CoreService', '$location', '$log', '$localS
             }
             return 'ROLE_USER'
         }
+
         CoreService.authInfo();
     }
 ]);
