@@ -8,7 +8,7 @@
     <script type="text/javascript" src="ui/lib/angular/angular.min.js"></script>
     <script type="text/javascript" src="ui/lib/angular-route/angular-route.min.js"></script>
 
-    
+
     <link href="ui/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="ui/lib/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet">
     <link href="ui/lib/font-awesome/css/fontawesome.min.css" rel="stylesheet">
@@ -32,83 +32,55 @@
     <script type="text/javascript" src="ui/rutas.js"></script>
     <script type="text/javascript" src="ui/interceptores.js"></script>
 
-    <script type="text/javascript" src="ui/modulos/ordenes/ordenes-modulo.js"></script>
-    <script type="text/javascript" src="ui/modulos/ordenes/ordenes-controller.js"></script>
-    <script type="text/javascript" src="ui/modulos/ordenes/ordenes-service.html.js"></script>
+    <script type="text/javascript" src="ui/modulos/ordenes-modulo.js"></script>
+    <script type="text/javascript" src="ui/controladores/ordenes-controller.js"></script>
+    <script type="text/javascript" src="ui/servicios/ordenes-service.html.js"></script>
 
     <script type="text/javascript" src="ui/controladores/loginController.js"></script>
     <script type="text/javascript" src="ui/servicios/core-service.js"></script>
 
 
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" type="text/css" href="ui/vistas/index.css">
     <link rel="stylesheet" type="text/css" href="ui/vistas/crearUsuario.css">
-    <link rel="stylesheet" type="text/css" href="ui/modulos/ordenes/ordenes.css">
+    <link rel="stylesheet" type="text/css" href="ui/vistas/ordenes.css">
 
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
-<nav class="navbar navbar-default">
-    <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-                data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="#">Final IW3</a>
-        </div>
-
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav">
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                        aria-expanded="false">Administracion <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a ng-click="relocate('ordenes')">Ordenes</a></li>
-                        <li><a href="#">Cargas</a></li>
-                    </ul>
-                </li>
-            </ul>
-            <ul ng-init="pedirAlarmas()" class="nav navbar-nav navbar-right">
-
-                <li ng-show="existeAlarma()" class="dropdown">
-                    <a href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><img
-                            src="campanaNotificacion.png" style="width:40px;padding: 0px!important;" alt=""> <span
-                            class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li ng-repeat="alarm in listaAlarmas" value="{{alarm}}">
-                            <a ng-mousemove="$scope.notificacionAprobacion()" style="color: black; cursor: pointer; border-width: 1px;border-right: black solid;border-bottom: black solid;border-left: black solid; border-radius: 5px;">
-                                {{alarm.descripcion}}</a>
-                        </li>
-                    </ul>
-                </li>
-                <li ng-show="!existeAlarma()" class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                        aria-expanded="false"><img src="campana.png" style="width:40px;" alt=""> <span
-                            class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a ng-click="relocate('ordenes')">Ordenes</a></li>
-                        <li><a href="#">Cargas</a></li>
-                    </ul>
-                </li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                        aria-expanded="false">{{ userData().username || 'No autenticad@'}} <span
-                            class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">Cuenta</a></li>
-                        <li><a ng-click="logout()">Cerrar sesion</a></li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
+<div ng-init="pedirAlarmas()" class="navegacion">
+    <div class="navIzqui">
+        <p class="navTitulo">Final IW3</p>
     </div>
-</nav>
+    <div class="navCentr"></div>
+    <div class="navDer">
+        <img ng-show="!existeAlarma()" class="fotoNav" src="campana.png" alt="">
+        <div ng-show="existeAlarma()" class="dropdown">
+            <div class="imagenTexto">
+                <img class="fotoNav" src="campanaNotificacion.png" alt="">
+            </div>
+            <div class="dropdown-content">
+                <select class="puntero" ng-model="alarm" ng-click="cons(alarm);alarm = ''" >
+                    <option ng-repeat="alarm in listaAlarmas" value="{{alarm.id}}">{{alarm.descripcion}}</option>
+                </select>
+            </div>
+
+        </div>
+        <div class="bloqueNav"></div>
+        <div class="dropdown">
+            <div class="imagenTexto">
+                <p class="navTitulo userLog">{{ userData().username || 'No autenticad@'}}</p>
+                <img class="fotoNav" src="cerrarSesion.png" alt="">
+            </div>
+            <div class="dropdown-content">
+                <a href="#">Cuenta</a>
+                <a ng-click="logout()">Cerrar sesion</a>
+            </div>
+        </div>
+        <div class="bloqueNavi"></div>
+    </div>
+</div>
 
 <body ng-app="trabajoIntegrador" style="overflow:hidden ;">
     <!--Modulo de Angular I> -->

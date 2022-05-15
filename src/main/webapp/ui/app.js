@@ -16,7 +16,7 @@ app.config(function ($localStorageProvider) {
 
 
 app.run(['$rootScope', '$uibModal', 'CoreService', '$location', '$log', '$localStorage', '$stomp',
-    function ($rootScope, $uibModal, CoreService, $location, $log, $localStorage, $stomp, SweetAlert,$scope) {
+    function ($rootScope, $uibModal, CoreService, $location, $log, $localStorage, $stomp, SweetAlert) {
 
         $rootScope.listaRoles = [];
 
@@ -52,7 +52,7 @@ app.run(['$rootScope', '$uibModal', 'CoreService', '$location', '$log', '$localS
 
                         if ($rootScope.listaAlarmas.length > 0) {
                             $rootScope.alarmas = true;
-                        }else{
+                        } else {
                             $rootScope.alarmas = false;
                         }
                         console.log($rootScope.alarmas)
@@ -67,7 +67,7 @@ app.run(['$rootScope', '$uibModal', 'CoreService', '$location', '$log', '$localS
         }
 
         $rootScope.existeAlarma = function () {
-            return  $rootScope.alarmas;
+            return $rootScope.alarmas;
         }
 
         $rootScope.openLoginForm = function (size) {     // funcion para llamar al formulario de nuestro loguien desde cualquier lugar de nuestra app
@@ -85,6 +85,19 @@ app.run(['$rootScope', '$uibModal', 'CoreService', '$location', '$log', '$localS
             }
         };
 
+        $rootScope.cons = function (letras) {
+            SweetAlert.swal({
+                title: letras,
+                type: "success",
+                showCancelButton: false,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Aceptar",
+                closeOnConfirm: true,
+                html: true
+            }, function (confirm) {
+                console.log(letras)
+            });
+        }
         //$rootScope.openLoginForm();
 
         $rootScope.getRole = function () {
