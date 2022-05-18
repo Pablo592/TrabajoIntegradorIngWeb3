@@ -7,6 +7,7 @@ import ar.edu.iua.iw3.negocio.excepciones.EncontradoException;
 import ar.edu.iua.iw3.negocio.excepciones.NegocioException;
 import ar.edu.iua.iw3.negocio.excepciones.NoEncontradoException;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -148,5 +149,25 @@ public class OrdenNegocioTest {
         //System.out.println(ordenNegocio.agregar(orden).getMensaje().getMensaje()); //El atributo 'Producto' es obligatorio
     }
 
+    //segundo request
+    @Test
+    public void setearFechaPesajeInicial() {
+        orden.setFechaRecepcionPesajeFinal(new Date());
+        //when + given + then
+        when(ordenRepositoryMock.save(orden)).thenReturn(orden);
+        assertThrows(BadRequest.class, () -> ordenNegocio.establecerPesajeInicial(orden));
+        assertEquals(id,orden.getId());
+    }
 
+
+    @Test
+    @Ignore
+    public void setearFechaPesajeInicialConCamionNuevo() {
+        orden.setCamion(new Camion());
+        orden.setFechaRecepcionPesajeFinal(new Date());
+        //when + given + then
+        when(ordenRepositoryMock.save(orden)).thenReturn(orden);
+
+        assertEquals(id,orden.getId());
+    }
 }
