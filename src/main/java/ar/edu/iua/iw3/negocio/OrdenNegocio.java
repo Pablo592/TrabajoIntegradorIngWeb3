@@ -290,8 +290,23 @@ public class OrdenNegocio implements IOrdenNegocio{
     }
 
     private void validarMetadata(Orden orden) throws BadRequest {
-        if (orden.checkBasicData() != null)
-            throw new BadRequest(orden.checkBasicData());
+        String error = orden.checkBasicData();
+        if (error != null )
+            throw new BadRequest(error);
+        error = validarFechaInicialOrden_TaraYPatenteCamion(orden);
+        if(error != null)
+            throw new BadRequest(error);
+    }
+
+    private String validarFechaInicialOrden_TaraYPatenteCamion(Orden orden) {
+
+        if(orden.getFechaPesajeInicial() == null)
+            return "El atributo 'fechaPesajeInicial' debe poseer un valor";
+        if(orden.getCamion().getPatente() == null)
+            return "El atributo 'Patente' es obligatorio";
+        if(orden.getCamion().getTara() <1)
+            return "El atributo 'Tara' debe poseer un valor valido";
+        return null;
     }
 
 

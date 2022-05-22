@@ -2,10 +2,7 @@ package ar.edu.iua.iw3.negocio;
 
 import ar.edu.iua.iw3.modelo.*;
 import ar.edu.iua.iw3.modelo.persistencia.OrdenRepository;
-import ar.edu.iua.iw3.negocio.excepciones.BadRequest;
-import ar.edu.iua.iw3.negocio.excepciones.EncontradoException;
-import ar.edu.iua.iw3.negocio.excepciones.NegocioException;
-import ar.edu.iua.iw3.negocio.excepciones.NoEncontradoException;
+import ar.edu.iua.iw3.negocio.excepciones.*;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -103,7 +100,7 @@ public class OrdenNegocioTest {
     }
 
     //primer envio
-    @Test
+    @Test //caso feliz
     public void crearOrdenConMetadatosSuficientes() throws EncontradoException, BadRequest, NegocioException {
         //when + given
         when(ordenRepositoryMock.save(orden)).thenReturn(orden);
@@ -150,24 +147,82 @@ public class OrdenNegocioTest {
     }
 
     //segundo request
+    @Test //caso feliz
+    public void setearFechaPesajeInicial() throws BadRequest, ConflictException, NoEncontradoException, NegocioException {
+        double taraCamion = 5000;
+        Date fechaPesoInicial = new Date();
+        orden.setFechaPesajeInicial(fechaPesoInicial);
+        orden.getCamion().setTara(taraCamion);
+
+        //given
+        Optional<Orden> givenOrden = Optional.of(orden);
+        //when
+        when(ordenRepositoryMock.findByCodigoExterno(orden.getCodigoExterno())).thenReturn(givenOrden);
+        when(ordenRepositoryMock.save(orden)).thenReturn(givenOrden.get());
+        when(ordenRepositoryMock.findById(orden.getId())).thenReturn(givenOrden);
+
+        Orden orden1 = ordenNegocio.establecerPesajeInicial(orden).getEntidad();
+        //then
+        assertEquals(id,orden1.getId());
+        assertEquals("45",orden1.getCodigoExterno());
+        assertEquals(taraCamion,orden1.getCamion().getTara());
+        assertEquals(fechaPesoInicial,orden1.getFechaPesajeInicial());
+    }
+
+
     @Test
-    public void setearFechaPesajeInicial() {
-        orden.setFechaRecepcionPesajeFinal(new Date());
-        //when + given + then
-        when(ordenRepositoryMock.save(orden)).thenReturn(orden);
+    public void segundoEnvioSinTara()  {
+        Date fechaPesoInicial = new Date();
+        orden.setFechaPesajeInicial(fechaPesoInicial);
+
+        //given
+        Optional<Orden> givenOrden = Optional.of(orden);
+        //when
+        when(ordenRepositoryMock.findByCodigoExterno(orden.getCodigoExterno())).thenReturn(givenOrden);
+        when(ordenRepositoryMock.save(orden)).thenReturn(givenOrden.get());
+        when(ordenRepositoryMock.findById(orden.getId())).thenReturn(givenOrden);
+
+        //then
         assertThrows(BadRequest.class, () -> ordenNegocio.establecerPesajeInicial(orden));
-        assertEquals(id,orden.getId());
-    }
 
+        //System.out.println(ordenNegocio.establecerPesajeInicial(orden).getMensaje().getMensaje()); //El atributo 'tara' tiene que ser mayor a cero
+    }
 
     @Test
-    @Ignore
-    public void setearFechaPesajeInicialConCamionNuevo() {
-        orden.setCamion(new Camion());
-        orden.setFechaRecepcionPesajeFinal(new Date());
-        //when + given + then
-        when(ordenRepositoryMock.save(orden)).thenReturn(orden);
+    public void segundoEnvioSinFechaPesajeInicial() {
+        double taraCamion = 5000;
+        orden.getCamion().setTara(taraCamion);
+        //given
+        Optional<Orden> givenOrden = Optional.of(orden);
+        //when
+        when(ordenRepositoryMock.findByCodigoExterno(orden.getCodigoExterno())).thenReturn(givenOrden);
+        when(ordenRepositoryMock.save(orden)).thenReturn(givenOrden.get());
+        when(ordenRepositoryMock.findById(orden.getId())).thenReturn(givenOrden);
 
-        assertEquals(id,orden.getId());
+        //then
+        assertThrows(BadRequest.class, () -> ordenNegocio.establecerPesajeInicial(orden));
+
+        //System.out.println(ordenNegocio.establecerPesajeInicial(orden).getMensaje().getMensaje()); //El atributo 'fechaPesajeInicial' debe poseer un valor
     }
+
+    @Test
+    public void segundoEnvioSinPatente() throws BadRequest, ConflictException, NoEncontradoException, NegocioException {
+        double taraCamion = 5000;
+        Date fechaPesoInicial = new Date();
+        orden.setFechaPesajeInicial(fechaPesoInicial);
+        orden.setCamion(new Camion());
+        orden.getCamion().setTara(taraCamion);
+        //given
+        Optional<Orden> givenOrden = Optional.of(orden);
+        //when
+        when(ordenRepositoryMock.findByCodigoExterno(orden.getCodigoExterno())).thenReturn(givenOrden);
+        when(ordenRepositoryMock.save(orden)).thenReturn(givenOrden.get());
+        when(ordenRepositoryMock.findById(orden.getId())).thenReturn(givenOrden);
+        //then
+        assertThrows(BadRequest.class, () -> ordenNegocio.establecerPesajeInicial(orden));
+
+        //System.out.println(ordenNegocio.establecerPesajeInicial(orden).getMensaje().getMensaje()); //El atributo 'Patente' es obligatorio
+    }
+
+
 }
