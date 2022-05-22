@@ -244,7 +244,7 @@ public class OrdenNegocioTest {
         //then
         assertThrows(ConflictException.class, () -> ordenNegocio.establecerPesajeInicial(orden));
 
-        //System.out.println(ordenNegocio.establecerPesajeInicial(orden).getMensaje().getMensaje()); //El atributo 'Patente' es obligatorio
+        //System.out.println(ordenNegocio.establecerPesajeInicial(orden).getMensaje().getMensaje()); //Solo se puede pasar a estado 2 las ordenes en estado 1
     }
 
 
