@@ -252,6 +252,10 @@ public class OrdenNegocio implements IOrdenNegocio{
 
         camionNegocio.setearPesoIni(orden.getCamion(), ordenBD.getCamion());
         ordenBD = validarFechaPesajeInicial(orden, ordenBD);
+
+        if(ordenBD.getEstado()!=1)
+            throw new ConflictException("Solo se puede pasar a estado 2 las ordenes en estado 1");
+
         ordenBD.setEstado(2);
         ordenBD.setPassword(String.valueOf(Math.abs(ordenBD.hashCode())).substring(0,5));
         Orden ordenNueva = modificar(ordenBD);

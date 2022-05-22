@@ -151,6 +151,7 @@ public class OrdenNegocioTest {
     public void setearFechaPesajeInicial() throws BadRequest, ConflictException, NoEncontradoException, NegocioException {
         double taraCamion = 5000;
         Date fechaPesoInicial = new Date();
+        orden.setEstado(1);
         orden.setFechaPesajeInicial(fechaPesoInicial);
         orden.getCamion().setTara(taraCamion);
 
@@ -174,7 +175,7 @@ public class OrdenNegocioTest {
     public void segundoEnvioSinTara()  {
         Date fechaPesoInicial = new Date();
         orden.setFechaPesajeInicial(fechaPesoInicial);
-
+        orden.setEstado(1);
         //given
         Optional<Orden> givenOrden = Optional.of(orden);
         //when
@@ -192,6 +193,7 @@ public class OrdenNegocioTest {
     public void segundoEnvioSinFechaPesajeInicial() {
         double taraCamion = 5000;
         orden.getCamion().setTara(taraCamion);
+        orden.setEstado(1);
         //given
         Optional<Orden> givenOrden = Optional.of(orden);
         //when
@@ -210,8 +212,9 @@ public class OrdenNegocioTest {
         double taraCamion = 5000;
         Date fechaPesoInicial = new Date();
         orden.setFechaPesajeInicial(fechaPesoInicial);
-        orden.setCamion(new Camion());
+        orden.setCamion(new Camion());  //borro la patente
         orden.getCamion().setTara(taraCamion);
+        orden.setEstado(1);
         //given
         Optional<Orden> givenOrden = Optional.of(orden);
         //when
@@ -220,6 +223,26 @@ public class OrdenNegocioTest {
         when(ordenRepositoryMock.findById(orden.getId())).thenReturn(givenOrden);
         //then
         assertThrows(BadRequest.class, () -> ordenNegocio.establecerPesajeInicial(orden));
+
+        //System.out.println(ordenNegocio.establecerPesajeInicial(orden).getMensaje().getMensaje()); //El atributo 'Patente' es obligatorio
+    }
+
+    @Test
+    public void segundoEnvioConEstadoOrdenDiferenteDe1() throws BadRequest, ConflictException, NoEncontradoException, NegocioException {
+        double taraCamion = 5000;
+        Date fechaPesoInicial = new Date();
+        orden.setFechaPesajeInicial(fechaPesoInicial);
+        orden.getCamion().setPatente("aa000wa");    //se lo seteo porque sino me lo intenta guardar
+        orden.getCamion().setTara(taraCamion);
+        orden.setEstado(0);
+        //given
+        Optional<Orden> givenOrden = Optional.of(orden);
+        //when
+        when(ordenRepositoryMock.findByCodigoExterno(orden.getCodigoExterno())).thenReturn(givenOrden);
+        when(ordenRepositoryMock.save(orden)).thenReturn(givenOrden.get());
+        when(ordenRepositoryMock.findById(orden.getId())).thenReturn(givenOrden);
+        //then
+        assertThrows(ConflictException.class, () -> ordenNegocio.establecerPesajeInicial(orden));
 
         //System.out.println(ordenNegocio.establecerPesajeInicial(orden).getMensaje().getMensaje()); //El atributo 'Patente' es obligatorio
     }

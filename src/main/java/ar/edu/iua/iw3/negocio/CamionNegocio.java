@@ -138,7 +138,7 @@ public class CamionNegocio implements ICamionNegocio{
 			if(camionRecibido.getTara()<= 0)
 				throw new BadRequest("El atributo 'tara' tiene que ser mayor a cero");
 			camionBD.setTara(camionRecibido.getTara());
-
+		System.out.println("Holaaaaa --->>> "+camionBD.getPatente()+ camionBD.getTara()+camionBD.getPreset()+camionBD.getCisternadoLitros());
 			return saveCamion(camionBD);
 	}
 
