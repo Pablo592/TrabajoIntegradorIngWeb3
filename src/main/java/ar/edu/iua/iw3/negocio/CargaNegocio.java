@@ -98,10 +98,10 @@ public class CargaNegocio implements ICargaNegocio {
         carga.checkFechasSalidaEsMenorFechaLlegada();
 
         carga.setOrden(orden);
-        if (orden.getCamion().getPreset() <= carga.getMasaAcumuladaKg()) {
+        if (orden.getCamion().getPreset() <= carga.getMasaAcumuladaKg()) { //si el tanque esta lleno
             cargaDAO.save(carga);
             orden.setEstado(3);
-            ordenNegocio.modificar(orden);
+            ordenNegocio.modificar(orden);  //actualizo la orden
             throw new UnprocessableException("Tanque lleno");
         }
 
@@ -158,11 +158,9 @@ public class CargaNegocio implements ICargaNegocio {
         a.setAutor(user);
         a.setDescripcion("Humbral de temperatura superado de la orden (codigo externo) " + orden.getCodigoExterno() + " con una temperatura de " + carga.getTemperaturaProductoCelcius());
         alarmaNegocio.agregar(a);
-        if(!orden.isAlarmaActiva()){
-            orden.setAlarmaActiva(true);
-            ordenNegocio.modificar(orden);
-            appEventPublisher.publishEvent(new CargaEvent(carga,tipo));
-        }
+        //orden.setAlarmaActiva(true);
+        ordenNegocio.modificar(orden);
+        appEventPublisher.publishEvent(new CargaEvent(carga,tipo));
     }
 
     private Date sumarFrecuenciaConTiempo(int frecuenciaEnSegundos, Date proximoTiempoLimite){

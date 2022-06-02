@@ -136,6 +136,12 @@ public class Orden implements Serializable{
 	@JsonBackReference
 	private List<Carga> cargaList = new ArrayList<Carga>();
 
+	@ApiModelProperty(notes = "Temperatura maxima aceptable del combustible.", example = "21,874")
+	private float umbralTemperaturaCombustible = 25;
+
+	@ApiModelProperty(notes = "Representa si la orden tiene su alarma prendida o no, para no enviar muchas alarmas", example = "true||false")
+	@Column(columnDefinition = "boolean default false", nullable = false)
+	boolean alarmaActiva = false;
 
 	public float getUmbralTemperaturaCombustible() {
 		return umbralTemperaturaCombustible;
@@ -144,15 +150,6 @@ public class Orden implements Serializable{
 	public void setUmbralTemperaturaCombustible(float umbralTemperaturaCombustible) {
 		this.umbralTemperaturaCombustible = umbralTemperaturaCombustible;
 	}
-
-	@ApiModelProperty(notes = "Temperatura maxima aceptable del combustible.", example = "21,874")
-	private float umbralTemperaturaCombustible = 25;
-
-	@ApiModelProperty(notes = "Representa si la orden tiene su alarma prendida o no, para no enviar muchas alarmas", example = "true||false")
-	@Column(columnDefinition = "boolean default false", nullable = false)
-	boolean alarmaActiva = false;
-
-
 	public long getId() {
 		return id;
 	}

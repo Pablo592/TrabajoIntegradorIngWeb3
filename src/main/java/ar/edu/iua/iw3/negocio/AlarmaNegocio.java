@@ -84,14 +84,11 @@ public class AlarmaNegocio implements IAlarmaNegocio{
             Orden orden = ordenNegocio.findByCodigoExterno(alarma.getOrden().getCodigoExterno());
             if(autor == null || orden == null )
                 throw new NoEncontradoException("El autor o la orden asociada a la alarma no existe");
-            //configuro los datos de la alarma
-            orden.setAlarmaActiva(false);   //cuando creo la alarma no la activo,
-                                            // sino que lo hago despues que se envia el mail,
-                                            // luego lo chequeo cada vez que se trata de enviar una alarma, si esta activa no la envio sino lo envio
+
             //como los datos de usuario y de orden no viene completos los obtengo y se los coloco a la alarma
             alarma.setAutor(autor);
             alarma.setOrden(orden);
-            alarma.setFechaAceptacion(new Date());//tengo que hacer un end-point diferente
+            alarma.setFechaAceptacion(new Date());      //tengo que hacer un end-point diferente
             //actualizo la fecha de aceptacion
             return alarmaDAO.save(alarma);
         } catch (Exception e) {
