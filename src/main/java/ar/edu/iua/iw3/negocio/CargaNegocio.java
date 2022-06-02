@@ -20,8 +20,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import java.util.*;
-
 @Service
 public class CargaNegocio implements ICargaNegocio {
 
@@ -151,6 +149,7 @@ public class CargaNegocio implements ICargaNegocio {
 
 
     private void  generarEvento(Carga carga, CargaEvent.Tipo tipo,Orden orden) throws ConflictException, NoEncontradoException, NegocioException, EncontradoException, BadRequest {
+        boolean enviarMailActivoOrdenDB = orden.isEnviarMailActivo();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Usuario user = (Usuario) auth.getPrincipal();
         Alarma a = new Alarma();
@@ -158,10 +157,10 @@ public class CargaNegocio implements ICargaNegocio {
         a.setAutor(user);
         a.setDescripcion("Humbral de temperatura superado de la orden (codigo externo) " + orden.getCodigoExterno() + " con una temperatura de " + carga.getTemperaturaProductoCelcius());
         alarmaNegocio.agregar(a);
-        //orden.setAlarmaActiva(true);
-        ordenNegocio.modificar(orden);
+
         appEventPublisher.publishEvent(new CargaEvent(carga,tipo));
     }
+
 
     private Date sumarFrecuenciaConTiempo(int frecuenciaEnSegundos, Date proximoTiempoLimite){
         Calendar cal = Calendar.getInstance();

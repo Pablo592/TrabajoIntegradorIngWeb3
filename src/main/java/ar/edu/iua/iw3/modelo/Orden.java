@@ -141,7 +141,7 @@ public class Orden implements Serializable{
 
 	@ApiModelProperty(notes = "Representa si la orden tiene su alarma prendida o no, para no enviar muchas alarmas", example = "true||false")
 	@Column(columnDefinition = "boolean default false", nullable = false)
-	boolean alarmaActiva = false;
+	boolean enviarMailActivo = false;
 
 	public float getUmbralTemperaturaCombustible() {
 		return umbralTemperaturaCombustible;
@@ -335,12 +335,12 @@ public class Orden implements Serializable{
 		return null;
 	}
 
-	public boolean isAlarmaActiva() {
-		return alarmaActiva;
+	public boolean isEnviarMailActivo() {
+		return enviarMailActivo;
 	}
 
-	public void setAlarmaActiva(boolean alarmaActiva) {
-		this.alarmaActiva = alarmaActiva;
+	public void setEnviarMailActivo(boolean alarmaActiva) {
+		this.enviarMailActivo = alarmaActiva;
 	}
 
 	@Override

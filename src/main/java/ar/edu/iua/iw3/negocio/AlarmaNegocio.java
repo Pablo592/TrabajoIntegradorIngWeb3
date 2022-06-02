@@ -69,7 +69,7 @@ public class AlarmaNegocio implements IAlarmaNegocio{
             throw new NoEncontradoException("No hay alarmas pertenecientes a este autor" + id);
         }
         for(Alarma a :o.get()){
-           if(a.getOrden().isAlarmaActiva() && (a.getFechaAceptacion() == null))
+           if(a.getOrden().isEnviarMailActivo() && (a.getFechaAceptacion() == null))
                alarmaActiva.add(a);
         }
 

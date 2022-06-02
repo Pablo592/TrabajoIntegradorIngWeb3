@@ -3,6 +3,9 @@ package ar.edu.iua.iw3.eventos;
 import ar.edu.iua.iw3.modelo.Carga;
 import ar.edu.iua.iw3.modelo.Orden;
 import ar.edu.iua.iw3.negocio.OrdenNegocio;
+import ar.edu.iua.iw3.negocio.excepciones.ConflictException;
+import ar.edu.iua.iw3.negocio.excepciones.NegocioException;
+import ar.edu.iua.iw3.negocio.excepciones.NoEncontradoException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,9 +43,26 @@ public class CargaEventListener implements ApplicationListener<CargaEvent> {
         String mensaje = String.format("El combustible abastecido en la orden %s, supero el umbral de temperatura al tener %.2f Cª"
                 ,carga.getOrden().getCodigoExterno(),carga.getTemperaturaProductoCelcius());
 
-        if(carga.getOrden().isAlarmaActiva()){
+        /*
+        t           t+1
+        False --> true se activa por primera vez
+        False --> False no se genera alarma
+        True  --> True no se envia alarma
+        True  --> False --> Acepta la alarma el usuario
+        * */
+        if(carga.getOrden().isEnviarMailActivo()){
             System.out.println("como la alarma esta activada no se puede enviar el mail hasta que lo acepte");
             return;
+        }else {
+            try {
+                ordenNegocio.modificar(carga.getOrden()).setEnviarMailActivo(true);
+            } catch (NegocioException e) {
+                throw new RuntimeException(e);
+            } catch (NoEncontradoException e) {
+                throw new RuntimeException(e);
+            } catch (ConflictException e) {
+                throw new RuntimeException(e);
+            }
         }
 
         log.info("Enviando mensaje '{}'",mensaje);
@@ -58,7 +78,7 @@ public class CargaEventListener implements ApplicationListener<CargaEvent> {
 
 
             Orden ordenConMailEnviado = carga.getOrden();
-            ordenConMailEnviado.setAlarmaActiva(true);
+            ordenConMailEnviado.setEnviarMailActivo(true);
             ordenNegocio.modificar(ordenConMailEnviado);
         }catch (Exception e){
             log.error(e.getMessage(),e);
