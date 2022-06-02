@@ -112,7 +112,7 @@ public class CargaNegocio implements ICargaNegocio {
             orden.setPromedDensidadProductoKilogramoMetroCub(cargaDTOAnterior.getPromedDensidadProductoKilogramoMetroCub());
             orden.setPromedioCaudalLitroSegundo(cargaDTOAnterior.getPromedioCaudalLitroSegundo());
             orden.setPromedioTemperaturaProductoCelcius(cargaDTOAnterior.getPromedioTemperaturaProductoCelcius());
-        } catch (NoEncontradoException e) {   //Si no hay carga anterior entonces salta un noEncontradoException
+        } catch (NoEncontradoException e) {   //Sino hay carga anterior entonces NoEncontradoException
             log.error(e.getMessage(), e);
             orden.setMasaAcumuladaKg(0);      //digo que la carga inicial de la orden es "cero" si es la primera carga de la orden
         }
@@ -158,9 +158,11 @@ public class CargaNegocio implements ICargaNegocio {
         a.setAutor(user);
         a.setDescripcion("Humbral de temperatura superado de la orden (codigo externo) " + orden.getCodigoExterno() + " con una temperatura de " + carga.getTemperaturaProductoCelcius());
         alarmaNegocio.agregar(a);
-        orden.setAlarmaActiva(true);
-        ordenNegocio.modificar(orden);
-        appEventPublisher.publishEvent(new CargaEvent(carga,tipo));
+        if(!orden.isAlarmaActiva()){
+            orden.setAlarmaActiva(true);
+            ordenNegocio.modificar(orden);
+            appEventPublisher.publishEvent(new CargaEvent(carga,tipo));
+        }
     }
 
     private Date sumarFrecuenciaConTiempo(int frecuenciaEnSegundos, Date proximoTiempoLimite){

@@ -21,7 +21,7 @@ public class CargaEventListener implements ApplicationListener<CargaEvent> {
     @Autowired
     private OrdenNegocio ordenNegocio;
 
-    @Value("${mail.carga.umbralTemperatura.to:pgaido524@alumnos.iua.edu.ar}")
+    @Value("${mail.carga.umbralTemperatura.to}")
     private String to;
 
     @Autowired
