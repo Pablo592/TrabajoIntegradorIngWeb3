@@ -1,6 +1,7 @@
 package ar.edu.iua.iw3.negocio;
 
 import ar.edu.iua.iw3.modelo.Alarma;
+import ar.edu.iua.iw3.modelo.Cuentas.Usuario;
 import ar.edu.iua.iw3.negocio.excepciones.*;
 
 import java.util.List;
@@ -18,4 +19,5 @@ public interface IAlarmaNegocio {
 
     void eliminar(long id) throws NegocioException, NoEncontradoException;
 
+    Alarma aceptarAlarma(Alarma alarma) throws NegocioException, NoEncontradoException, ConflictException;;
 }

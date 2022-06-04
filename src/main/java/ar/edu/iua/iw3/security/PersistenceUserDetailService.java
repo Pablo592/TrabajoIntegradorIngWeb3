@@ -21,7 +21,7 @@ public class PersistenceUserDetailService implements UserDetailsService {
 		Usuario user=null;
 		
 		try {
-			user=userNegocio.cargarPorNombreOEmail(username);
+			user=userNegocio.cargarPorUsernameOEmail(username);
 		} catch (NegocioException e) {
 		
 			e.printStackTrace();

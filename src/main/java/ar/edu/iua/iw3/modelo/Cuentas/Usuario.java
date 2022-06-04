@@ -53,8 +53,21 @@ public class Usuario implements UserDetails, Serializable {
 
 	@ApiModelProperty(notes = "Un usuario puede crear varias alarmas")
 	@OneToMany(targetEntity= Alarma.class, mappedBy= "autor", fetch = FetchType.LAZY)
-	@JsonBackReference
+	@JsonBackReference (value = "alarmaList")
 	private List<Alarma> alarmaList;
+
+	@ApiModelProperty(notes = "Un usuario puede aceptar varias alarmas")
+	@OneToMany(targetEntity= Alarma.class, mappedBy= "usuarioAceptador", fetch = FetchType.LAZY)
+	@JsonBackReference (value = "aceptadasList")
+	private List<Alarma> aceptadasList;
+
+	public List<Alarma> getAceptadasList() {
+		return aceptadasList;
+	}
+
+	public void setAceptadasList(List<Alarma> aceptadasList) {
+		this.aceptadasList = aceptadasList;
+	}
 
 	public List<Alarma> getAlarmaList() {
 		return alarmaList;

@@ -79,7 +79,6 @@ public class AlarmaNegocio implements IAlarmaNegocio{
 
     @Override   //recibe los datos de una alarma con 2 datos mas, el id del autor y el codigo externo de la orden de la alarma, junto con los datos de la alarma
     public Alarma agregar(Alarma alarma) throws NegocioException, EncontradoException, BadRequest,NoEncontradoException {
-        try{
             Usuario autor = usuarioNegocio.findByid(alarma.getAutor().getId());
             Orden orden = ordenNegocio.findByCodigoExterno(alarma.getOrden().getCodigoExterno());
             if(autor == null || orden == null )
@@ -90,30 +89,33 @@ public class AlarmaNegocio implements IAlarmaNegocio{
             alarma.setOrden(orden);
             alarma.setFechaAceptacion(new Date());      //tengo que hacer un end-point diferente
             //actualizo la fecha de aceptacion
-            return alarmaDAO.save(alarma);
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            throw new NegocioException(e);
-        }
+            return saveAlarma(alarma);
     }
 
-    @Override   //le voy a tener que pasar el id de la alarma porque no tengo otra manera de identificarlo
+    @Override
     public Alarma modificar(Alarma alarma) throws NegocioException, NoEncontradoException, ConflictException {
-        cargar(alarma.getId());
-        Usuario autor = usuarioNegocio.findByid(alarma.getAutor().getId());
-        Orden orden = ordenNegocio.findByCodigoExterno(alarma.getOrden().getCodigoExterno());
-        if(autor == null || orden == null )
-            throw new NoEncontradoException("El autor o la orden asociada a la alarma no existe");
-        //configuro los datos de la alarma
-        alarma.setAutor(autor);
-        alarma.setOrden(orden);
+        Alarma alarmaBD = cargar(alarma.getId());
+        if(alarma.getAutor() == null)
+            alarma.setAutor(usuarioNegocio.findByid(alarmaBD.getAutor().getId()));
+        if(alarma.getOrden() == null)
+            alarma.setOrden(ordenNegocio.findByCodigoExterno(alarmaBD.getOrden().getCodigoExterno()));
+        if(alarma.getUsuarioAceptador() == null)
+            alarma.setUsuarioAceptador(alarmaBD.getUsuarioAceptador());
+        if(alarma.getFechaAceptacion() == null)
+            alarma.setFechaAceptacion(alarmaBD.getFechaAceptacion());
+        if(alarmaBD.getFechaAceptacion() != alarma.getFechaAceptacion())
+            throw new ConflictException("No se puede cambiar la fecha de aceptacion de la alarma");
+
+        return saveAlarma(alarma);
+    }
+
+    private Alarma saveAlarma(Alarma alarma) throws NegocioException {
         try {
-            return alarmaDAO.save(alarma); //
+            return alarmaDAO.save(alarma); // sino existe la alarma la cargo
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             throw new NegocioException(e);
         }
-
     }
 
     @Override
@@ -132,5 +134,19 @@ public class AlarmaNegocio implements IAlarmaNegocio{
             log.error(e.getMessage(), e);
             throw new NegocioException(e);
         }
+    }
+
+    @Override   //solo se modifica la fecha de aceptacion y el usuario que acepta la alarma
+    public Alarma aceptarAlarma(Alarma alarma) throws NegocioException, NoEncontradoException, ConflictException {
+        Alarma alarmaBD = cargar(alarma.getId());
+        if(alarmaBD.getFechaAceptacion() != null)
+            throw new ConflictException("La alarma con descripcion :" + alarma.getDescripcion() + " ya fue aceptada, no se pueden aceptar alarmas por segunda vez");
+
+        Usuario usuarioAceptador = usuarioNegocio.cargarPorUsernameOEmail(alarma.getUsuarioAceptador().getUsername());
+
+        alarma.setAutor( usuarioNegocio.cargar(alarmaBD.getAutor().getId()));
+        alarma.setOrden(ordenNegocio.findByCodigoExterno(alarmaBD.getOrden().getCodigoExterno()));
+        alarma.setUsuarioAceptador(usuarioAceptador);
+        return saveAlarma(alarma);
     }
 }

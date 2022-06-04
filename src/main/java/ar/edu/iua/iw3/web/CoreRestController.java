@@ -33,7 +33,7 @@ public class CoreRestController extends BaseRestController{
 	public ResponseEntity<String> loginToken(@RequestParam(value = "username") String username,
 			@RequestParam(value = "password") String password) {
 		try {
-			Usuario u = userBusiness.cargarPorNombreOEmail(username);
+			Usuario u = userBusiness.cargarPorUsernameOEmail(username);
 			String msg = u.checkAccount(passwordEncoder, password);
 			if (msg != null) {
 				u.agregaIntentoFallido();
@@ -66,7 +66,7 @@ public class CoreRestController extends BaseRestController{
 	public ResponseEntity<String> loginTokenFullJson(@RequestParam(value = "username") String username,
 			@RequestParam(value = "password") String password) {
 		try {
-			Usuario u = userBusiness.cargarPorNombreOEmail(username);
+			Usuario u = userBusiness.cargarPorUsernameOEmail(username);
 			String msg = u.checkAccount(passwordEncoder, password);
 			if (msg != null) {
 				u.agregaIntentoFallido();

@@ -25,6 +25,11 @@ public class Alarma {
     @JoinColumn(name = "autor_id")
     private Usuario autor;
 
+    @ApiModelProperty(notes = "Una alarma tiene un unico autor.")
+    @ManyToOne(cascade=CascadeType.ALL)
+    @JoinColumn(name = "aceptador_id")
+    private Usuario usuarioAceptador;
+
     @ApiModelProperty(notes = "Una alarma se asocia a una unica orden")
     @OneToOne(cascade =  CascadeType.ALL)
     @JoinColumn(name = "id_orden")
@@ -38,6 +43,14 @@ public class Alarma {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public Usuario getUsuarioAceptador() {
+        return usuarioAceptador;
+    }
+
+    public void setUsuarioAceptador(Usuario usuarioAceptador) {
+        this.usuarioAceptador = usuarioAceptador;
     }
 
     public String getDescripcion() {

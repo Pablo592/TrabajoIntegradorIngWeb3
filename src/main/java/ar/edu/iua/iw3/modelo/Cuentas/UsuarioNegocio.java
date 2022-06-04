@@ -116,7 +116,7 @@ public class UsuarioNegocio implements IUsuarioNegocio {
 	}
 
 	@Override
-	public Usuario cargarPorNombreOEmail(String nombreOEmail) throws NegocioException, NoEncontradoException {
+	public Usuario cargarPorUsernameOEmail(String nombreOEmail) throws NegocioException, NoEncontradoException {
 		Optional<Usuario> o = null;
 		try {
 			o = userDAO.findFirstByUsernameOrEmail(nombreOEmail, nombreOEmail);
