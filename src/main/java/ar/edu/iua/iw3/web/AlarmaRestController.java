@@ -6,6 +6,7 @@ import ar.edu.iua.iw3.negocio.AlarmaNegocio;
 import ar.edu.iua.iw3.negocio.IAlarmaNegocio;
 import ar.edu.iua.iw3.negocio.excepciones.*;
 import ar.edu.iua.iw3.util.Constantes;
+import ar.edu.iua.iw3.util.MensajeRespuesta;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,59 +53,63 @@ public class AlarmaRestController {
     }
 
     @PostMapping(value="")
-    public ResponseEntity<String> agregar(@RequestBody Alarma alarma) {
+    public ResponseEntity<MensajeRespuesta>  agregar(@RequestBody Alarma alarma) {
         try {
-            Alarma respuesta=alarmaNegocio.agregar(alarma);
-            HttpHeaders responseHeaders=new HttpHeaders();
-            responseHeaders.set("location", "/alarma/"+respuesta.getId());
-            return new ResponseEntity<String>(responseHeaders, HttpStatus.CREATED);
+            MensajeRespuesta r=alarmaNegocio.agregar(alarma).getMensaje();
+            return new ResponseEntity<MensajeRespuesta>(r, HttpStatus.CREATED);
         } catch (NegocioException e) {
             log.error(e.getMessage(), e);
-            return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
+            MensajeRespuesta r=new MensajeRespuesta(-1,e.getMessage());
+            return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (EncontradoException e) {
             log.error(e.getMessage(), e);
-            return new ResponseEntity<String>(HttpStatus.FOUND);
+            MensajeRespuesta r=new MensajeRespuesta(-1,e.getMessage());
+            return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.FOUND);
         } catch (BadRequest e) {
             log.error(e.getMessage(), e);
-            return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+            MensajeRespuesta r=new MensajeRespuesta(-1,e.getMessage());
+            return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.BAD_REQUEST);
         } catch (NoEncontradoException e) {
             log.error(e.getMessage(), e);
-            return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
+            MensajeRespuesta r=new MensajeRespuesta(-1,e.getMessage());
+            return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.NOT_FOUND);
         }
     }
 
     @PutMapping(value="")
-    public ResponseEntity<String> modificar(@RequestBody Alarma alarma) {
+    public ResponseEntity<MensajeRespuesta> modificar(@RequestBody Alarma alarma) {
         try {
-            alarmaNegocio.modificar(alarma);
-            return new ResponseEntity<String>(HttpStatus.OK);
+            MensajeRespuesta r = alarmaNegocio.modificar(alarma).getMensaje();
+            return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.OK);
         } catch (NegocioException e) {
             log.error(e.getMessage(), e);
-            return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
+            MensajeRespuesta r=new MensajeRespuesta(-1,e.getMessage());
+            return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (NoEncontradoException e) {
+            MensajeRespuesta r=new MensajeRespuesta(-1,e.getMessage());
             log.error(e.getMessage(), e);
-            return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
-        } catch (ConflictException e) {
-            log.error(e.getMessage(), e);
-            return new ResponseEntity<String>(HttpStatus.CONFLICT);
+            return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.NOT_FOUND);
         }
     }
 
     @PutMapping(value="/aceptarAlarma")
-    public ResponseEntity<String> aceptarAlarma(@RequestBody Alarma alarma) {
+    public ResponseEntity<MensajeRespuesta> aceptarAlarma(@RequestBody Alarma alarma) {
         try {
             alarma.setFechaAceptacion(new Date());
-            alarmaNegocio.aceptarAlarma(alarma);
-            return new ResponseEntity<String>(HttpStatus.OK);
+            MensajeRespuesta r = alarmaNegocio.aceptarAlarma(alarma).getMensaje();
+            return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.OK);
         } catch (NegocioException e) {
             log.error(e.getMessage(), e);
-            return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
+            MensajeRespuesta r=new MensajeRespuesta(-1,e.getMessage());
+            return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (NoEncontradoException e) {
             log.error(e.getMessage(), e);
-            return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
+            MensajeRespuesta r=new MensajeRespuesta(-1,e.getMessage());
+            return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.NOT_FOUND);
         } catch (ConflictException e) {
             log.error(e.getMessage(), e);
-            return new ResponseEntity<String>(HttpStatus.CONFLICT);
+            MensajeRespuesta r=new MensajeRespuesta(-1,e.getMessage());
+            return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.CONFLICT);
         }
     }
 
@@ -121,5 +126,4 @@ public class AlarmaRestController {
             return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
         }
     }
-
 }

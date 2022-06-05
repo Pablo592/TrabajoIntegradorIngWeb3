@@ -280,8 +280,8 @@ public class OrdenRestController {
             return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.BAD_REQUEST);
         } catch (ConflictException e) {
             log.error(e.getMessage(), e);
-            MensajeRespuesta r=new MensajeRespuesta(-1,e.getMessage());
-            return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.CONFLICT);
+                MensajeRespuesta r=new MensajeRespuesta(-1,e.getMessage());
+                return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.CONFLICT);
         }
     }
 

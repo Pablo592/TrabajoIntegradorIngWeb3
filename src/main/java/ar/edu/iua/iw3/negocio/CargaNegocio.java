@@ -114,14 +114,13 @@ public class CargaNegocio implements ICargaNegocio {
             log.error(e.getMessage(), e);
             orden.setMasaAcumuladaKg(0);      //digo que la carga inicial de la orden es "cero" si es la primera carga de la orden
         }
+        //controlo que la carga acumulada actual sea mayor que la anterior, tirar excepcion
+        if (!isValidoMasaAcumuadaActualCargaConLaAnterior(orden, carga))
+            throw new UnprocessableException("La masa Acumulada actual debe ser mayor  a la masa acumulada de la carga anterior");
 
         if(carga.getTemperaturaProductoCelcius() > orden.getUmbralTemperaturaCombustible())
             generarEvento(carga, CargaEvent.Tipo.SUPERADO_UMBRAL_DE_TEMPERATURA,orden);
 
-
-        //controlo que la carga acumulada actual sea mayor que la anterior, tirar excepcion
-        if (!isValidoMasaAcumuadaActualCargaConLaAnterior(orden, carga))
-            throw new UnprocessableException("La masa Acumulada actual debe ser mayor  a la masa acumulada de la carga anterior");
         orden.setMasaAcumuladaKg(carga.getMasaAcumuladaKg());
         orden.setUltimoCaudalLitroSegundo(carga.getCaudalLitroSegundo());
         orden.setUltimaDensidadProductoKilogramoMetroCub(carga.getDensidadProductoKilogramoMetroCub());
@@ -149,7 +148,6 @@ public class CargaNegocio implements ICargaNegocio {
 
 
     private void  generarEvento(Carga carga, CargaEvent.Tipo tipo,Orden orden) throws ConflictException, NoEncontradoException, NegocioException, EncontradoException, BadRequest {
-        boolean enviarMailActivoOrdenDB = orden.isEnviarMailActivo();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Usuario user = (Usuario) auth.getPrincipal();
         Alarma a = new Alarma();

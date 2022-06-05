@@ -84,7 +84,6 @@ public class CargaRestController {
             carga.setFechaEntradaBackEnd(new Date());
             MensajeRespuesta r=cargaNegocio.agregar(carga).getMensaje();
             return new ResponseEntity<MensajeRespuesta>(r, HttpStatus.OK);
-
         } catch (NegocioException e) {
             log.error(e.getMessage(), e);
             MensajeRespuesta r=new MensajeRespuesta(-1,e.getMessage());
