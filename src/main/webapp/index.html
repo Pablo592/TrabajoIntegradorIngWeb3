@@ -61,8 +61,8 @@
                 <img class="fotoNav" src="campanaNotificacion.png" alt="">
             </div>
             <div class="dropdown-content">
-                <select class="puntero" ng-model="alarm" ng-click="cons(alarm);alarm = ''" >
-                    <option ng-repeat="alarm in listaAlarmas" value="{{alarm.id}}">{{alarm.descripcion}}</option>
+                <select class="puntero" ng-model="alarm" ng-click="cons(alarm);" >
+                    <option ng-repeat="alarm in listaAlarmas" value="{{alarm}}">{{alarm.descripcion}}</option>
                 </select>
             </div>
 

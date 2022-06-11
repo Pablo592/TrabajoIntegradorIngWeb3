@@ -182,12 +182,9 @@ public class CargaNegocioTest {
         carga.setId(idCarga);
         carga.setFechaEntradaBackEnd(new Date());
 
-        //se lo agrege
         carga.setOrden(orden);
-        List<Carga> list = new ArrayList<Carga>();
-
         orden.getCargaList().add(carga);
-        orden.setMasaAcumuladaKg(carga.getMasaAcumuladaKg());  //ver porque no actualiza la lista de carga en una orden
+        orden.setMasaAcumuladaKg(carga.getMasaAcumuladaKg());
 
 
         CargaDTO cargaDTO = new CargaDTO(carga.getDensidadProductoKilogramoMetroCub(),carga.getTemperaturaProductoCelcius(),carga.getCaudalLitroSegundo());

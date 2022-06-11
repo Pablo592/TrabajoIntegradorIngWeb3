@@ -1,5 +1,5 @@
 var app = angular.module('trabajoIntegrador',
-    ['ngRoute', 'ordenes', 'ui.bootstrap', 'ngStorage', 'oitozero.ngSweetAlert', 'ngStomp']);
+        ['ngRoute', 'ordenes', 'ui.bootstrap', 'ngStorage', 'oitozero.ngSweetAlert', 'ngStomp']);
 
 /*declaramos el modulo que tiene que estar escrito igual que en el tag del HTML
 y las dependencias y nombres de los modulos creados dentro del arreglo
@@ -21,6 +21,8 @@ app.run(['$rootScope', '$uibModal', 'CoreService', '$location', '$log', '$localS
         $rootScope.listaRoles = [];
 
         $rootScope.listaAlarmas = [];
+
+        $rootScope.alarmaDescripcionSeleccionada = "";
 
         let logueado = localStorage.getItem('iw3/userdata');
         let logueadoJson = JSON.parse(logueado);
@@ -85,9 +87,12 @@ app.run(['$rootScope', '$uibModal', 'CoreService', '$location', '$log', '$localS
             }
         };
 
-        $rootScope.cons = function (letras) {
-            SweetAlert.swal({
-                title: letras,
+        $rootScope.cons = function (alarm) {
+            /*console.log(alarm)
+            console.log(JSON.parse(alarm).descripcion)*/
+
+            swal({
+                title: JSON.parse(alarm).descripcion,
                 type: "success",
                 showCancelButton: false,
                 confirmButtonColor: "#DD6B55",
@@ -95,7 +100,7 @@ app.run(['$rootScope', '$uibModal', 'CoreService', '$location', '$log', '$localS
                 closeOnConfirm: true,
                 html: true
             }, function (confirm) {
-                console.log(letras)
+                console.log(alarm.descripcion) //acceder al service para el end-point --> http://localhost:8080/test/api/v1/alarmas/aceptarAlarma?token={{tokeniw3}}
             });
         }
         //$rootScope.openLoginForm();
