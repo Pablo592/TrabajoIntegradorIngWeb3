@@ -1,6 +1,10 @@
 package ar.edu.iua.iw3.negocio;
 
 import ar.edu.iua.iw3.modelo.*;
+import ar.edu.iua.iw3.modelo.Cuentas.IUsuarioNegocio;
+import ar.edu.iua.iw3.modelo.Cuentas.Rol;
+import ar.edu.iua.iw3.modelo.Cuentas.Usuario;
+import ar.edu.iua.iw3.modelo.Cuentas.UsuarioRepository;
 import ar.edu.iua.iw3.modelo.dto.CargaDTO;
 import ar.edu.iua.iw3.modelo.persistencia.CargaRepository;
 import ar.edu.iua.iw3.modelo.persistencia.OrdenRepository;
@@ -13,14 +17,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -35,6 +41,8 @@ public class CargaNegocioTest {
     private Cliente cliente;
     private Chofer chofer;
     private Producto producto;
+
+    private Usuario usuario;
     private Camion camion;
     long idOrden = 1;
     long idCarga = 2;
@@ -48,6 +56,12 @@ public class CargaNegocioTest {
     OrdenRepository ordenRepositoryMock;
     @Autowired
     OrdenNegocio ordenNegocio;
+
+    @MockBean
+    UsuarioRepository usuarioRepositoryMock;
+
+    @Autowired
+    private IUsuarioNegocio userBusiness;
 
     @Before
     public void setup_init() {
@@ -81,6 +95,10 @@ public class CargaNegocioTest {
         orden.setProducto(producto);
         orden.setCamion(camion);
         orden.setId(idOrden);
+        //
+        usuario = new Usuario();
+        usuario.setUsername("admin");
+        usuario.setPassword("123");
     }
     @Test//tercer envio caso feliz
     public void agregarCargar() throws BadRequest, EncontradoException, UnprocessableException, ConflictException, NoEncontradoException, NegocioException {
@@ -171,7 +189,7 @@ public class CargaNegocioTest {
     }
 
     @Test
-    public void enviarCargasConMismaMasaAcumulada() throws BadRequest, EncontradoException, UnprocessableException, ConflictException, NoEncontradoException, NegocioException {
+    public void enviarCargasConsecutivasConMismaMasaAcumulada(){
         carga = new Carga();
         carga.setMasaAcumuladaKg(10);
         carga.setDensidadProductoKilogramoMetroCub(454);
@@ -200,6 +218,50 @@ public class CargaNegocioTest {
         when(cargaRepositoryMock.save(carga)).thenReturn(carga);
         when(cargaRepositoryMock.getPromedioDensidadAndTemperaturaAndCaudal(orden.getId())).thenReturn(cargaDTO);   //se lo agrege
         assertThrows(UnprocessableException.class, () -> cargaNegocio.agregar(carga));
+    }
 
+    @Test
+    public void envioDeAlarmaUnicaVez() throws BadRequest, EncontradoException, UnprocessableException, ConflictException, NoEncontradoException, NegocioException {
+        carga = new Carga();
+        carga.setMasaAcumuladaKg(10);
+        carga.setDensidadProductoKilogramoMetroCub(454);
+        carga.setTemperaturaProductoCelcius(26);
+        carga.setCaudalLitroSegundo(3);
+        carga.setFechaSalidaHW(new Date());
+        carga.setOrden(orden);
+        carga.setId(idCarga);
+        carga.setFechaEntradaBackEnd(new Date());
+        //los roles del usuario
+        Rol rol = new Rol();
+        rol.setNombre("ROLE_ADMIN");
+        Set<Rol> roles = new HashSet<>();
+        roles.add(rol);
+        usuario.setRoles(roles);
+
+        Optional<Usuario> givenUsuario = Optional.of(usuario);
+
+        when(usuarioRepositoryMock.findFirstByUsernameOrEmail(usuario.getUsername(), usuario.getUsername())).thenReturn(Optional.ofNullable(usuario));
+        userBusiness.cargarPorUsernameOEmail(usuario.getUsername());
+
+
+
+        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(usuario, null, usuario.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(auth);
+
+        //given
+        Optional<Orden> givenOrden = Optional.of(orden);
+
+        //when
+
+        when(ordenRepositoryMock.findById(orden.getId())).thenReturn(givenOrden);
+        when(ordenRepositoryMock.findByCodigoExterno(orden.getCodigoExterno())).thenReturn(givenOrden);
+        when(ordenRepositoryMock.save(orden)).thenReturn(givenOrden.get());
+        when(cargaRepositoryMock.save(carga)).thenReturn(carga);
+
+        //tengo que agregar el repository de las alarmar
+        cargaNegocio.agregar(carga);
+        System.out.println(orden.isEnviarMailActivo());
+
+        //assertThrows(UnprocessableException.class, () -> cargaNegocio.agregar(carga));
     }
 }

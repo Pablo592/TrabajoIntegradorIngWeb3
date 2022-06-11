@@ -121,6 +121,7 @@ public class AlarmaNegocio implements IAlarmaNegocio {
         alarmaBD.setFechaAceptacion(alarma.getFechaAceptacion());
 
         Orden orden = alarmaBD.getOrden();
+
         orden.setEnviarMailActivo(false);
         ordenNegocio.modificar(orden);
 

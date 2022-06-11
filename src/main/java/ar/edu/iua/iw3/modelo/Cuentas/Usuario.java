@@ -209,7 +209,7 @@ public class Usuario implements UserDetails, Serializable {
 
 	
 	public String checkAccount(PasswordEncoder passwordEncoder, String password) {
-		
+		//System.out.println("password codificada:" + passwordEncoder );
 		if (!isEnabled())
 			return "ACCOUNT_NOT_ENABLED";
 		if (!isAccountNonLocked())

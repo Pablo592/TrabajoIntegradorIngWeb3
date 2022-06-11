@@ -147,7 +147,7 @@ public class CargaNegocio implements ICargaNegocio {
     }
 
 
-    private void  generarEvento(Carga carga, CargaEvent.Tipo tipo,Orden orden) throws ConflictException, NoEncontradoException, NegocioException, EncontradoException, BadRequest {
+    private void  generarEvento(Carga carga, CargaEvent.Tipo tipo,Orden orden) throws NoEncontradoException, NegocioException, EncontradoException, BadRequest {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Usuario user = (Usuario) auth.getPrincipal();
         Alarma a = new Alarma();
