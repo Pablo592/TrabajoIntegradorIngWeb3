@@ -1,6 +1,7 @@
 package ar.edu.iua.iw3.negocio;
 
 import ar.edu.iua.iw3.modelo.*;
+import ar.edu.iua.iw3.modelo.dto.CargaDTO;
 import ar.edu.iua.iw3.modelo.persistencia.CargaRepository;
 import ar.edu.iua.iw3.modelo.persistencia.OrdenRepository;
 import ar.edu.iua.iw3.negocio.excepciones.*;
@@ -14,10 +15,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
@@ -86,7 +92,6 @@ public class CargaNegocioTest {
         carga.setFechaSalidaHW(new Date());
         carga.setOrden(orden);
         carga.setId(idCarga);
-        for (int i=0;i<100000;i++){}
 
         carga.setFechaEntradaBackEnd(new Date());
 
@@ -103,7 +108,101 @@ public class CargaNegocioTest {
 
         //then
         assertEquals(idCarga,carga1.getId());
+    }
+    @Test
+    public void enviarCargaConHoraHadwareDespuesDeHoraLlegadaBackend(){
+        carga = new Carga();
+        carga.setMasaAcumuladaKg(10);
+        carga.setDensidadProductoKilogramoMetroCub(454);
+        carga.setTemperaturaProductoCelcius(25);
+        carga.setCaudalLitroSegundo(3);
+        carga.setFechaSalidaHW(new Date());
+        carga.setOrden(orden);
+        carga.setId(idCarga);
 
+        Date fechaEntradaBackEnd = new Date();
+
+        try {
+            fechaEntradaBackEnd = new SimpleDateFormat("yyyy-MM-dd").parse("2022-06-02");
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+        carga.setFechaEntradaBackEnd(fechaEntradaBackEnd);
+
+        //given
+        Optional<Orden> givenOrden = Optional.of(orden);
+
+        //when+
+        when(ordenRepositoryMock.findById(orden.getId())).thenReturn(givenOrden);
+        when(ordenRepositoryMock.findByCodigoExterno(orden.getCodigoExterno())).thenReturn(givenOrden);
+        when(ordenRepositoryMock.save(orden)).thenReturn(givenOrden.get());
+        when(cargaRepositoryMock.save(carga)).thenReturn(carga);
+
+        //then
+        assertThrows(ConflictException.class, () -> cargaNegocio.agregar(carga));
     }
 
+
+    @Test
+    public void enviarCargaConOrdenEnEstadoIncorrecto(){
+        carga = new Carga();
+        carga.setMasaAcumuladaKg(10);
+        carga.setDensidadProductoKilogramoMetroCub(454);
+        carga.setTemperaturaProductoCelcius(25);
+        carga.setCaudalLitroSegundo(3);
+        carga.setFechaSalidaHW(new Date());
+        carga.setOrden(orden);
+        carga.setId(idCarga);
+        carga.getOrden().setEstado(1);
+
+        carga.setFechaEntradaBackEnd(new Date());
+
+        //given
+        Optional<Orden> givenOrden = Optional.of(orden);
+
+        //when+
+        when(ordenRepositoryMock.findById(orden.getId())).thenReturn(givenOrden);
+        when(ordenRepositoryMock.findByCodigoExterno(orden.getCodigoExterno())).thenReturn(givenOrden);
+        when(ordenRepositoryMock.save(orden)).thenReturn(givenOrden.get());
+        when(cargaRepositoryMock.save(carga)).thenReturn(carga);
+
+        //then
+        assertThrows(UnprocessableException.class, () -> cargaNegocio.agregar(carga));
+    }
+
+    @Test
+    public void enviarCargasConMismaMasaAcumulada() throws BadRequest, EncontradoException, UnprocessableException, ConflictException, NoEncontradoException, NegocioException {
+        carga = new Carga();
+        carga.setMasaAcumuladaKg(10);
+        carga.setDensidadProductoKilogramoMetroCub(454);
+        carga.setTemperaturaProductoCelcius(25);
+        carga.setCaudalLitroSegundo(3);
+        carga.setFechaSalidaHW(new Date());
+        carga.setOrden(orden);
+        carga.setId(idCarga);
+        carga.setFechaEntradaBackEnd(new Date());
+
+        //se lo agrege
+        carga.setOrden(orden);
+        List<Carga> list = new ArrayList<Carga>();
+
+        orden.getCargaList().add(carga);
+        orden.setMasaAcumuladaKg(carga.getMasaAcumuladaKg());  //ver porque no actualiza la lista de carga en una orden
+
+
+        CargaDTO cargaDTO = new CargaDTO(carga.getDensidadProductoKilogramoMetroCub(),carga.getTemperaturaProductoCelcius(),carga.getCaudalLitroSegundo());
+
+
+        //given
+        Optional<Orden> givenOrden = Optional.of(orden);
+
+        //when+
+        when(ordenRepositoryMock.findById(orden.getId())).thenReturn(givenOrden);
+        when(ordenRepositoryMock.findByCodigoExterno(orden.getCodigoExterno())).thenReturn(givenOrden);
+        when(ordenRepositoryMock.save(orden)).thenReturn(givenOrden.get());
+        when(cargaRepositoryMock.save(carga)).thenReturn(carga);
+        when(cargaRepositoryMock.getPromedioDensidadAndTemperaturaAndCaudal(orden.getId())).thenReturn(cargaDTO);   //se lo agrege
+        assertThrows(UnprocessableException.class, () -> cargaNegocio.agregar(carga));
+
+    }
 }

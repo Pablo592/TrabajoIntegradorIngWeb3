@@ -134,7 +134,7 @@ public class Orden implements Serializable{
 	@ApiModelProperty(notes = "Las cargas de combustible introducidas en el camión")
 	@OneToMany(targetEntity=Carga.class, mappedBy= "orden",fetch = FetchType.EAGER)
 	@JsonBackReference
-	private List<Carga> cargaList = new ArrayList<Carga>();
+	public List<Carga> cargaList = new ArrayList<Carga>();
 
 	@ApiModelProperty(notes = "Temperatura maxima aceptable del combustible.", example = "21,874")
 	private float umbralTemperaturaCombustible = 25;
