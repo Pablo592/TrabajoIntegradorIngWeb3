@@ -18,6 +18,11 @@ app.config(function ($localStorageProvider) {
 app.run(['$rootScope', '$uibModal', 'CoreService', '$location', '$log', '$localStorage', '$stomp',
     function ($rootScope, $uibModal, CoreService, $location, $log, $localStorage, $stomp, SweetAlert) {
 
+        $rootScope.alarma = {
+            id: '',
+            usuarioAceptador:{"username":''},
+        };
+  
         $rootScope.listaRoles = [];
 
         $rootScope.listaAlarmas = [];
@@ -88,19 +93,45 @@ app.run(['$rootScope', '$uibModal', 'CoreService', '$location', '$log', '$localS
         };
 
         $rootScope.cons = function (alarm) {
-            /*console.log(alarm)
-            console.log(JSON.parse(alarm).descripcion)*/
+            console.log(JSON.parse(alarm))
+          /* console.log(JSON.parse(alarm).descripcion)*/
+
+            let alarmaJson = JSON.parse(alarm);
+            let mensajeAcotadoJson = alarmaJson.descripcion;
+            let mensajeAcotado = JSON.stringify(mensajeAcotadoJson);
+            let mensajeAcotado1 = mensajeAcotado.split("(codigo externo)")[1];
+            let mensajeAcotado2 = "La Orden" + mensajeAcotado1.split("con una temperatura de")[0] + "ha superado los" + 
+            mensajeAcotado1.split("con una temperatura de")[1].substring(0,mensajeAcotado1.split("con una temperatura de")[1].length - 1) 
+            + "°C de temperatura";
+          
+            $rootScope.alarma.id = alarmaJson.id;
+            $rootScope.alarma.usuarioAceptador.username = alarmaJson.autor.username;
+            
+            console.log(JSON.parse(JSON.stringify($rootScope.alarma)))
+
+
 
             swal({
-                title: JSON.parse(alarm).descripcion,
-                type: "success",
+                title: mensajeAcotado2,
+                type: "warning",
                 showCancelButton: false,
                 confirmButtonColor: "#DD6B55",
                 confirmButtonText: "Aceptar",
                 closeOnConfirm: true,
                 html: true
             }, function (confirm) {
-                console.log(alarm.descripcion) //acceder al service para el end-point --> http://localhost:8080/test/api/v1/alarmas/aceptarAlarma?token={{tokeniw3}}
+                CoreService.alarmaAceptar(JSON.stringify($rootScope.alarma)).then(
+                    //va la funcion en caso de que se hizo el request y se hizo el response todo bien
+                    function (resp) {
+                        if (resp.status == 200) { //lo deduje del console.log
+                        }
+                        console.log(resp.data);
+                    },
+                    function (err) {
+                        console.log(err.data);
+                    }
+                    //va la funcion que se ejecuta cuando no se pudo hacer el request bien
+                );
             });
         }
         //$rootScope.openLoginForm();

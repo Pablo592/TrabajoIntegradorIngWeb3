@@ -20,6 +20,9 @@ angular.module('trabajoIntegrador').factory('CoreService',function($http,URL_BAS
 		},
 		alarmas:function(p) {
             return $http.get(URL_BASE+'/alarmas/listar-author/'+p);
+        },
+		alarmaAceptar:function(alarma) {
+            return $http.put(URL_BASE+'/alarmas/aceptarAlarma', alarma);
         }
 	};
 });
