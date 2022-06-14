@@ -1,0 +1,87 @@
+<body>
+    <div ng-init="buscarConciliacion()">
+
+        <div class="consiliacionCuerpo">
+            <div class="consiliacionCelda">
+                <div class="consiliacionMensaje">
+                    Pesaje Inicial
+                </div>
+                <div class="consiliacionInformacion">
+                    {{conciliacionOrden.pesajeInicial}}
+                </div>
+            </div>
+            <div class="consiliacionCelda">
+                <div class="consiliacionMensaje">
+                    Pesaje Final
+                </div>
+                <div class="consiliacionInformacion">
+                    {{conciliacionOrden.pesajeFinal}}
+                </div>
+            </div>
+            <div class="consiliacionCelda">
+                <div class="consiliacionMensaje">
+                    Diferencia neta de pesaje final e inicial
+                </div>
+                <div class="consiliacionInformacion">
+                    {{conciliacionOrden.netoPorBalanza}}
+                </div>
+            </div>
+            <div class="consiliacionCelda">
+                <div class="consiliacionMensaje">
+                    Masa acumulada KG
+                </div>
+                <div class="consiliacionInformacion">
+                    {{conciliacionOrden.masaAcumuladaKg}}
+                </div>
+            </div>
+            <div class="consiliacionCelda">
+                <div class="consiliacionMensaje">
+                    Diferencia neta de masa acumulada
+                </div>
+                <div class="consiliacionInformacion">
+                    {{conciliacionOrden.diferenciaNetoPorBalanza_masaAcumuludada}}
+                </div>
+            </div>
+            <div class="consiliacionCelda">
+                <div class="consiliacionMensaje">
+                    Densidad promedio del producto
+                </div>
+                <div class="consiliacionInformacion">
+                    {{conciliacionOrden.promedDensidadProductoKilogramoMetroCub}}
+                </div>
+            </div>
+            <div class="consiliacionCelda">
+                <div class="consiliacionMensaje">
+                    Caudal promedio
+                </div>
+                <div class="consiliacionInformacion">
+                    {{conciliacionOrden.promedioCaudalLitroSegundo}}
+                </div>
+            </div>
+            <div class="consiliacionCelda">
+                <div class="consiliacionMensaje">
+                    Temperatura promedio del producto
+                </div>
+                <div class="consiliacionInformacion">
+                    {{conciliacionOrden.promedioTemperaturaProductoCelcius}}
+                </div>
+            </div>
+
+            <button class="consiliacionBoton" ng-click="cerrarModal()">Cerrar</button>
+        </div>
+
+    </div>
+
+</body>
+
+
+<!--
+diferenciaNetoPorBalanza_masaAcumuludada: 98082
+masaAcumuladaKg: 518
+netoPorBalanza: 98600
+pesajeFinal: 100000
+pesajeInicial: 1400
+promedDensidadProductoKilogramoMetroCub: 0.85
+promedioCaudalLitroSegundo: 0.3
+promedioTemperaturaProductoCelcius: 25.5
+-->

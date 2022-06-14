@@ -260,7 +260,6 @@
 <!--Listo todas las ordenes-->
 <br>
 <div class="scrollInferior">
-    <label class="form-check-label fuente" for="exampleRadios2">Actualizar Orden</label>
     <div class="tabla">
         <div class="encabezadoTabla">
             <div class="espacioVacio"></div>
@@ -294,7 +293,7 @@
             <div class="celda">
                 {{calculoTiempoRestante(list.ultimoCaudalLitroSegundo,list.ultimaDensidadProductoKilogramoMetroCub,list.camion.preset,list.masaAcumuladaKg)}}
             </div>
-            <div class="celda"><img class="imagen"
+            <div ng-click="openConciliacion(list)" class="celda"><img class="imagen"
                     src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvpt6spFV3pDKV36GRdIijPno83SjH9mKa_A&usqp=CAU"
                     alt=""></div>
             <div class="celda"><img class="imagen" src="https://cdn-icons-png.flaticon.com/512/58/58976.png" alt="">

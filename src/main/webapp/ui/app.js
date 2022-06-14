@@ -1,5 +1,5 @@
 var app = angular.module('trabajoIntegrador',
-        ['ngRoute', 'ordenes', 'ui.bootstrap', 'ngStorage', 'oitozero.ngSweetAlert', 'ngStomp']);
+        ['ngRoute', 'ordenes','conciliacion', 'ui.bootstrap', 'ngStorage', 'oitozero.ngSweetAlert', 'ngStomp']);
 
 /*declaramos el modulo que tiene que estar escrito igual que en el tag del HTML
 y las dependencias y nombres de los modulos creados dentro del arreglo

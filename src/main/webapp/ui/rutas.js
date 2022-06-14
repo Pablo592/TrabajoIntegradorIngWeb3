@@ -14,6 +14,11 @@ angular.module('trabajoIntegrador').config(function ($routeProvider, $locationPr
         controller: 'Ordenes'
         })
 
+        .when('/conciliacion',{
+            templateUrl : 'ui/vistas/conciliacion.html',
+            controller: 'Conciliacion'
+            })
+
         .otherwise({
         redirectTo: '/ordenes'
     });

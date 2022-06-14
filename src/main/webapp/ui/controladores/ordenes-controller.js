@@ -1,4 +1,4 @@
-angular.module('ordenes').controller('Ordenes', function($scope, OrdenesService, SweetAlert,$scope) {
+angular.module('ordenes').controller('Ordenes', function($scope, OrdenesService, SweetAlert,$scope,$uibModal,$rootScope) {
 
     $scope.orden = {
         codigoExterno: '',
@@ -212,6 +212,31 @@ angular.module('ordenes').controller('Ordenes', function($scope, OrdenesService,
         var fechaFin    = new Date(fechaF).getTime();
         return  Math.abs(fechaFin - fechaInicio)/(1000*60);
     };
+
+
+
+    $rootScope.openConciliacion = function (orden) {     // funcion para llamar al formulario de nuestro loguien desde cualquier lugar de nuestra app
+        if(orden.estado != 4)
+        return;
+
+        $rootScope.OrdenParaConciliacion = orden;
+        if (!$rootScope.conciliacionOpen) {
+      //      $uibModalInstance.dismiss(false);
+            $rootScope.conciliacionOpen = true;            //antes de abrir el modal del loguin indico que esta abierto
+            $uibModal.open({
+                animation: true,
+                backdrop: 'static',                //no se me cierra el modal sin importar que me haga click en la pantalla de atras
+                keyboard: false,
+                templateUrl: 'ui/vistas/conciliacion.html',//tengo que tener si o si este html
+                controller: 'Conciliacion', //tengo que crear este controlador
+             //   size: size
+            });
+        }
+    };
+
+
+
+
 
 
     $scope.notificacionError = function(mensaje) {

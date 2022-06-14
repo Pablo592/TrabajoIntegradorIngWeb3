@@ -49,22 +49,18 @@ public class OrdenRestController {
 
     @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping(value= "/ordenes/conciliacion/{codigoExterno}")
-    public ResponseEntity<MensajeRespuesta>  getConciliacion(@PathVariable("codigoExterno") String codigoExterno) {
+    public ResponseEntity<ConciliacionDTO>  getConciliacion(@PathVariable("codigoExterno") String codigoExterno) {
         try {
-            MensajeRespuesta r = ordenNegocio.obtenerConciliacion(codigoExterno).getMensaje();
-            return new ResponseEntity<MensajeRespuesta>(r, HttpStatus.OK);
+            return new ResponseEntity<ConciliacionDTO>(ordenNegocio.obtenerConciliacion(codigoExterno), HttpStatus.OK);
         } catch (NegocioException e) {
             log.error(e.getMessage(), e);
-            MensajeRespuesta r=new MensajeRespuesta(-1,e.getMessage());
-            return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<ConciliacionDTO>(HttpStatus.INTERNAL_SERVER_ERROR);
         }catch (NoEncontradoException e) {
             log.error(e.getMessage(), e);
-            MensajeRespuesta r=new MensajeRespuesta(-1,e.getMessage());
-            return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.NOT_FOUND);
+            return new ResponseEntity<ConciliacionDTO>(HttpStatus.NOT_FOUND);
         } catch (UnprocessableException e) {
             log.error(e.getMessage(), e);
-            MensajeRespuesta r=new MensajeRespuesta(-1,e.getMessage());
-            return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.UNPROCESSABLE_ENTITY);
+            return new ResponseEntity<ConciliacionDTO>(HttpStatus.UNPROCESSABLE_ENTITY);
         }
     }
 

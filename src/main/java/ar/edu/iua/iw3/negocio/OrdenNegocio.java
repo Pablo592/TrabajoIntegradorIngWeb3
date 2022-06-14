@@ -97,7 +97,7 @@ public class OrdenNegocio implements IOrdenNegocio{
     }
 
     @Override
-    public RespuestaGenerica<ConciliacionDTO> obtenerConciliacion(String codigoExterno) throws NegocioException, NoEncontradoException, UnprocessableException {
+    public ConciliacionDTO obtenerConciliacion(String codigoExterno) throws NegocioException, NoEncontradoException, UnprocessableException {
 
         Orden ordenBD = findByCodigoExterno(codigoExterno);
         if(null==ordenBD)
@@ -106,11 +106,7 @@ public class OrdenNegocio implements IOrdenNegocio{
             throw new UnprocessableException("Solo se puede obtener la consiliacion cuando la orden esta en estado 3 o 4");
         try{
             ConciliacionDTO conciliacionDTO = ordenDAO.getPesoInicialAndPesoFinalAndMasaAcumuladaKgAndDiferenciaMasaAcu_DeltaPeso(ordenBD.getId());
-            MensajeRespuesta m=new MensajeRespuesta();
-            RespuestaGenerica<ConciliacionDTO> r = new RespuestaGenerica<ConciliacionDTO>(conciliacionDTO, m);
-            m.setCodigo(0);
-            m.setMensaje(conciliacionDTO.toString());
-            return r;
+            return conciliacionDTO;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             throw new NegocioException(e);
