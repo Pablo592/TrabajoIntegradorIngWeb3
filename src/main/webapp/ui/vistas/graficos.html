@@ -1,0 +1,38 @@
+<div style="padding-left: 20px; padding-right: 20px">
+
+
+	<div class="panel panel-success">
+		<div class="panel-heading">
+			<div class="row">
+				<div class="col-md-10">
+					<h3 class="panel-title">{{title}}</h3>
+				</div>
+				<div class="col-md-2">
+					<button ng-click="requestRefresh()" class="btn btn-success pull-right">Pedir Datos</button>
+				</div>
+
+		</div>
+		<div class="panel-body">
+<canvas id="grafico1" class="chart-horizontal-bar"
+	chart-options="graphOptions.demo.options"
+	chart-data="graphOptions.demo.data.data"
+	chart-labels="graphOptions.demo.data.labels" height="180px" width="600px">
+</canvas>
+		</div>
+
+		<div class="panel-footer" style="text-align: center;">
+
+			<a href="http://jtblin.github.io/angular-chart.js/" target="_BLANK">Info de ChartJS/Angular</a>
+		</div>
+
+	</div>
+	
+</div>
+
+
+<script type="text/ng-template" id="notifica.html">
+    <div class="ui-notification custom-template">
+      <h3>Atención!</h3>
+      <div class="message" ng-bind-html="message"></div>
+    </div>
+</script>

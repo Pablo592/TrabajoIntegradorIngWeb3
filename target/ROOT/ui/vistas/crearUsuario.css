@@ -1,0 +1,52 @@
+.cuerpoo{
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+}
+.paquete{
+    border-style: solid;
+    border-radius: 5px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    height: 40%;
+    justify-content: center;
+    align-items: center;
+    font-size: 30px;
+    text-align: center;
+}
+
+.boton{
+    margin-top: 20px;
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    border-radius: 5px;
+    background: rgb(194, 194, 194);
+}
+
+.boton:hover{
+    background: rgb(155, 154, 154);
+}
+
+.entrada{
+    display: flex;
+    width: 100%;
+}
+
+.portaFoto{
+    justify-content: center;
+    display: flex;
+}
+
+.foto{
+    display: flex;
+    width: 50%;
+    height: 50%;    
+}
+
+.espaciado{
+    height: 20px;
+}

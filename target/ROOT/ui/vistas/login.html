@@ -1,0 +1,38 @@
+<div class="modal-header">
+    <h3 class="modal-title">{{title}}</h3>
+</div>
+<div class="cuerpoo">
+    <div class="paquete">
+
+        <div class="portaFoto">
+            <img class="foto" src="https://cdn-icons-png.flaticon.com/512/23/23159.png" alt="">
+        </div>
+        <div class="items">
+            <div class="textos">
+                <div class="col-12 item  bg-light text-dark">
+                    <label class="col-12 ">Ingrese su usuario o Email</label>
+                </div>
+            </div>
+            <div class="input-group mb-3 item entrada">
+                <input type="text" ng-model="usuario.username" class="form-control" placeholder=""
+                    aria-label="Example text with button addon" aria-describedby="button-addon1">
+            </div>
+        </div>
+        <div class="items">
+            <div class="espaciado"></div>
+            <div class="textos">
+                <div class="col-12 item  bg-light text-dark">
+                    <label class="col-12 ">Ingrese su contraseña</label>
+                </div>
+            </div>
+            <div class="input-group mb-3 item entrada">
+                <input type="password" ng-model="usuario.password" class="form-control" placeholder=""
+                    aria-label="Example text with button addon" aria-describedby="button-addon1">
+            </div>
+        </div>
+        <div class="registrase">
+            <button type="button" ng-click="login()" class="btn btn-secondary boton">Iniciar Sesión</button>
+        </div>
+        <div class="espaciado"></div>
+    </div>
+</div>

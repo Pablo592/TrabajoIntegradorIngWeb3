@@ -1,0 +1,32 @@
+angular.module('trabajoIntegrador').controller('Login',
+    function(
+        $rootScope, $scope, $localStorage,
+        $uibModalInstance, SweetAlert,
+        CoreService,$log) {
+            $scope.title="Ingreso Login";
+
+            $scope.usuario={username:"",password:""};
+            $scope.login = function() {
+                CoreService.login($scope.usuario).then(
+                    function(resp){
+                        console.log(resp)
+                        if(resp.status===200) {
+                            $localStorage.userdata=resp.data;
+                            $rootScope.listaRoles=resp.data.roles;
+                            console.log("la lista de los roles del usuario es: " + resp.data.roles)
+                            $localStorage.logged=true;
+                            $rootScope.loginOpen = false;       //lo uso como flag, antes de cerrar el modal del loguin indsico que esta cerrado
+                            $uibModalInstance.dismiss(true);  //oculto el modal
+                        }else{
+                            delete $localStorage.userdata;      // si me logueo mal borro los datos del usuario en el localstore
+                            $localStorage.logged=false;
+                            SweetAlert.swal( "Problemas autenticando",resp.data, "error");
+                        }
+                    },
+                    function(respErr){
+                        $log.log(respErr);  //me ,muestra en caso que venga un error 500
+                        SweetAlert.swal( "Problemas autenticando",respErr.data, "error");
+                    }
+                );
+            };
+        }); //End LoginFormController

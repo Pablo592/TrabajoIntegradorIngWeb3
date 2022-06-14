@@ -220,7 +220,7 @@ public class CargaNegocioTest {
         assertThrows(UnprocessableException.class, () -> cargaNegocio.agregar(carga));
     }
 
-    @Test
+  /*  @Test
     public void envioDeAlarmaUnicaVez() throws BadRequest, EncontradoException, UnprocessableException, ConflictException, NoEncontradoException, NegocioException {
         carga = new Carga();
         carga.setMasaAcumuladaKg(10);
@@ -263,5 +263,5 @@ public class CargaNegocioTest {
         System.out.println(orden.isEnviarMailActivo());
 
         //assertThrows(UnprocessableException.class, () -> cargaNegocio.agregar(carga));
-    }
+    }*/
 }

@@ -1,5 +1,5 @@
 var app = angular.module('trabajoIntegrador',
-        ['ngRoute', 'ordenes','conciliacion', 'ui.bootstrap', 'ngStorage', 'oitozero.ngSweetAlert', 'ngStomp']);
+        ['ngRoute', 'ordenes','conciliacion', 'ui.bootstrap', 'ngStorage', 'oitozero.ngSweetAlert','chart.js', 'ngStomp','graficos']);
 
 /*declaramos el modulo que tiene que estar escrito igual que en el tag del HTML
 y las dependencias y nombres de los modulos creados dentro del arreglo
@@ -9,6 +9,8 @@ angular.module('trabajoIntegrador'); --> Solo obtenemos
 */
 app.constant('URL_BASE', 'http://localhost:8080/test/api/v1');
 app.constant('URL_TOKEN', 'http://localhost:8080/test/api/v1/auth');
+app.constant('URL_WS', 'http://localhost:8080/test/api/v1/socket');
+
 
 app.config(function ($localStorageProvider) {
     $localStorageProvider.setKeyPrefix('iw3/');
