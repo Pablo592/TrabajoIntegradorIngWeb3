@@ -16,10 +16,10 @@ import org.slf4j.LoggerFactory;
 public class ScheduleEvents {
     private Logger log = LoggerFactory.getLogger(this.getClass());
 
-    @Scheduled(fixedDelay = 5*1000, initialDelay = 3000)
+  /*  @Scheduled(fixedDelay = 5*1000, initialDelay = 3000)
     public void dummy() {
     //    log.info("Ejecutando tarea");
-    }
+    }*/
 
     @Autowired
     private IAuthTokenBusiness atB;

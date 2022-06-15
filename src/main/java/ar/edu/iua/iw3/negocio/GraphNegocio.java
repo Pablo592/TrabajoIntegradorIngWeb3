@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import ar.edu.iua.iw3.modelo.Alarma;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,8 +35,17 @@ public class GraphNegocio implements IGraphNegocio {
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 		}
+	}
 
 
+	@Override
+	public void pushExistAlarma(Alarma alarma) {
+		try {
+			wSock.convertAndSend("/iw3/alarma",
+					new ChangeStateMessage<Alarma>(ChangeStateMessage.TYPE_NOTIFICA, alarma));
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+		}
 	}
 
 }

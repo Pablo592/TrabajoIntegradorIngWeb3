@@ -1,5 +1,5 @@
 var app = angular.module('trabajoIntegrador',
-        ['ngRoute', 'ordenes','conciliacion', 'ui.bootstrap', 'ngStorage', 'oitozero.ngSweetAlert','chart.js', 'ngStomp','graficos']);
+    ['ngRoute', 'ordenes', 'conciliacion', 'ui.bootstrap', 'ngStorage', 'oitozero.ngSweetAlert', 'chart.js', 'ngStomp', 'graficos']);
 
 /*declaramos el modulo que tiene que estar escrito igual que en el tag del HTML
 y las dependencias y nombres de los modulos creados dentro del arreglo
@@ -22,9 +22,9 @@ app.run(['$rootScope', '$uibModal', 'CoreService', '$location', '$log', '$localS
 
         $rootScope.alarma = {
             id: '',
-            usuarioAceptador:{"username":''},
+            usuarioAceptador: { "username": '' },
         };
-  
+
         $rootScope.listaRoles = [];
 
         $rootScope.listaAlarmas = [];
@@ -58,7 +58,6 @@ app.run(['$rootScope', '$uibModal', 'CoreService', '$location', '$log', '$localS
                 function (resp) {
                     if (resp.status == 200) { //lo deduje del console.log
                         $rootScope.listaAlarmas = resp.data;
-
                         if ($rootScope.listaAlarmas.length > 0) {
                             $rootScope.alarmas = true;
                         } else {
@@ -96,19 +95,19 @@ app.run(['$rootScope', '$uibModal', 'CoreService', '$location', '$log', '$localS
 
         $rootScope.cons = function (alarm) {
             console.log(JSON.parse(alarm))
-          /* console.log(JSON.parse(alarm).descripcion)*/
+            /* console.log(JSON.parse(alarm).descripcion)*/
 
             let alarmaJson = JSON.parse(alarm);
             let mensajeAcotadoJson = alarmaJson.descripcion;
             let mensajeAcotado = JSON.stringify(mensajeAcotadoJson);
             let mensajeAcotado1 = mensajeAcotado.split("(codigo externo)")[1];
-            let mensajeAcotado2 = "La Orden" + mensajeAcotado1.split("con una temperatura de")[0] + "ha superado los" + 
-            mensajeAcotado1.split("con una temperatura de")[1].substring(0,mensajeAcotado1.split("con una temperatura de")[1].length - 1) 
-            + "°C de temperatura";
-          
+            let mensajeAcotado2 = "La Orden" + mensajeAcotado1.split("con una temperatura de")[0] + "ha superado los" +
+                mensajeAcotado1.split("con una temperatura de")[1].substring(0, mensajeAcotado1.split("con una temperatura de")[1].length - 1)
+                + "°C de temperatura";
+
             $rootScope.alarma.id = alarmaJson.id;
             $rootScope.alarma.usuarioAceptador.username = alarmaJson.autor.username;
-            
+
             console.log(JSON.parse(JSON.stringify($rootScope.alarma)))
 
 

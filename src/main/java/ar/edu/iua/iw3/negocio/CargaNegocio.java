@@ -39,6 +39,10 @@ public class CargaNegocio implements ICargaNegocio {
     @Autowired
     private ApplicationEventPublisher appEventPublisher;
 
+    @Autowired
+    private IGraphNegocio graphService;
+
+
     @Override
     public List<Carga> listado() throws NegocioException {
         try {
@@ -155,7 +159,7 @@ public class CargaNegocio implements ICargaNegocio {
         a.setAutor(user);
         a.setDescripcion("Humbral de temperatura superado de la orden (codigo externo) " + orden.getCodigoExterno() + " con una temperatura de " + carga.getTemperaturaProductoCelcius());
         alarmaNegocio.agregar(a);
-
+        graphService.pushExistAlarma(a);
         appEventPublisher.publishEvent(new CargaEvent(carga,tipo));
     }
 

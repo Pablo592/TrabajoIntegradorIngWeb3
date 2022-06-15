@@ -49,8 +49,10 @@
 
     <script type="text/javascript" src="ui/controladores/loginController.js"></script>
     <script type="text/javascript" src="ui/controladores/conciliacionController.js"></script>
-    <script type="text/javascript" src="ui/controladores/graficosController"></script>
+    <script type="text/javascript" src="ui/controladores/graficosController.js"></script>
     <script type="text/javascript" src="ui/servicios/core-service.js"></script>
+
+
 
 
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -76,7 +78,7 @@
             </div>
             <div class="dropdown-content">
                 <select class="puntero" ng-model="alarm" ng-click="cons(alarm);" >
-                    <option ng-repeat="alarm in listaAlarmas" value="{{alarm}}">{{alarm.descripcion}}</option>
+                    <option ng-repeat="alarm in listaAlarmas track by $index" value="{{alarm}}">{{alarm.descripcion}}</option>
                 </select>
             </div>
 
