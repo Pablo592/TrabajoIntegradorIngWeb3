@@ -1,15 +1,15 @@
 angular.module('trabajoIntegrador').factory('wsService',		
 			function($rootScope, URL_WS, $timeout, $interval, $log, $localStorage) {
 
-			var fnConfig = function(stomp, topic, cb) {
+			/*var fnConfig = function(stomp, topic, cb) {
 				$log.info("Stomp: suscribiendo a " + topic);
 				stomp.subscribe(topic, function(payload, headers, res) {
 					cb(payload, headers, res);
 				});
-			};
+			};*/
 
 			return {
-				initStompClient : function(topic, cb) {
+			/*	initStompClient : function(topic, cb) {
 					
 					$rootScope.stomp.setDebug(function(args) {
 						//$log.log(args);
@@ -34,7 +34,7 @@ angular.module('trabajoIntegrador').factory('wsService',
 				stopStompClient: function() {
 					if($rootScope.stomp) 
 						$rootScope.stomp.disconnect();
-				}
+				}*/
 			}
 
 		} );

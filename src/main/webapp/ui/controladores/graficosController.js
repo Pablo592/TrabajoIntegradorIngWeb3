@@ -1,6 +1,6 @@
 angular.module('graficos').controller('GraficosController',
 	function ($scope, $log, wsService, graphService, $rootScope) {
-
+/*
 		$scope.title = 'Demostración de gráficos por WebSockets';
 
 		$scope.graphOptions = {
@@ -38,15 +38,14 @@ angular.module('graficos').controller('GraficosController',
 			});
 
 
-			wsService.initStompClient('/iw3/alarma', function (payload,
-				headers, res) {
+			wsService.initStompClient('/iw3/alarma', function (payload,headers, res) {
 				let aux = JSON.stringify($rootScope.listaAlarmas)
 				if($rootScope.listaAlarmas != "")
 				$rootScope.listaAlarmas = JSON.parse(aux.substring(0, aux.length - 1) + "," + JSON.stringify(payload.payload) + aux.substring(aux.length - 1,));
 				else{
 				$rootScope.listaAlarmas = JSON.parse("["+JSON.stringify(payload.payload)+"]");
-				$rootScope.alarmas = true;
 				}
+				$rootScope.alarmas = true;
 			
 				if (payload.type == 'GRAPH_DATA') {
 					$scope.procesaDatosGraph(payload.payload);
@@ -69,6 +68,6 @@ angular.module('graficos').controller('GraficosController',
 		$scope.$on("$destroy", function () {
 			wsService.stopStompClient();
 		});
-
+*/
 	}
 ); //End GraficosController

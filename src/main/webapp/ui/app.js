@@ -18,7 +18,7 @@ app.config(function ($localStorageProvider) {
 
 
 app.run(['$rootScope', '$uibModal', 'CoreService', '$location', '$log', '$localStorage', '$stomp',
-    function ($rootScope, $uibModal, CoreService, $location, $log, $localStorage, $stomp, SweetAlert) {
+    function ($rootScope, $uibModal, CoreService, $location, $log, $localStorage, $stomp, $scope, ) {
 
         $rootScope.alarma = {
             id: '',
@@ -110,8 +110,6 @@ app.run(['$rootScope', '$uibModal', 'CoreService', '$location', '$log', '$localS
 
             console.log(JSON.parse(JSON.stringify($rootScope.alarma)))
 
-
-
             swal({
                 title: mensajeAcotado2,
                 type: "warning",
@@ -121,6 +119,7 @@ app.run(['$rootScope', '$uibModal', 'CoreService', '$location', '$log', '$localS
                 closeOnConfirm: true,
                 html: true
             }, function (confirm) {
+                $rootScope.alarmas = false;
                 CoreService.alarmaAceptar(JSON.stringify($rootScope.alarma)).then(
                     //va la funcion en caso de que se hizo el request y se hizo el response todo bien
                     function (resp) {
@@ -133,6 +132,7 @@ app.run(['$rootScope', '$uibModal', 'CoreService', '$location', '$log', '$localS
                     }
                     //va la funcion que se ejecuta cuando no se pudo hacer el request bien
                 );
+                $rootScope.listaAlarmas = [];
             });
         }
         //$rootScope.openLoginForm();
@@ -145,6 +145,19 @@ app.run(['$rootScope', '$uibModal', 'CoreService', '$location', '$log', '$localS
             return 'ROLE_USER'
         }
 
+
+        $rootScope.iniciaWS = function () {
+            CoreService.initStompClient('/iw3/alarma', function (payload, headers, res) {
+                let aux = JSON.stringify($rootScope.listaAlarmas)
+                if ($rootScope.listaAlarmas != "")
+                    $rootScope.listaAlarmas = JSON.parse(aux.substring(0, aux.length - 1) + "," + JSON.stringify(payload.payload) + aux.substring(aux.length - 1,));
+                else
+                    $rootScope.listaAlarmas = JSON.parse("[" + JSON.stringify(payload.payload) + "]");
+                $rootScope.alarmas = true;
+                $rootScope.$apply();
+            });
+        } 
+        $rootScope.iniciaWS()
         CoreService.authInfo();
     }
 ]);
