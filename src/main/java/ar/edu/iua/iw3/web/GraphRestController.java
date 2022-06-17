@@ -17,7 +17,7 @@ public class GraphRestController {
     @GetMapping("/push")
     public void push() {
         System.out.print("HOLAAAAA EN EL SOCKET");
-        graphService.pushGraphData();
+     //   graphService.pushGraphData();
     }
 
 }

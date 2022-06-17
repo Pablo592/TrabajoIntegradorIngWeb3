@@ -1,7 +1,8 @@
 angular.module('graficos').controller('GraficosController',
-	function ($scope, $log, wsService, graphService, $rootScope) {
-/*
-		$scope.title = 'Demostración de gráficos por WebSockets';
+	function ($scope, $log, CoreService, graphService, $rootScope,$uibModalInstance) {
+
+		
+	let orden =	$rootScope.OrdenParaGrafica
 
 		$scope.graphOptions = {
 			demo: {
@@ -9,7 +10,7 @@ angular.module('graficos').controller('GraficosController',
 				data: {}
 			}
 		};
-
+		
 		$scope.procesaDatosGraph = function (datos) {
 			var labels = [];
 			var data = [];
@@ -19,39 +20,17 @@ angular.module('graficos').controller('GraficosController',
 			});
 			$scope.graphOptions.demo.data = {
 				data: data,
-				labels: labels
+				labels: labels,
 			}
 		};
 		$scope.iniciaWS = function () {
 			$log.log("iniciandoWS");
-			wsService.initStompClient('/iw3/data', function (payload,
+			CoreService.initStompClient('/iw3/data/'+orden.codigoExterno, function (payload,
 				headers, res) {
 				$log.log(payload);
 				console.log(payload);
 				if (payload.type == 'GRAPH_DATA') {
 					$scope.procesaDatosGraph(payload.payload);
-				}
-				if (payload.type == 'NOTIFICA') {
-					$scope.notificar(payload.payload.label, payload.payload.value);
-				}
-				$scope.$apply();
-			});
-
-
-			wsService.initStompClient('/iw3/alarma', function (payload,headers, res) {
-				let aux = JSON.stringify($rootScope.listaAlarmas)
-				if($rootScope.listaAlarmas != "")
-				$rootScope.listaAlarmas = JSON.parse(aux.substring(0, aux.length - 1) + "," + JSON.stringify(payload.payload) + aux.substring(aux.length - 1,));
-				else{
-				$rootScope.listaAlarmas = JSON.parse("["+JSON.stringify(payload.payload)+"]");
-				}
-				$rootScope.alarmas = true;
-			
-				if (payload.type == 'GRAPH_DATA') {
-					$scope.procesaDatosGraph(payload.payload);
-				}
-				if (payload.type == 'NOTIFICA') {
-					console.log(payload);
 				}
 				$scope.$apply();
 			});
@@ -61,13 +40,18 @@ angular.module('graficos').controller('GraficosController',
 			graphService.requestPushData();
 		};
 
-
 		$scope.iniciaWS()
 
-
 		$scope.$on("$destroy", function () {
-			wsService.stopStompClient();
+			CoreService.stopStompClient();
 		});
-*/
+
+		$scope.cerrarModal = function() {
+            $rootScope.graficaOpen = false;      
+            $uibModalInstance.dismiss(true);
+          }
+
+
+
 	}
 ); //End GraficosController

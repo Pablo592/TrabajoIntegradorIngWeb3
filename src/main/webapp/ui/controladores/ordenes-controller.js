@@ -218,7 +218,6 @@ angular.module('ordenes').controller('Ordenes', function($scope, OrdenesService,
     $rootScope.openConciliacion = function (orden) {     // funcion para llamar al formulario de nuestro loguien desde cualquier lugar de nuestra app
         if(orden.estado != 4)
         return;
-
         $rootScope.OrdenParaConciliacion = orden;
         if (!$rootScope.conciliacionOpen) {
       //      $uibModalInstance.dismiss(false);
@@ -234,9 +233,23 @@ angular.module('ordenes').controller('Ordenes', function($scope, OrdenesService,
         }
     };
 
-
-
-
+    $rootScope.openGrafica = function (orden) {     // funcion para llamar al formulario de nuestro loguien desde cualquier lugar de nuestra app
+        if(orden.estado != 2)
+        return;
+        $rootScope.OrdenParaGrafica = orden;
+        if (!$rootScope.graficaOpen) {
+      //      $uibModalInstance.dismiss(false);
+            $rootScope.graficaOpen = true;            //antes de abrir el modal del loguin indico que esta abierto
+            $uibModal.open({
+                animation: true,
+                backdrop: 'static',                //no se me cierra el modal sin importar que me haga click en la pantalla de atras
+                keyboard: false,
+                templateUrl: 'ui/vistas/graficos.html',//tengo que tener si o si este html
+                controller: 'GraficosController', //tengo que crear este controlador
+             //   size: size
+            });
+        }
+    };
 
 
     $scope.notificacionError = function(mensaje) {

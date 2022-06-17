@@ -105,6 +105,8 @@ public class CargaNegocio implements ICargaNegocio {
             orden.setEstado(3);
             ordenNegocio.modificar(orden);  //actualizo la orden
             throw new UnprocessableException("Tanque lleno");
+        }else{
+            graphService.pushGraphDataCarga(orden.getCamion().getPreset(),carga.getMasaAcumuladaKg(),orden.getCodigoExterno());
         }
 
         //obtengo y guardo los promedios de las cargas,

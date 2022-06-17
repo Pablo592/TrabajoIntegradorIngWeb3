@@ -1,5 +1,6 @@
 package ar.edu.iua.iw3.negocio;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,15 +24,14 @@ public class GraphNegocio implements IGraphNegocio {
 
 
 	@Override
-	public void pushGraphData() {
+	public void pushGraphDataCarga(double preset,float cargaAcumulada,String codigoExterno) {
 		try {
-			String[] meses = "Enero,Febrero,Marzo,Abril,Mayo,Junio,Julio,Agosto,Septiembre,Octubre,Noviembre,Diciembre"
-					.split(",");
-			List<LabelValue> valores = Arrays.stream(meses).map(mes -> {
-				return new LabelValue(mes, ((int) (Math.random() * 100)));
-			}).collect(Collectors.toList());
-			wSock.convertAndSend("/iw3/data",
-					new ChangeStateMessage<List<LabelValue>>(ChangeStateMessage.TYPE_GRAPH_DATA, valores));
+			List<LabelValue> datosCarga = new ArrayList<LabelValue>();
+			datosCarga.add(new LabelValue("Preset",preset));
+			datosCarga.add(new LabelValue("Carga Acumulada",cargaAcumulada));
+
+			wSock.convertAndSend("/iw3/data/"+codigoExterno,
+					new ChangeStateMessage<List<LabelValue>>(ChangeStateMessage.TYPE_GRAPH_DATA, datosCarga));
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 		}

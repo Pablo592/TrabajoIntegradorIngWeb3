@@ -16,11 +16,6 @@ import org.slf4j.LoggerFactory;
 public class ScheduleEvents {
     private Logger log = LoggerFactory.getLogger(this.getClass());
 
-  /*  @Scheduled(fixedDelay = 5*1000, initialDelay = 3000)
-    public void dummy() {
-    //    log.info("Ejecutando tarea");
-    }*/
-
     @Autowired
     private IAuthTokenBusiness atB;
 
@@ -32,13 +27,4 @@ public class ScheduleEvents {
             log.error(e.getMessage(),e);
         }
     }
-
-    @Autowired
-    private IGraphNegocio graphService;
-
-    @Scheduled(fixedDelay = 5000, initialDelay = 10000)
-    public void estados() {
-        graphService.pushGraphData();
-    }
-
 }

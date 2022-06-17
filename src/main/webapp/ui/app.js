@@ -150,8 +150,10 @@ app.run(['$rootScope', '$uibModal', 'CoreService', '$location', '$log', '$localS
             CoreService.initStompClient('/iw3/alarma', function (payload, headers, res) {
                 let aux = JSON.stringify($rootScope.listaAlarmas)
                 if ($rootScope.listaAlarmas != "")
+                //Esto es en caso que hayan habido alarmas antes
                     $rootScope.listaAlarmas = JSON.parse(aux.substring(0, aux.length - 1) + "," + JSON.stringify(payload.payload) + aux.substring(aux.length - 1,));
                 else
+                //Esto es en caso que no hayan habido alarmas antes
                     $rootScope.listaAlarmas = JSON.parse("[" + JSON.stringify(payload.payload) + "]");
                 $rootScope.alarmas = true;
                 $rootScope.$apply();
