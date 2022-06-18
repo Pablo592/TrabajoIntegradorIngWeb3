@@ -1,5 +1,5 @@
 angular.module('graficos').controller('GraficosController',
-	function ($scope, $log, CoreService,$rootScope, $uibModalInstance) {
+	function ($scope, $log, CoreService, $rootScope, $uibModalInstance) {
 
 		let orden = $rootScope.OrdenParaGrafica
 
@@ -58,7 +58,7 @@ angular.module('graficos').controller('GraficosController',
 			if (densidad === 0)
 				return "";
 
-			let cargaSegundo = Math.pow(caudal, -3) * densidad
+			let cargaSegundo = caudal * densidad
 			let tiempoRestante = ((preset - masa) / (cargaSegundo * 60)).toFixed(2);
 			return estado <= 2 ? tiempoRestante : "Finalizado";
 		};

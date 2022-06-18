@@ -18,7 +18,7 @@ app.config(function ($localStorageProvider) {
 
 
 app.run(['$rootScope', '$uibModal', 'CoreService', '$location', '$log', '$localStorage', '$stomp',
-    function ($rootScope, $uibModal, CoreService, $location, $log, $localStorage, $stomp, $scope, ) {
+    function ($rootScope, $uibModal, CoreService, $location, $log, $localStorage, $stomp, $scope,) {
 
         $rootScope.alarma = {
             id: '',
@@ -80,7 +80,7 @@ app.run(['$rootScope', '$uibModal', 'CoreService', '$location', '$log', '$localS
 
         $rootScope.openLoginForm = function (size) {     // funcion para llamar al formulario de nuestro loguien desde cualquier lugar de nuestra app
             if (!$rootScope.loginOpen) {
-                //$rootScope.cleanLoginData();
+                $localStorage.logged = false;
                 $rootScope.loginOpen = true;            //antes de abrir el modal del loguin indico que esta abierto
                 $uibModal.open({
                     animation: true,
@@ -150,16 +150,18 @@ app.run(['$rootScope', '$uibModal', 'CoreService', '$location', '$log', '$localS
             CoreService.initStompClient('/iw3/alarma', function (payload, headers, res) {
                 let aux = JSON.stringify($rootScope.listaAlarmas)
                 if ($rootScope.listaAlarmas != "")
-                //Esto es en caso que hayan habido alarmas antes
+                    //Esto es en caso que hayan habido alarmas antes
                     $rootScope.listaAlarmas = JSON.parse(aux.substring(0, aux.length - 1) + "," + JSON.stringify(payload.payload) + aux.substring(aux.length - 1,));
                 else
-                //Esto es en caso que no hayan habido alarmas antes
+                    //Esto es en caso que no hayan habido alarmas antes
                     $rootScope.listaAlarmas = JSON.parse("[" + JSON.stringify(payload.payload) + "]");
                 $rootScope.alarmas = true;
                 $rootScope.$apply();
             });
-        } 
-        $rootScope.iniciaWS()
+        }
+      
+       $rootScope.iniciaWS()
+       
         CoreService.authInfo();
     }
 ]);
