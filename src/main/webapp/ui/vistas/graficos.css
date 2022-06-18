@@ -1,4 +1,4 @@
-.cuerpoGrafico{
+.cuerpoGrafico {
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -8,7 +8,7 @@
     padding: 2%;
 }
 
-.sectorGrafica{
+.sectorGrafica {
     display: flex;
     width: 100%;
     height: 500px;
@@ -16,7 +16,7 @@
     justify-content: center;
 }
 
-.sectorBoton{
+.sectorBoton {
     display: flex;
     width: 100%;
     height: 100px;
@@ -24,7 +24,7 @@
     justify-content: center;
 }
 
-.botonGrafica{
+.botonGrafica {
     width: 75%;
     height: 75px;
     font-size: 40px;

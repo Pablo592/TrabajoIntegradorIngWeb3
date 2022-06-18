@@ -183,6 +183,7 @@
     overflow: auto !important;
     overflow-x: hidden;
 }
-.form-check-label{
-    width: 100%!important;
+
+.form-check-label {
+    width: 100% !important;
 }

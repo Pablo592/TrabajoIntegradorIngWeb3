@@ -1,7 +1,7 @@
-angular.module('conciliacion').factory('ConciliacionService',function($http, URL_BASE){
+angular.module('conciliacion').factory('ConciliacionService', function ($http, URL_BASE) {
     return {
-        pedirConciliacion:function(id) {
-            return $http.get(URL_BASE+'/ordenes/conciliacion/'+ id);  //el http es una interfaz de angular
+        pedirConciliacion: function (id) {
+            return $http.get(URL_BASE + '/ordenes/conciliacion/' + id);
         }
     };
 });

@@ -4,10 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="author" content="Spitale-Gaido">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="icon" type="image/png" href="/sisterna.png" sizes="32x32">
     <script type="text/javascript" src="ui/lib/angular/angular.min.js"></script>
     <script type="text/javascript" src="ui/lib/angular-route/angular-route.min.js"></script>
-
+   
 
     <link href="ui/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="ui/lib/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet">
@@ -30,8 +31,6 @@
     <script type="text/javascript" src="ui/lib/chart.js/dist/Chart.min.js"></script>
     <script type="text/javascript" src="ui/lib/angular-chart.js/dist/angular-chart.min.js"></script>
 
-
-
     <script type="text/javascript" src="ui/app.js"></script>
     <script type="text/javascript" src="ui/rutas.js"></script>
     <script type="text/javascript" src="ui/interceptores.js"></script>
@@ -39,22 +38,17 @@
     <script type="text/javascript" src="ui/modulos/ordenes-modulo.js"></script>
     <script type="text/javascript" src="ui/modulos/conciliacion-modulo.js"></script>
     <script type="text/javascript" src="ui/modulos/graficos-modulo.js"></script>
+
     <script type="text/javascript" src="ui/controladores/ordenes-controller.js"></script>
-    <script type="text/javascript" src="ui/servicios/ordenes-service.js"></script>
-    <script type="text/javascript" src="ui/servicios/conciliacion-service.js"></script>
-    <script type="text/javascript" src="ui/servicios/graficos-service.js"></script>
-
-
-
     <script type="text/javascript" src="ui/controladores/loginController.js"></script>
     <script type="text/javascript" src="ui/controladores/conciliacionController.js"></script>
     <script type="text/javascript" src="ui/controladores/graficosController.js"></script>
+
+    <script type="text/javascript" src="ui/servicios/ordenes-service.js"></script>
+    <script type="text/javascript" src="ui/servicios/conciliacion-service.js"></script>
+    <script type="text/javascript" src="ui/servicios/graficos-service.js"></script>
     <script type="text/javascript" src="ui/servicios/core-service.js"></script>
 
-
-
-
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" type="text/css" href="ui/vistas/index.css">
     <link rel="stylesheet" type="text/css" href="ui/vistas/crearUsuario.css">
     <link rel="stylesheet" type="text/css" href="ui/vistas/ordenes.css">
@@ -77,8 +71,9 @@
                 <img class="fotoNav" src="campanaNotificacion.png" alt="">
             </div>
             <div class="dropdown-content">
-                <select class="puntero" ng-model="alarm" ng-click="cons(alarm);" >
-                    <option ng-repeat="alarm in listaAlarmas track by $index" value="{{alarm}}">{{alarm.descripcion}}</option>
+                <select class="puntero" ng-model="alarm" ng-click="cons(alarm);">
+                    <option ng-repeat="alarm in listaAlarmas track by $index" value="{{alarm}}">{{alarm.descripcion}}
+                    </option>
                 </select>
             </div>
 
@@ -99,11 +94,7 @@
 </div>
 
 <body ng-app="trabajoIntegrador" style="overflow:hidden ;">
-    <!--Modulo de Angular I> -->
     <div style="height: 100%; width: 100%;" ng-view=""></div>
 </body>
 
 </html>
-
-
-<!--  <li><a ng-click = "relocate('ordenes')">Ordenes</a></li>-->

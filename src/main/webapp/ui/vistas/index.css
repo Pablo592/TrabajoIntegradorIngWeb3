@@ -4,7 +4,7 @@
     height: 80px;
     flex-direction: row;
     background-color: rgb(237, 234, 234);
-   border-style: solid;
+    border-style: solid;
     border-color: rgb(174, 174, 174);
 }
 
@@ -22,11 +22,12 @@
     margin-right: 5px;
     margin-left: 5px;
 }
-.userLog{
+
+.userLog {
     margin-top: 6px;
 }
 
-.imagenTexto{
+.imagenTexto {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -47,20 +48,21 @@
     align-items: center;
 }
 
-.bloqueNav{
+.bloqueNav {
     display: flex;
     width: 50px;
 }
 
-.bloqueNave{
+.bloqueNave {
     display: flex;
     width: 200px;
 }
 
-.bloqueNavi{
+.bloqueNavi {
     display: flex;
     width: 25px;
 }
+
 .fotoNav {
     width: 50px;
     height: 50px;
@@ -108,6 +110,6 @@
     background-color: #00A4BD;
 }
 
-.puntero{
+.puntero {
     cursor: pointer;
 }

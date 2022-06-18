@@ -257,7 +257,6 @@
         </div>
     </div>
 </div>
-<!--Listo todas las ordenes-->
 <br>
 <div class="scrollInferior">
     <div class="tabla">
@@ -278,7 +277,6 @@
             <div class="espacioVacio margenIzquierdo"></div>
         </div>
         <div class="filasTabla" ng-repeat="list in listaOrdenes">
-            <!--En esta fila va el ng-repeat-->
             <div class="espacioVacio"></div>
             <div class="celda">{{list.codigoExterno}}</div>
             <div class="celda">{{list.estado}}</div>
@@ -291,7 +289,7 @@
             <div class="celda">{{calculoTiempoTranscurrido(list.fechaPesajeInicial,list.fechaFinProcesoCarga)}}
             </div>
             <div class="celda">
-                {{calculoTiempoRestante(list.ultimoCaudalLitroSegundo,list.ultimaDensidadProductoKilogramoMetroCub,list.camion.preset,list.masaAcumuladaKg)}}
+                {{calculoTiempoRestante(list.ultimoCaudalLitroSegundo,list.ultimaDensidadProductoKilogramoMetroCub,list.camion.preset,list.masaAcumuladaKg,list.estado)}}
             </div>
             <div ng-click="openConciliacion(list)" class="celda"><img class="imagen"
                     src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvpt6spFV3pDKV36GRdIijPno83SjH9mKa_A&usqp=CAU"
