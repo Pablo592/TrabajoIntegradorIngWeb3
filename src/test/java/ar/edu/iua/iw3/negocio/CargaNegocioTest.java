@@ -6,9 +6,12 @@ import ar.edu.iua.iw3.modelo.Cuentas.Rol;
 import ar.edu.iua.iw3.modelo.Cuentas.Usuario;
 import ar.edu.iua.iw3.modelo.Cuentas.UsuarioRepository;
 import ar.edu.iua.iw3.modelo.dto.CargaDTO;
+import ar.edu.iua.iw3.modelo.persistencia.AlarmaRepository;
 import ar.edu.iua.iw3.modelo.persistencia.CargaRepository;
 import ar.edu.iua.iw3.modelo.persistencia.OrdenRepository;
 import ar.edu.iua.iw3.negocio.excepciones.*;
+import ar.edu.iua.iw3.util.MensajeRespuesta;
+import ar.edu.iua.iw3.util.RespuestaGenerica;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -41,7 +45,6 @@ public class CargaNegocioTest {
     private Cliente cliente;
     private Chofer chofer;
     private Producto producto;
-
     private Usuario usuario;
     private Camion camion;
     long idOrden = 1;
@@ -56,6 +59,11 @@ public class CargaNegocioTest {
     OrdenRepository ordenRepositoryMock;
     @Autowired
     OrdenNegocio ordenNegocio;
+
+    @MockBean
+    AlarmaRepository alarmaRepositoryMock;
+    @MockBean
+    AlarmaNegocio alarmaNegocioMock;
 
     @MockBean
     UsuarioRepository usuarioRepositoryMock;
@@ -220,7 +228,7 @@ public class CargaNegocioTest {
         assertThrows(UnprocessableException.class, () -> cargaNegocio.agregar(carga));
     }
 
-  /*  @Test
+    @Test
     public void envioDeAlarmaUnicaVez() throws BadRequest, EncontradoException, UnprocessableException, ConflictException, NoEncontradoException, NegocioException {
         carga = new Carga();
         carga.setMasaAcumuladaKg(10);
@@ -244,11 +252,27 @@ public class CargaNegocioTest {
         userBusiness.cargarPorUsernameOEmail(usuario.getUsername());
 
 
-
         UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(usuario, null, usuario.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(auth);
 
-        //given
+        //alarma
+
+        Authentication auth_aux = SecurityContextHolder.getContext().getAuthentication();
+        Usuario user = (Usuario) auth_aux.getPrincipal();
+        Alarma a = new Alarma();
+        a.setOrden(orden);
+        a.setAutor(user);
+        a.setDescripcion("Humbral de temperatura superado de la orden (codigo externo) " + orden.getCodigoExterno() + " con una temperatura de " + carga.getTemperaturaProductoCelcius());
+
+        MensajeRespuesta m = new MensajeRespuesta();
+        RespuestaGenerica<Alarma> r = new RespuestaGenerica<Alarma>(a, m);
+        m.setCodigo(0);//cero esta todo ok
+        m.setMensaje(a.toString());
+
+        when(alarmaNegocioMock.agregar(a)).thenReturn(r);
+
+
+    //given
         Optional<Orden> givenOrden = Optional.of(orden);
 
         //when
@@ -263,5 +287,5 @@ public class CargaNegocioTest {
         System.out.println(orden.isEnviarMailActivo());
 
         //assertThrows(UnprocessableException.class, () -> cargaNegocio.agregar(carga));
-    }*/
+    }
 }
