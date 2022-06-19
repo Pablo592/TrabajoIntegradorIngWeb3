@@ -26,7 +26,6 @@ app.run(['$rootScope', '$uibModal', 'CoreService', '$location', '$log', '$localS
         };
 
         $rootScope.listaRoles = [];
-
         $rootScope.listaAlarmas = [];
 
         $rootScope.alarmaDescripcionSeleccionada = "";
