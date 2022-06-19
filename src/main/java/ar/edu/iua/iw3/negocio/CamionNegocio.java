@@ -62,13 +62,9 @@ public class CamionNegocio implements ICamionNegocio{
 			throw new BadRequest();
 		}
 		else {
-			try {
-				if (null != findCamionByPatente(camion.getPatente()))
-					throw new EncontradoException("Ya existe un camion con la patente =" + camion.getPatente());
-				cargar(camion.getId());                                    // tira excepcion sino no lo encuentra
+			if (null != findCamionByPatente(camion.getPatente()))
 				throw new EncontradoException("Ya existe un camion con id=" + camion.getId());
-			} catch (NoEncontradoException e) {
-			}
+
 			try {
 				return camionDAO.save(camion);
 			} catch (Exception e) {
@@ -81,7 +77,7 @@ public class CamionNegocio implements ICamionNegocio{
 	public Camion findCamionByPatente(String patente) {
 		Optional<Camion> o = camionDAO.findByPatente(patente);
 		if(o.isPresent())
-			return  o.get();
+			return o.get();
 		return null;
 	}
 
@@ -144,6 +140,7 @@ public class CamionNegocio implements ICamionNegocio{
 
 	public Camion setearPesoFinalCamion(Orden orden) throws NoEncontradoException, NegocioException {
 		Camion camionBD = findCamionByPatente(orden.getCamion().getPatente());	//validarlo sino colocar que busque por dni
+
 		camionBD.setPesoFinalCamion(orden.getCamion().getPesoFinalCamion());
 		return modificar(camionBD);
 	}

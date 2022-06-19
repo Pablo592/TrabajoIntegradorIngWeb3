@@ -2,6 +2,7 @@ package ar.edu.iua.iw3.modelo;
 
 import ar.edu.iua.iw3.modelo.dto.ConciliacionDTO;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
@@ -136,6 +137,11 @@ public class Orden implements Serializable{
 	@JsonBackReference
 	public List<Carga> cargaList = new ArrayList<Carga>();
 
+	@ApiModelProperty(notes = "Las alarmas de una orden")
+	@OneToMany(targetEntity=Alarma.class, mappedBy= "ordenAlarma",fetch = FetchType.LAZY)
+	@JsonBackReference(value = "alarma")
+	public List<Alarma> alarmaList = new ArrayList<Alarma>();
+
 	@ApiModelProperty(notes = "Temperatura maxima aceptable del combustible.", example = "21,874")
 	private float umbralTemperaturaCombustible = 25;
 
@@ -150,6 +156,15 @@ public class Orden implements Serializable{
 	public void setUmbralTemperaturaCombustible(float umbralTemperaturaCombustible) {
 		this.umbralTemperaturaCombustible = umbralTemperaturaCombustible;
 	}
+
+	public List<Alarma> getAlarmaList() {
+		return alarmaList;
+	}
+
+	public void setAlarmaList(List<Alarma> alarmaList) {
+		this.alarmaList = alarmaList;
+	}
+
 	public long getId() {
 		return id;
 	}

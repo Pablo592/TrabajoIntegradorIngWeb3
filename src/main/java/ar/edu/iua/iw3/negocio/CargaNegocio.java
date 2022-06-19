@@ -105,6 +105,8 @@ public class CargaNegocio implements ICargaNegocio {
             orden.setEstado(3);
             ordenNegocio.modificar(orden);  //actualizo la orden
             throw new UnprocessableException("Tanque lleno");
+        }else{
+            graphService.pushGraphDataCarga(orden.getCamion().getPreset(),carga.getMasaAcumuladaKg(),orden.getCodigoExterno());
         }
 
         //obtengo y guardo los promedios de las cargas,
@@ -120,7 +122,7 @@ public class CargaNegocio implements ICargaNegocio {
         }
         //controlo que la carga acumulada actual sea mayor que la anterior, tirar excepcion
         if (!isValidoMasaAcumuadaActualCargaConLaAnterior(orden, carga))
-            throw new UnprocessableException("La masa Acumulada: "+carga.getMasaAcumuladaKg()+" actual debe ser mayor  a la masa acumulada de la carga anterior");
+            throw new UnprocessableException("La masa Acumulada actual debe ser mayor  a la masa acumulada de la carga anterior");
 
         if(carga.getTemperaturaProductoCelcius() > orden.getUmbralTemperaturaCombustible())
             generarEvento(carga, CargaEvent.Tipo.SUPERADO_UMBRAL_DE_TEMPERATURA,orden);
@@ -143,7 +145,6 @@ public class CargaNegocio implements ICargaNegocio {
         }
         if(proximoTiempoLimite.compareTo(carga.getFechaEntradaBackEnd())<0) {
             cargaNueva = cargaDAO.save(carga);
-            graphService.pushGraphDataCarga(orden.getCamion().getPreset(),carga.getMasaAcumuladaKg(),orden.getCodigoExterno());
             proximoTiempoLimite = sumarFrecuenciaConTiempo(orden.getFrecuencia(),proximoTiempoLimite);
         }
         m.setCodigo(0);
@@ -156,7 +157,7 @@ public class CargaNegocio implements ICargaNegocio {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Usuario user = (Usuario) auth.getPrincipal();
         Alarma a = new Alarma();
-        a.setOrden(orden);
+        a.setOrdenAlarma(orden);
         a.setAutor(user);
         a.setDescripcion("Humbral de temperatura superado de la orden (codigo externo) " + orden.getCodigoExterno() + " con una temperatura de " + carga.getTemperaturaProductoCelcius());
         alarmaNegocio.agregar(a);

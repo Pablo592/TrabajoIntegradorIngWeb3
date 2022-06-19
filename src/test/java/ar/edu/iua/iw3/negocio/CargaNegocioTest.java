@@ -260,7 +260,7 @@ public class CargaNegocioTest {
         Authentication auth_aux = SecurityContextHolder.getContext().getAuthentication();
         Usuario user = (Usuario) auth_aux.getPrincipal();
         Alarma a = new Alarma();
-        a.setOrden(orden);
+        a.setOrdenAlarma(orden);
         a.setAutor(user);
         a.setDescripcion("Humbral de temperatura superado de la orden (codigo externo) " + orden.getCodigoExterno() + " con una temperatura de " + carga.getTemperaturaProductoCelcius());
 

@@ -115,7 +115,7 @@ public class OrdenRestController {
     })
 
     @PreAuthorize("hasRole('ROLE_USER')")
-    @PostMapping(value= "/ordenes/primer-envio")
+    @PostMapping(value= "/ordenes/primer-envio",consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<MensajeRespuesta> agregarPrimerRequest(@RequestBody Orden orden) {
         try {
             MensajeRespuesta r=ordenNegocio.agregar(orden).getMensaje();

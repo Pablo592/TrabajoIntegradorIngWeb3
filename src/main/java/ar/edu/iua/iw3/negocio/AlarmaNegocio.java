@@ -72,7 +72,7 @@ public class AlarmaNegocio implements IAlarmaNegocio {
             throw new NoEncontradoException("No hay alarmas pertenecientes a este autor" + id);
         }
         for (Alarma a : o.get()) {
-            if (a.getOrden().isEnviarMailActivo() && (a.getFechaAceptacion() == null))
+            if (a.getOrdenAlarma().isEnviarMailActivo() && (a.getFechaAceptacion() == null))
                 alarmaActiva.add(a);
         }
 
@@ -121,7 +121,7 @@ public class AlarmaNegocio implements IAlarmaNegocio {
         alarmaBD.setUsuarioAceptador(usuarioAceptador);
         alarmaBD.setFechaAceptacion(alarma.getFechaAceptacion());
 
-        Orden orden = alarmaBD.getOrden();
+        Orden orden = alarmaBD.getOrdenAlarma();
 
         orden.setEnviarMailActivo(false);
         ordenNegocio.modificar(orden);

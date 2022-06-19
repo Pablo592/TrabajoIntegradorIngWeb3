@@ -66,7 +66,7 @@ public class Carga implements Serializable {
     private Date fechaEntradaBackEnd;
 
     @ApiModelProperty(notes = "Pueden haber muchas cargas en una orden.")
-    @ManyToOne(cascade=CascadeType.REMOVE)
+    @ManyToOne(cascade=CascadeType.MERGE)
     @JoinColumn(name = "orden_id")
     private Orden orden;
 
@@ -114,8 +114,8 @@ public class Carga implements Serializable {
         return orden;
     }
 
-    public void setOrden(Orden orden) {
-        this.orden = orden;
+    public void setOrden(Orden ordenCarga) {
+        this.orden = ordenCarga;
     }
 
     public Date getFechaSalidaHW() {

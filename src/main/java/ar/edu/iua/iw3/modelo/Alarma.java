@@ -30,10 +30,10 @@ public class Alarma {
     @JoinColumn(name = "aceptador_id")
     private Usuario usuarioAceptador;
 
-    @ApiModelProperty(notes = "Una alarma se asocia a una unica orden")
-    @OneToOne(cascade =  CascadeType.ALL)
-    @JoinColumn(name = "id_orden")
-    private Orden orden;
+    @ApiModelProperty(notes = "Muchas alarma se asocia a una unica orden")
+    @ManyToOne(cascade=CascadeType.MERGE)
+    @JoinColumn(name = "orden_id")
+    private Orden ordenAlarma;
     @ApiModelProperty(notes = "Fecha y hora en que el usuario acepta la alarma")
     private Date  fechaAceptacion;
 
@@ -89,12 +89,12 @@ public class Alarma {
         this.fechaAceptacion = fechaAceptacion;
     }
 
-    public Orden getOrden() {
-        return orden;
+    public Orden getOrdenAlarma() {
+        return ordenAlarma;
     }
 
-    public void setOrden(Orden ordenAlarma) {
-        this.orden = ordenAlarma;
+    public void setOrdenAlarma(Orden ordenAlarma) {
+        this.ordenAlarma = ordenAlarma;
     }
 
     @Override
@@ -104,7 +104,7 @@ public class Alarma {
                 ", descripcion='" + descripcion + '\'' +
                 ", autor=" + autor +
                 ", usuarioAceptador=" + usuarioAceptador +
-                ", orden=" + orden +
+                ", orden=" + ordenAlarma +
                 ", fechaAceptacion=" + fechaAceptacion +
                 ", fecha_HR_MM_registrada=" + fecha_HR_MM_registrada +
                 '}';
