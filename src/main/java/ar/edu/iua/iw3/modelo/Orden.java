@@ -5,6 +5,9 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -134,11 +137,13 @@ public class Orden implements Serializable{
 
 	@ApiModelProperty(notes = "Las cargas de combustible introducidas en el camión")
 	@OneToMany(targetEntity=Carga.class, mappedBy= "orden",fetch = FetchType.EAGER)
+	@Fetch(value = FetchMode.SUBSELECT)
 	@JsonBackReference
 	public List<Carga> cargaList = new ArrayList<Carga>();
 
 	@ApiModelProperty(notes = "Las alarmas de una orden")
-	@OneToMany(targetEntity=Alarma.class, mappedBy= "ordenAlarma",fetch = FetchType.LAZY)
+	@OneToMany(targetEntity=Alarma.class, mappedBy= "ordenAlarma",fetch = FetchType.EAGER)
+	@Fetch(value = FetchMode.SUBSELECT)
 	@JsonBackReference(value = "alarma")
 	public List<Alarma> alarmaList = new ArrayList<Alarma>();
 

@@ -91,7 +91,6 @@ public class AlarmaNegocio implements IAlarmaNegocio {
 
         m.setCodigo(0);//cero esta todo ok
         m.setMensaje(alarmaNueva.toString());
-        System.out.println(alarmaNueva.toString());
         return r;
     }
 

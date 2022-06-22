@@ -136,7 +136,7 @@ public class CargaNegocio implements ICargaNegocio {
         if (orden.getFechaInicioProcesoCarga() == null)
             orden.setFechaInicioProcesoCarga(new Date());
 
-        ordenNegocio.modificar(orden);
+        Orden nuevaOrden = ordenNegocio.modificar(orden);
         Carga cargaNueva = carga;
         //sino hay cargas en la bd entonces la tiempo inicial es
         if(listado().size()==0 || proximoTiempoLimite == null) { //en caso de que se corte la luz

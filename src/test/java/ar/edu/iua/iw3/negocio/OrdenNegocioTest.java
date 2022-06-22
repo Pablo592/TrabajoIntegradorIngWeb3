@@ -31,13 +31,18 @@ public class OrdenNegocioTest {
     private Chofer chofer;
     private Producto producto;
     private Camion camion;
+    private Carga carga;
 
     long id = 1;
 
     @MockBean
     OrdenRepository ordenRepositoryMock;
+    @MockBean
+    CamionNegocio camionNegocioMock;
     @Autowired
     OrdenNegocio ordenNegocio;
+    @Autowired
+    CamionNegocio camionNegocio;
 
     @Before
     public  void setup_init() {
@@ -248,6 +253,44 @@ public class OrdenNegocioTest {
 
         //System.out.println(ordenNegocio.establecerPesajeInicial(orden).getMensaje().getMensaje()); //Solo se puede pasar a estado 2 las ordenes en estado 1
     }
+
+    /*@Test   //caso feliz
+    public void frenarCarga() throws BadRequest, ConflictException, NoEncontradoException, NegocioException {
+        double taraCamion = 5000;
+        Date fechaPesoInicial = new Date();
+        orden.setEstado(3);
+        orden.setFechaPesajeInicial(fechaPesoInicial);
+        orden.getCamion().setTara(taraCamion);
+
+
+        //carga
+        carga = new Carga();
+        carga.setMasaAcumuladaKg((float) camion.getPreset());
+        carga.setDensidadProductoKilogramoMetroCub(454);
+        carga.setTemperaturaProductoCelcius(25);
+        carga.setCaudalLitroSegundo(3);
+        carga.setFechaSalidaHW(new Date());
+        carga.setOrden(orden);
+        carga.setId(id);
+        carga.setFechaEntradaBackEnd(new Date());
+
+        camion.setPesoFinalCamion(camion.getPreset());
+
+        //given
+        Optional<Orden> givenOrden = Optional.of(orden);
+        //when
+        when(ordenRepositoryMock.findByCodigoExterno(orden.getCodigoExterno())).thenReturn(givenOrden);
+        when(camionNegocioMock.setearPesoFinalCamion(orden)).thenReturn(camion);
+        when(ordenRepositoryMock.save(orden)).thenReturn(givenOrden.get());
+        when(ordenRepositoryMock.findById(orden.getId())).thenReturn(givenOrden);
+
+        Orden orden1 = ordenNegocio.establecerPesajeInicial(orden).getEntidad();
+        //then
+        assertEquals(id,orden1.getId());
+        assertEquals(4,orden1.getEstado());
+        assertEquals(camion.getPesoFinalCamion(),orden1.getCamion().getPesoFinalCamion());
+
+       }*/
 
 
 }

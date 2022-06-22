@@ -32,6 +32,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
@@ -96,7 +97,7 @@ public class CargaNegocioTest {
         camion.setPatente("ad123as");
         camion.setCisternadoLitros(1000);
         camion.setPreset(3000);
-        camion.setTara(5000);
+        camion.setTara(2000);
         ///////
         orden.setCliente(cliente);
         orden.setChofer(chofer);
@@ -107,9 +108,7 @@ public class CargaNegocioTest {
         usuario = new Usuario();
         usuario.setUsername("admin");
         usuario.setPassword("123");
-    }
-    @Test//tercer envio caso feliz
-    public void agregarCargar() throws BadRequest, EncontradoException, UnprocessableException, ConflictException, NoEncontradoException, NegocioException {
+        //carga
         carga = new Carga();
         carga.setMasaAcumuladaKg(10);
         carga.setDensidadProductoKilogramoMetroCub(454);
@@ -118,12 +117,13 @@ public class CargaNegocioTest {
         carga.setFechaSalidaHW(new Date());
         carga.setOrden(orden);
         carga.setId(idCarga);
-
         carga.setFechaEntradaBackEnd(new Date());
 
+    }
+    @Test//tercer envio caso feliz
+    public void agregarCargar() throws BadRequest, EncontradoException, UnprocessableException, ConflictException, NoEncontradoException, NegocioException {
         //given
         Optional<Orden> givenOrden = Optional.of(orden);
-
         //when+
         when(ordenRepositoryMock.findById(orden.getId())).thenReturn(givenOrden);
         when(ordenRepositoryMock.findByCodigoExterno(orden.getCodigoExterno())).thenReturn(givenOrden);
@@ -137,15 +137,6 @@ public class CargaNegocioTest {
     }
     @Test
     public void enviarCargaConHoraHadwareDespuesDeHoraLlegadaBackend(){
-        carga = new Carga();
-        carga.setMasaAcumuladaKg(10);
-        carga.setDensidadProductoKilogramoMetroCub(454);
-        carga.setTemperaturaProductoCelcius(25);
-        carga.setCaudalLitroSegundo(3);
-        carga.setFechaSalidaHW(new Date());
-        carga.setOrden(orden);
-        carga.setId(idCarga);
-
         Date fechaEntradaBackEnd = new Date();
 
         try {
@@ -158,7 +149,7 @@ public class CargaNegocioTest {
         //given
         Optional<Orden> givenOrden = Optional.of(orden);
 
-        //when+
+        //when
         when(ordenRepositoryMock.findById(orden.getId())).thenReturn(givenOrden);
         when(ordenRepositoryMock.findByCodigoExterno(orden.getCodigoExterno())).thenReturn(givenOrden);
         when(ordenRepositoryMock.save(orden)).thenReturn(givenOrden.get());
@@ -171,18 +162,7 @@ public class CargaNegocioTest {
 
     @Test
     public void enviarCargaConOrdenEnEstadoIncorrecto(){
-        carga = new Carga();
-        carga.setMasaAcumuladaKg(10);
-        carga.setDensidadProductoKilogramoMetroCub(454);
-        carga.setTemperaturaProductoCelcius(25);
-        carga.setCaudalLitroSegundo(3);
-        carga.setFechaSalidaHW(new Date());
-        carga.setOrden(orden);
-        carga.setId(idCarga);
         carga.getOrden().setEstado(1);
-
-        carga.setFechaEntradaBackEnd(new Date());
-
         //given
         Optional<Orden> givenOrden = Optional.of(orden);
 
@@ -198,23 +178,10 @@ public class CargaNegocioTest {
 
     @Test
     public void enviarCargasConsecutivasConMismaMasaAcumulada(){
-        carga = new Carga();
-        carga.setMasaAcumuladaKg(10);
-        carga.setDensidadProductoKilogramoMetroCub(454);
-        carga.setTemperaturaProductoCelcius(25);
-        carga.setCaudalLitroSegundo(3);
-        carga.setFechaSalidaHW(new Date());
-        carga.setOrden(orden);
-        carga.setId(idCarga);
-        carga.setFechaEntradaBackEnd(new Date());
-
-        carga.setOrden(orden);
         orden.getCargaList().add(carga);
         orden.setMasaAcumuladaKg(carga.getMasaAcumuladaKg());
 
-
         CargaDTO cargaDTO = new CargaDTO(carga.getDensidadProductoKilogramoMetroCub(),carga.getTemperaturaProductoCelcius(),carga.getCaudalLitroSegundo());
-
 
         //given
         Optional<Orden> givenOrden = Optional.of(orden);
@@ -229,34 +196,21 @@ public class CargaNegocioTest {
     }
 
     @Test
-    public void envioDeAlarmaUnicaVez() throws BadRequest, EncontradoException, UnprocessableException, ConflictException, NoEncontradoException, NegocioException {
-        carga = new Carga();
-        carga.setMasaAcumuladaKg(10);
-        carga.setDensidadProductoKilogramoMetroCub(454);
+    public void generarUnicaAlarmaYEnviarMail() throws BadRequest, EncontradoException, UnprocessableException, ConflictException, NoEncontradoException, NegocioException {
         carga.setTemperaturaProductoCelcius(26);
-        carga.setCaudalLitroSegundo(3);
-        carga.setFechaSalidaHW(new Date());
-        carga.setOrden(orden);
-        carga.setId(idCarga);
-        carga.setFechaEntradaBackEnd(new Date());
         //los roles del usuario
         Rol rol = new Rol();
         rol.setNombre("ROLE_ADMIN");
         Set<Rol> roles = new HashSet<>();
         roles.add(rol);
         usuario.setRoles(roles);
-
-        Optional<Usuario> givenUsuario = Optional.of(usuario);
-
+        //SIMULAMOS UN LOGUIN
         when(usuarioRepositoryMock.findFirstByUsernameOrEmail(usuario.getUsername(), usuario.getUsername())).thenReturn(Optional.ofNullable(usuario));
-        userBusiness.cargarPorUsernameOEmail(usuario.getUsername());
-
-
+        //userBusiness.cargarPorUsernameOEmail(usuario.getUsername());
         UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(usuario, null, usuario.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(auth);
 
         //alarma
-
         Authentication auth_aux = SecurityContextHolder.getContext().getAuthentication();
         Usuario user = (Usuario) auth_aux.getPrincipal();
         Alarma a = new Alarma();
@@ -271,21 +225,33 @@ public class CargaNegocioTest {
 
         when(alarmaNegocioMock.agregar(a)).thenReturn(r);
 
-
-    //given
+        //given
         Optional<Orden> givenOrden = Optional.of(orden);
 
         //when
-
         when(ordenRepositoryMock.findById(orden.getId())).thenReturn(givenOrden);
         when(ordenRepositoryMock.findByCodigoExterno(orden.getCodigoExterno())).thenReturn(givenOrden);
         when(ordenRepositoryMock.save(orden)).thenReturn(givenOrden.get());
         when(cargaRepositoryMock.save(carga)).thenReturn(carga);
 
-        //tengo que agregar el repository de las alarmar
-        cargaNegocio.agregar(carga);
-        System.out.println(orden.isEnviarMailActivo());
-
-        //assertThrows(UnprocessableException.class, () -> cargaNegocio.agregar(carga));
+        assertNotEquals(-1, cargaNegocio.agregar(carga).getMensaje().getCodigo());  //el -1 indica que se produjo un error
+        assertEquals(true, orden.isEnviarMailActivo());
     }
+
+
+    @Test
+    public void tanqueLleno() throws BadRequest, EncontradoException, UnprocessableException, ConflictException, NoEncontradoException, NegocioException {
+        //given
+        Optional<Orden> givenOrden = Optional.of(orden);
+        carga.setMasaAcumuladaKg((float) (camion.getPreset()+1));
+        //when
+        when(ordenRepositoryMock.findById(orden.getId())).thenReturn(givenOrden);
+        when(ordenRepositoryMock.findByCodigoExterno(orden.getCodigoExterno())).thenReturn(givenOrden);
+        when(ordenRepositoryMock.save(orden)).thenReturn(givenOrden.get());
+        when(cargaRepositoryMock.save(carga)).thenReturn(carga);
+
+        //then
+        assertThrows(UnprocessableException.class, () -> cargaNegocio.agregar(carga));
+    }
+
 }
