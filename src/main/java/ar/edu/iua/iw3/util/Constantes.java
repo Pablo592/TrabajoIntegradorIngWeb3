@@ -11,9 +11,7 @@ public final class Constantes {
 	public static final String URL_CARGAS = URL_BASE+ "/cargas";
 	public static final String URL_CHOFER = URL_BASE+ "/choferes";
 	public static final String URL_CLIENTE = URL_BASE+ "/clientes";
-	public static final String URL_SOCKET_GRAFICOS = URL_BASE+ "/socket/graficos";
 	public static final String URL_SOCKET = URL_BASE+ "/socket";
-
 	public static final String URL_LOGIN_TOKEN_CON_DATOS = "/login-json";
 	public static final String URL_LOGIN_SOLO_TOKEN = "/login";
 	public static final String URL_AUTH_INFO = "/auth-info";

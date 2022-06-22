@@ -1,6 +1,7 @@
 package ar.edu.iua.iw3.negocio;
 
 import ar.edu.iua.iw3.modelo.*;
+import ar.edu.iua.iw3.modelo.dto.ConciliacionDTO;
 import ar.edu.iua.iw3.modelo.persistencia.OrdenRepository;
 import ar.edu.iua.iw3.negocio.excepciones.*;
 import org.junit.Before;
@@ -254,18 +255,19 @@ public class OrdenNegocioTest {
         //System.out.println(ordenNegocio.establecerPesajeInicial(orden).getMensaje().getMensaje()); //Solo se puede pasar a estado 2 las ordenes en estado 1
     }
 
-    /*@Test   //caso feliz
-    public void frenarCarga() throws BadRequest, ConflictException, NoEncontradoException, NegocioException {
+    @Test   //caso feliz
+    public void frenarCarga() throws NoEncontradoException, NegocioException, UnprocessableException {
         double taraCamion = 5000;
         Date fechaPesoInicial = new Date();
-        orden.setEstado(3);
+        orden.setEstado(2);
         orden.setFechaPesajeInicial(fechaPesoInicial);
         orden.getCamion().setTara(taraCamion);
+        orden.setMasaAcumuladaKg(1500);
 
 
         //carga
         carga = new Carga();
-        carga.setMasaAcumuladaKg((float) camion.getPreset());
+        carga.setMasaAcumuladaKg(/*(float) camion.getPreset()*/1500);
         carga.setDensidadProductoKilogramoMetroCub(454);
         carga.setTemperaturaProductoCelcius(25);
         carga.setCaudalLitroSegundo(3);
@@ -280,17 +282,225 @@ public class OrdenNegocioTest {
         Optional<Orden> givenOrden = Optional.of(orden);
         //when
         when(ordenRepositoryMock.findByCodigoExterno(orden.getCodigoExterno())).thenReturn(givenOrden);
-        when(camionNegocioMock.setearPesoFinalCamion(orden)).thenReturn(camion);
         when(ordenRepositoryMock.save(orden)).thenReturn(givenOrden.get());
         when(ordenRepositoryMock.findById(orden.getId())).thenReturn(givenOrden);
-
-        Orden orden1 = ordenNegocio.establecerPesajeInicial(orden).getEntidad();
+        Orden orden1 = ordenNegocio.frenarCargar(orden.getCodigoExterno()).getEntidad();
         //then
-        assertEquals(id,orden1.getId());
-        assertEquals(4,orden1.getEstado());
-        assertEquals(camion.getPesoFinalCamion(),orden1.getCamion().getPesoFinalCamion());
-
-       }*/
+        assertEquals(3,orden1.getEstado());
+        assertEquals(carga.getMasaAcumuladaKg(),orden1.getMasaAcumuladaKg());
+       }
 
 
+    @Test   //caso con estado incorrecto
+    public void frenarCargaSinEstadoDos() {
+        double taraCamion = 5000;
+        Date fechaPesoInicial = new Date();
+        orden.setEstado(3);
+        orden.setFechaPesajeInicial(fechaPesoInicial);
+        orden.getCamion().setTara(taraCamion);
+        orden.setMasaAcumuladaKg(1500);
+
+
+        //carga
+        carga = new Carga();
+        carga.setMasaAcumuladaKg(/*(float) camion.getPreset()*/1500);
+        carga.setDensidadProductoKilogramoMetroCub(454);
+        carga.setTemperaturaProductoCelcius(25);
+        carga.setCaudalLitroSegundo(3);
+        carga.setFechaSalidaHW(new Date());
+        carga.setOrden(orden);
+        carga.setId(id);
+        carga.setFechaEntradaBackEnd(new Date());
+
+        camion.setPesoFinalCamion(camion.getPreset());
+
+        //given
+        Optional<Orden> givenOrden = Optional.of(orden);
+        //when
+        when(ordenRepositoryMock.findByCodigoExterno(orden.getCodigoExterno())).thenReturn(givenOrden);
+        when(ordenRepositoryMock.save(orden)).thenReturn(givenOrden.get());
+        when(ordenRepositoryMock.findById(orden.getId())).thenReturn(givenOrden);
+        //then
+        assertThrows(UnprocessableException.class, () -> ordenNegocio.frenarCargar(orden.getCodigoExterno()));
+    }
+
+
+    @Test   //caso con orden incorrecta
+    public void frenarCargaConOrdenIncorrecta() {
+        double taraCamion = 5000;
+        Date fechaPesoInicial = new Date();
+        orden.setEstado(3);
+        orden.setFechaPesajeInicial(fechaPesoInicial);
+        orden.getCamion().setTara(taraCamion);
+        orden.setMasaAcumuladaKg(1500);
+
+
+        //carga
+        carga = new Carga();
+        carga.setMasaAcumuladaKg(/*(float) camion.getPreset()*/1500);
+        carga.setDensidadProductoKilogramoMetroCub(454);
+        carga.setTemperaturaProductoCelcius(25);
+        carga.setCaudalLitroSegundo(3);
+        carga.setFechaSalidaHW(new Date());
+        carga.setOrden(orden);
+        carga.setId(id);
+        carga.setFechaEntradaBackEnd(new Date());
+
+        Orden ordenAux = new Orden();
+        ordenAux.setCodigoExterno("5");
+
+        camion.setPesoFinalCamion(camion.getPreset());
+
+        //given
+        Optional<Orden> givenOrden = Optional.of(orden);
+        //when
+        when(ordenRepositoryMock.findByCodigoExterno(ordenAux.getCodigoExterno())).thenReturn(givenOrden);
+        when(ordenRepositoryMock.save(orden)).thenReturn(givenOrden.get());
+        when(ordenRepositoryMock.findById(orden.getId())).thenReturn(givenOrden);
+        //then
+        assertThrows(NoEncontradoException.class, () -> ordenNegocio.frenarCargar(orden.getCodigoExterno()));
+    }
+
+
+    @Test   //caso feliz
+    public void conciliacion() throws UnprocessableException, NoEncontradoException, NegocioException {
+        double taraCamion = 5000;
+        Date fechaPesoInicial = new Date();
+        orden.setEstado(3);
+        orden.setFechaPesajeInicial(fechaPesoInicial);
+        orden.getCamion().setTara(taraCamion);
+        orden.setMasaAcumuladaKg(1500);
+        camion.setTara(1000);
+        camion.setPesoFinalCamion(3000);
+
+        //carga
+        carga = new Carga();
+        carga.setMasaAcumuladaKg(/*(float) camion.getPreset()*/1500);
+        carga.setDensidadProductoKilogramoMetroCub(454);
+        carga.setTemperaturaProductoCelcius(25);
+        carga.setCaudalLitroSegundo(3);
+        carga.setFechaSalidaHW(new Date());
+        carga.setOrden(orden);
+        carga.setId(id);
+        carga.setFechaEntradaBackEnd(new Date());
+
+        //conciliacionDTO
+        ConciliacionDTO conciliacionDTO = new ConciliacionDTO(
+                (float)camion.getTara(),
+                (float)camion.getPesoFinalCamion(),
+                carga.getMasaAcumuladaKg(),
+                (float)(camion.getPesoFinalCamion() - camion.getTara()),
+                (float)((camion.getPesoFinalCamion() - camion.getTara()) - carga.getMasaAcumuladaKg()),
+                orden.getPromedDensidadProductoKilogramoMetroCub(),
+                orden.getPromedioTemperaturaProductoCelcius(),
+                orden.getPromedioCaudalLitroSegundo()
+        );
+
+
+        //given
+        Optional<Orden> givenOrden = Optional.of(orden);
+        //when
+        when(ordenRepositoryMock.findByCodigoExterno(orden.getCodigoExterno())).thenReturn(givenOrden);
+        when(ordenRepositoryMock.getPesoInicialAndPesoFinalAndMasaAcumuladaKgAndDiferenciaMasaAcu_DeltaPeso(orden.getId())).thenReturn(conciliacionDTO);
+        when(ordenRepositoryMock.findById(orden.getId())).thenReturn(givenOrden);
+        //then
+
+        ConciliacionDTO conciliacion = ordenNegocio.obtenerConciliacion(orden.getCodigoExterno());
+        assertEquals(conciliacionDTO,conciliacion);
+    }
+
+    @Test   //caso cuando no existe la orden
+    public void conciliacionOrdenNoExistente() throws UnprocessableException, NoEncontradoException, NegocioException {
+        double taraCamion = 5000;
+        Date fechaPesoInicial = new Date();
+        orden.setEstado(3);
+        orden.setFechaPesajeInicial(fechaPesoInicial);
+        orden.getCamion().setTara(taraCamion);
+        orden.setMasaAcumuladaKg(1500);
+        camion.setTara(1000);
+        camion.setPesoFinalCamion(3000);
+
+        //carga
+        carga = new Carga();
+        carga.setMasaAcumuladaKg(/*(float) camion.getPreset()*/1500);
+        carga.setDensidadProductoKilogramoMetroCub(454);
+        carga.setTemperaturaProductoCelcius(25);
+        carga.setCaudalLitroSegundo(3);
+        carga.setFechaSalidaHW(new Date());
+        carga.setOrden(orden);
+        carga.setId(id);
+        carga.setFechaEntradaBackEnd(new Date());
+
+        Orden ordenAux = new Orden();
+        ordenAux.setCodigoExterno("5");
+
+        //conciliacionDTO
+        ConciliacionDTO conciliacionDTO = new ConciliacionDTO(
+                (float)camion.getTara(),
+                (float)camion.getPesoFinalCamion(),
+                carga.getMasaAcumuladaKg(),
+                (float)(camion.getPesoFinalCamion() - camion.getTara()),
+                (float)((camion.getPesoFinalCamion() - camion.getTara()) - carga.getMasaAcumuladaKg()),
+                orden.getPromedDensidadProductoKilogramoMetroCub(),
+                orden.getPromedioTemperaturaProductoCelcius(),
+                orden.getPromedioCaudalLitroSegundo()
+        );
+
+
+        //given
+        Optional<Orden> givenOrden = Optional.of(orden);
+        //when
+        when(ordenRepositoryMock.findByCodigoExterno(ordenAux.getCodigoExterno())).thenReturn(givenOrden);
+        when(ordenRepositoryMock.getPesoInicialAndPesoFinalAndMasaAcumuladaKgAndDiferenciaMasaAcu_DeltaPeso(orden.getId())).thenReturn(conciliacionDTO);
+        when(ordenRepositoryMock.findById(orden.getId())).thenReturn(givenOrden);
+        //then
+
+        assertThrows(NoEncontradoException.class, () -> ordenNegocio.obtenerConciliacion(orden.getCodigoExterno()));
+    }
+
+    @Test   //caso cuando el estado ni 3 ni 4
+    public void conciliacionEstadoIncorrecto() throws UnprocessableException, NoEncontradoException, NegocioException {
+        double taraCamion = 5000;
+        Date fechaPesoInicial = new Date();
+        orden.setEstado(2);
+        orden.setFechaPesajeInicial(fechaPesoInicial);
+        orden.getCamion().setTara(taraCamion);
+        orden.setMasaAcumuladaKg(1500);
+        camion.setTara(1000);
+        camion.setPesoFinalCamion(3000);
+
+        //carga
+        carga = new Carga();
+        carga.setMasaAcumuladaKg(/*(float) camion.getPreset()*/1500);
+        carga.setDensidadProductoKilogramoMetroCub(454);
+        carga.setTemperaturaProductoCelcius(25);
+        carga.setCaudalLitroSegundo(3);
+        carga.setFechaSalidaHW(new Date());
+        carga.setOrden(orden);
+        carga.setId(id);
+        carga.setFechaEntradaBackEnd(new Date());
+
+        //conciliacionDTO
+        ConciliacionDTO conciliacionDTO = new ConciliacionDTO(
+                (float)camion.getTara(),
+                (float)camion.getPesoFinalCamion(),
+                carga.getMasaAcumuladaKg(),
+                (float)(camion.getPesoFinalCamion() - camion.getTara()),
+                (float)((camion.getPesoFinalCamion() - camion.getTara()) - carga.getMasaAcumuladaKg()),
+                orden.getPromedDensidadProductoKilogramoMetroCub(),
+                orden.getPromedioTemperaturaProductoCelcius(),
+                orden.getPromedioCaudalLitroSegundo()
+        );
+
+
+        //given
+        Optional<Orden> givenOrden = Optional.of(orden);
+        //when
+        when(ordenRepositoryMock.findByCodigoExterno(orden.getCodigoExterno())).thenReturn(givenOrden);
+        when(ordenRepositoryMock.getPesoInicialAndPesoFinalAndMasaAcumuladaKgAndDiferenciaMasaAcu_DeltaPeso(orden.getId())).thenReturn(conciliacionDTO);
+        when(ordenRepositoryMock.findById(orden.getId())).thenReturn(givenOrden);
+        //then
+
+        assertThrows(UnprocessableException.class, () -> ordenNegocio.obtenerConciliacion(orden.getCodigoExterno()));
+    }
 }
