@@ -83,11 +83,12 @@ public class OrdenNegocio implements IOrdenNegocio{
             throw new NoEncontradoException("No existe la orden con codigo externo =" + orden.getCodigoExterno());
         if(ordenBD.getEstado()!=3)
             throw new UnprocessableException("Solo se puede establecer el pesaje final solo si el estado es 3");
-        camionNegocio.setearPesoFinalCamion(orden);
         try{
+            camionNegocio.setearPesoFinalCamion(orden);
             MensajeRespuesta m=new MensajeRespuesta();
             RespuestaGenerica<Orden> r = new RespuestaGenerica<Orden>(ordenBD, m);
             ordenBD.setEstado(4);
+            ordenBD.getCamion().setPesoFinalCamion(orden.getCamion().getPesoFinalCamion());
             ordenBD.setFechaRecepcionPesajeFinal(new Date());
             Orden ordenNueva = modificar(ordenBD);
             m.setCodigo(0);
