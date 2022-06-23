@@ -52,7 +52,7 @@ public class Usuario implements UserDetails, Serializable {
 
 
 	@ApiModelProperty(notes = "Un usuario puede crear varias alarmas")
-	@OneToMany(targetEntity= Alarma.class, mappedBy= "autor", fetch = FetchType.LAZY)
+	@OneToMany(targetEntity= Alarma.class, mappedBy= "autor", fetch = FetchType.EAGER)
 	@JsonBackReference (value = "alarmaList")
 	private List<Alarma> alarmaList;
 

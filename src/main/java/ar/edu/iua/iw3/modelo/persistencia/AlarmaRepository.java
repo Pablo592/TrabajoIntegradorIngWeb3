@@ -8,4 +8,5 @@ import java.util.Optional;
 
 public interface AlarmaRepository extends JpaRepository<Alarma, Long> {
     Optional<List<Alarma>> findAllByAutor_Id(int id);
+    Optional<List<Alarma>> findByOrdenAlarma_Id(long id);
 }

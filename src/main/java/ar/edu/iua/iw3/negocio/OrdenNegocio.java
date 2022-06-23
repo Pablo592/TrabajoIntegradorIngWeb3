@@ -31,6 +31,9 @@ public class OrdenNegocio implements IOrdenNegocio{
     @Autowired
     private CargaNegocio cargaNegocio;
 
+    @Autowired
+    private AlarmaNegocio alarmaNegocio;
+
     @Override
     public List<Orden> listado() throws NegocioException {
         try {
@@ -230,6 +233,17 @@ public class OrdenNegocio implements IOrdenNegocio{
     public void eliminar(long id) throws NegocioException, NoEncontradoException {
         Orden o = cargar(id);
         try {
+            Orden orden = cargar(id);
+            List<Alarma> alarmas = alarmaNegocio.listarPorOrden(id);
+            for (Alarma a:alarmas) {
+                alarmaNegocio.eliminar(a.getId());
+            }
+          /*  for (Alarma a:orden.getAlarmaList()) {
+                alarmaNegocio.eliminar(a.getId());
+            }*/
+            for (Carga c:orden.getCargaList()) {
+                cargaNegocio.eliminar(c.getId());
+            }
             ordenDAO.deleteById(id);
         } catch (Exception e) {
             log.error(e.getMessage(), e);

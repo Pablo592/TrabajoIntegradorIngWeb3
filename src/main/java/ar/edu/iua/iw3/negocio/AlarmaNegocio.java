@@ -43,6 +43,21 @@ public class AlarmaNegocio implements IAlarmaNegocio {
         }
     }
 
+    public List<Alarma> listarPorOrden(long id) throws NegocioException, NoEncontradoException {
+        Optional<List<Alarma>> o;
+        try {
+            o = alarmaDAO.findByOrdenAlarma_Id(id);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            throw new NegocioException(e);
+        }
+        if (!o.isPresent()) {
+            throw new NoEncontradoException("No se encuentra la orden con id=" + id);
+        }
+        return o.get();
+    }
+
+
     @Override
     public Alarma cargar(long id) throws NegocioException, NoEncontradoException {
         Optional<Alarma> o;
