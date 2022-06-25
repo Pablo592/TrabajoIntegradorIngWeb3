@@ -2,6 +2,7 @@ package ar.edu.iua.iw3.negocio;
 
 import ar.edu.iua.iw3.modelo.*;
 import ar.edu.iua.iw3.modelo.dto.ConciliacionDTO;
+import ar.edu.iua.iw3.modelo.persistencia.CamionRepository;
 import ar.edu.iua.iw3.modelo.persistencia.OrdenRepository;
 import ar.edu.iua.iw3.negocio.excepciones.*;
 import org.junit.Before;
@@ -23,7 +24,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 @RunWith(SpringRunner.class)
-//@ActiveProfiles("mysqldev")
 @SpringBootTest //lo utilizo para indicar que son test de negocio
 public class OrdenNegocioTest {
     private Logger log = LoggerFactory.getLogger(this.getClass());
@@ -40,6 +40,8 @@ public class OrdenNegocioTest {
     OrdenRepository ordenRepositoryMock;
     @MockBean
     CamionNegocio camionNegocioMock;
+    @MockBean
+    CamionRepository camionRepositoryMock;
     @Autowired
     OrdenNegocio ordenNegocio;
     @Autowired
@@ -178,7 +180,6 @@ public class OrdenNegocioTest {
         assertEquals(fechaPesoInicial,orden1.getFechaPesajeInicial());
     }
 
-
     @Test
     public void segundoEnvioSinTara()  {
         Date fechaPesoInicial = new Date();
@@ -290,7 +291,6 @@ public class OrdenNegocioTest {
         assertEquals(carga.getMasaAcumuladaKg(),orden1.getMasaAcumuladaKg());
        }
 
-
     @Test   //caso con estado incorrecto
     public void frenarCargaSinEstadoDos() {
         double taraCamion = 5000;
@@ -323,7 +323,6 @@ public class OrdenNegocioTest {
         //then
         assertThrows(UnprocessableException.class, () -> ordenNegocio.frenarCargar(orden.getCodigoExterno()));
     }
-
 
     @Test   //caso con orden incorrecta
     public void frenarCargaConOrdenIncorrecta() {
@@ -361,6 +360,57 @@ public class OrdenNegocioTest {
         assertThrows(NoEncontradoException.class, () -> ordenNegocio.frenarCargar(orden.getCodigoExterno()));
     }
 
+    @Test   //caso feliz
+    public void pesoFinal() throws UnprocessableException, NoEncontradoException, NegocioException {
+        Date fechaPesoInicial = new Date();
+        orden.setFechaPesajeInicial(fechaPesoInicial);
+        orden.setFechaRecepcionPesajeFinal(fechaPesoInicial);
+        orden.setMasaAcumuladaKg(1500);
+        orden.setEstado(3);
+        camion.setTara(1000);
+        camion.setPesoFinalCamion(orden.getMasaAcumuladaKg()+ camion.getTara());
+
+        //given
+        Optional<Orden> givenOrden = Optional.of(orden);
+        Optional<Camion> givenCamion = Optional.of(camion);
+        //when
+        when(ordenRepositoryMock.findByCodigoExterno(orden.getCodigoExterno())).thenReturn(givenOrden);
+        when(ordenRepositoryMock.findById(orden.getId())).thenReturn(givenOrden);
+        when(camionRepositoryMock.findByPatente(camion.getPatente())).thenReturn(givenCamion);
+        when(camionRepositoryMock.findById(camion.getId())).thenReturn(givenCamion);
+        when(camionRepositoryMock.save(camion)).thenReturn(camion);
+        when(ordenRepositoryMock.save(orden)).thenReturn(orden);
+        //then
+
+        Orden orden1 = ordenNegocio.establecerPesajeFinal(orden).getEntidad();
+
+        assertEquals(4,orden1.getEstado());
+
+    }
+
+    @Test
+    public void pesoFinalConEstadoIncorrecto() {
+        Date fechaPesoInicial = new Date();
+        orden.setFechaPesajeInicial(fechaPesoInicial);
+        orden.setFechaRecepcionPesajeFinal(fechaPesoInicial);
+        orden.setMasaAcumuladaKg(1500);
+        orden.setEstado(4);
+        camion.setTara(1000);
+        camion.setPesoFinalCamion(orden.getMasaAcumuladaKg()+ camion.getTara());
+
+        //given
+        Optional<Orden> givenOrden = Optional.of(orden);
+        Optional<Camion> givenCamion = Optional.of(camion);
+        //when
+        when(ordenRepositoryMock.findByCodigoExterno(orden.getCodigoExterno())).thenReturn(givenOrden);
+        when(ordenRepositoryMock.findById(orden.getId())).thenReturn(givenOrden);
+        when(camionRepositoryMock.findByPatente(camion.getPatente())).thenReturn(givenCamion);
+        when(camionRepositoryMock.findById(camion.getId())).thenReturn(givenCamion);
+        when(camionRepositoryMock.save(camion)).thenReturn(camion);
+        when(ordenRepositoryMock.save(orden)).thenReturn(orden);
+        //then
+        assertThrows(UnprocessableException.class, () -> ordenNegocio.establecerPesajeFinal(orden) );
+    }
 
     @Test   //caso feliz
     public void conciliacion() throws UnprocessableException, NoEncontradoException, NegocioException {
@@ -375,7 +425,7 @@ public class OrdenNegocioTest {
 
         //carga
         carga = new Carga();
-        carga.setMasaAcumuladaKg(/*(float) camion.getPreset()*/1500);
+        carga.setMasaAcumuladaKg(1500);
         carga.setDensidadProductoKilogramoMetroCub(454);
         carga.setTemperaturaProductoCelcius(25);
         carga.setCaudalLitroSegundo(3);
@@ -410,7 +460,7 @@ public class OrdenNegocioTest {
     }
 
     @Test   //caso cuando no existe la orden
-    public void conciliacionOrdenNoExistente() throws UnprocessableException, NoEncontradoException, NegocioException {
+    public void conciliacionOrdenNoExistente(){
         double taraCamion = 5000;
         Date fechaPesoInicial = new Date();
         orden.setEstado(3);
@@ -459,7 +509,7 @@ public class OrdenNegocioTest {
     }
 
     @Test   //caso cuando el estado ni 3 ni 4
-    public void conciliacionEstadoIncorrecto() throws UnprocessableException, NoEncontradoException, NegocioException {
+    public void conciliacionEstadoIncorrecto() {
         double taraCamion = 5000;
         Date fechaPesoInicial = new Date();
         orden.setEstado(2);

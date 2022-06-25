@@ -141,6 +141,7 @@ public class CamionNegocio implements ICamionNegocio{
 		Camion camionBD = findCamionByPatente(orden.getCamion().getPatente());	//validarlo sino colocar que busque por dni
 
 		camionBD.setPesoFinalCamion(orden.getCamion().getPesoFinalCamion());
+
 		return modificar(camionBD);
 	}
 
