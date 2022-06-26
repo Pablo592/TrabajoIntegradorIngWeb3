@@ -8,7 +8,16 @@ import java.io.Serializable;
 public class Rol implements Serializable{
 
 	private static final long serialVersionUID = 1139806825119468503L;
- 
+
+	public Rol() {
+	}
+
+	public Rol(int id, String nombre, String descripcion) {
+		this.id = id;
+		this.nombre = nombre;
+		this.descripcion = descripcion;
+	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;

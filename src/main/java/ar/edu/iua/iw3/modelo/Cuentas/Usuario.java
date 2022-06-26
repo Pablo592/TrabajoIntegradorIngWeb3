@@ -22,6 +22,18 @@ public class Usuario implements UserDetails, Serializable {
 
 	private static final long serialVersionUID = -1920138525852395737L;
 
+	public Usuario() {}
+
+	public Usuario(int id, String nombre, String apellido, String email, String password, String username, Set<Rol> roles) {
+		this.id = id;
+		this.nombre = nombre;
+		this.apellido = apellido;
+		this.email = email;
+		this.password = password;
+		this.username = username;
+		this.roles = roles;
+	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
