@@ -7,6 +7,9 @@ import ar.edu.iua.iw3.negocio.IAlarmaNegocio;
 import ar.edu.iua.iw3.negocio.excepciones.*;
 import ar.edu.iua.iw3.util.Constantes;
 import ar.edu.iua.iw3.util.MensajeRespuesta;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +17,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -28,17 +32,12 @@ public class AlarmaRestController {
 
     private Logger log = LoggerFactory.getLogger(AlarmaNegocio.class);
 
-    @GetMapping(value="/listar")
-    public ResponseEntity<List<Alarma>> listado() {
-        try {
-            return new ResponseEntity<List<Alarma>>(alarmaNegocio.listado(), HttpStatus.OK);
-        } catch (NegocioException e) {
-            log.error(e.getMessage(), e);
-            return new ResponseEntity<List<Alarma>>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-
+    @ApiOperation("Busca todas alarmas generadas durante la utilizacion del sistema por un determinado usuario")
+    @ApiResponses( value = {
+            @ApiResponse(code = 200 , message = "Alarmas listadas correctamente"),
+            @ApiResponse(code = 404 , message = "No hay alarmas pertenecientes al autor"),
+            @ApiResponse(code = 500 , message = "Información incorrecta recibida o error interno del servidor")
+    })
     @GetMapping(value="/listar-author/{id}")
     public ResponseEntity<List<Alarma>> listadoAuthor(@PathVariable("id") Long id) {
         try {
@@ -52,46 +51,14 @@ public class AlarmaRestController {
         }
     }
 
-    @PostMapping(value="")
-    public ResponseEntity<MensajeRespuesta>  agregar(@RequestBody Alarma alarma) {
-        try {
-            MensajeRespuesta r=alarmaNegocio.agregar(alarma).getMensaje();
-            return new ResponseEntity<MensajeRespuesta>(r, HttpStatus.CREATED);
-        } catch (NegocioException e) {
-            log.error(e.getMessage(), e);
-            MensajeRespuesta r=new MensajeRespuesta(-1,e.getMessage());
-            return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.INTERNAL_SERVER_ERROR);
-        } catch (EncontradoException e) {
-            log.error(e.getMessage(), e);
-            MensajeRespuesta r=new MensajeRespuesta(-1,e.getMessage());
-            return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.FOUND);
-        } catch (BadRequest e) {
-            log.error(e.getMessage(), e);
-            MensajeRespuesta r=new MensajeRespuesta(-1,e.getMessage());
-            return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.BAD_REQUEST);
-        } catch (NoEncontradoException e) {
-            log.error(e.getMessage(), e);
-            MensajeRespuesta r=new MensajeRespuesta(-1,e.getMessage());
-            return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.NOT_FOUND);
-        }
-    }
 
-    @PutMapping(value="")
-    public ResponseEntity<MensajeRespuesta> modificar(@RequestBody Alarma alarma) {
-        try {
-            MensajeRespuesta r = alarmaNegocio.modificar(alarma).getMensaje();
-            return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.OK);
-        } catch (NegocioException e) {
-            log.error(e.getMessage(), e);
-            MensajeRespuesta r=new MensajeRespuesta(-1,e.getMessage());
-            return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.INTERNAL_SERVER_ERROR);
-        } catch (NoEncontradoException e) {
-            MensajeRespuesta r=new MensajeRespuesta(-1,e.getMessage());
-            log.error(e.getMessage(), e);
-            return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.NOT_FOUND);
-        }
-    }
-
+    @ApiOperation("Al aceptar la alarma se da constancia que el usuario la conoce")
+    @ApiResponses( value = {
+            @ApiResponse(code = 200 , message = "Alarmas aceptadas correctamente"),
+            @ApiResponse(code = 404 , message = "No existe la orden a la que pertenece la alarma"),
+            @ApiResponse(code = 500 , message = "Información incorrecta recibida o error interno del servidor"),
+            @ApiResponse(code = 409 , message = "Se ha producido una incosistencia con los datos ya guardados")
+    })
     @PutMapping(value="/aceptarAlarma")
     public ResponseEntity<MensajeRespuesta> aceptarAlarma(@RequestBody Alarma alarma) {
         try {
@@ -113,6 +80,14 @@ public class AlarmaRestController {
         }
     }
 
+
+    @ApiOperation("Eliminar alarma por id")
+    @ApiResponses( value = {
+            @ApiResponse(code = 200 , message = "Alarma eliminada correctamente"),
+            @ApiResponse(code = 404 , message = "No existe la alarma o el autor a la que pertenece"),
+            @ApiResponse(code = 500 , message = "Información incorrecta recibida o error interno del servidor"),
+    })
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping(value="/{id}")
     public ResponseEntity<String> eliminar(@PathVariable("id") long id) {
         try {

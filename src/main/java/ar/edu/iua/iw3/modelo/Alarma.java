@@ -38,7 +38,7 @@ public class Alarma {
     private Date  fechaAceptacion;
 
     @ApiModelProperty(notes = "Fecha y Hora en que se genera la alarma")
-    private Date fecha_HR_MM_registrada;
+    private Date fechaDeCreacion;
 
     public long getId() {
         return id;
@@ -48,12 +48,12 @@ public class Alarma {
         this.id = id;
     }
 
-    public Date getFecha_HR_MM_registrada() {
-        return fecha_HR_MM_registrada;
+    public Date getFechaDeCreacion() {
+        return fechaDeCreacion;
     }
 
-    public void setFecha_HR_MM_registrada(Date fecha_HR_MM_registrada) {
-        this.fecha_HR_MM_registrada = fecha_HR_MM_registrada;
+    public void setFechaDeCreacion(Date fechaDeCreacion) {
+        this.fechaDeCreacion = fechaDeCreacion;
     }
 
     public Usuario getUsuarioAceptador() {
@@ -106,7 +106,7 @@ public class Alarma {
                 ", usuarioAceptador=" + usuarioAceptador +
                 ", orden=" + ordenAlarma +
                 ", fechaAceptacion=" + fechaAceptacion +
-                ", fecha_HR_MM_registrada=" + fecha_HR_MM_registrada +
+                ", fecha_HR_MM_registrada=" + fechaDeCreacion +
                 '}';
     }
 }

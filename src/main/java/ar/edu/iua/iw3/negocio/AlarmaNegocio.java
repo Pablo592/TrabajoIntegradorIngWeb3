@@ -34,15 +34,6 @@ public class AlarmaNegocio implements IAlarmaNegocio {
     private OrdenNegocio ordenNegocio;
 
     @Override
-    public List<Alarma> listado() throws NegocioException {
-        try {
-            return alarmaDAO.findAll();
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            throw new NegocioException(e);
-        }
-    }
-    @Override
     public Alarma cargar(long id) throws NegocioException, NoEncontradoException {
         Optional<Alarma> o;
         try {
@@ -80,26 +71,13 @@ public class AlarmaNegocio implements IAlarmaNegocio {
 
 
     @Override
-    //recibe los datos de una alarma con 2 datos mas, el id del autor y el codigo externo de la orden de la alarma, junto con los datos de la alarma
     public RespuestaGenerica<Alarma> agregar(Alarma alarma) throws NegocioException, EncontradoException, BadRequest, NoEncontradoException {
         MensajeRespuesta m = new MensajeRespuesta();
         RespuestaGenerica<Alarma> r = new RespuestaGenerica<Alarma>(alarma, m);
 
-        alarma.setFecha_HR_MM_registrada(new Date());
+        alarma.setFechaDeCreacion(new Date());
         Alarma alarmaNueva =  saveAlarma(alarma);
 
-        m.setCodigo(0);//cero esta todo ok
-        m.setMensaje(alarmaNueva.toString());
-        return r;
-    }
-
-    @Override
-    public RespuestaGenerica<Alarma> modificar(Alarma alarma) throws NegocioException, NoEncontradoException {
-        cargar(alarma.getId());
-
-        MensajeRespuesta m=new MensajeRespuesta();
-        RespuestaGenerica<Alarma> r = new RespuestaGenerica<Alarma>(alarma, m);
-        Alarma alarmaNueva = saveAlarma(alarma);
         m.setCodigo(0);
         m.setMensaje(alarmaNueva.toString());
         return r;
@@ -142,10 +120,18 @@ public class AlarmaNegocio implements IAlarmaNegocio {
 
     @Override
     public void eliminar(long id) throws NegocioException, NoEncontradoException {
-        Alarma alarma = cargar(id);
+        Optional<Alarma> o;
         try {
-            //primero tengo que eliminar la asocioacion entre el autor y la alarma
-            Usuario u = usuarioNegocio.findByid(alarma.getAutor().getId());
+            o = Optional.ofNullable(cargar(id));
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            throw new NegocioException(e);
+        }
+        if (!o.isPresent()) {
+            throw new NoEncontradoException("No existe la alarma con el id " + id);
+        }
+        try {
+            Usuario u = usuarioNegocio.findByid(o.get().getAutor().getId());
             for (int a = 0; a < u.getAlarmaList().size(); a++) {
                 if (u.getAlarmaList().get(a).getId() == id)
                     u.getAlarmaList().remove(a);
