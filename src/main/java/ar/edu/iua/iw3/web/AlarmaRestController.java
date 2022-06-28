@@ -59,7 +59,7 @@ public class AlarmaRestController {
             @ApiResponse(code = 500 , message = "Información incorrecta recibida o error interno del servidor"),
             @ApiResponse(code = 409 , message = "Se ha producido una incosistencia con los datos ya guardados")
     })
-    @PutMapping(value="/aceptarAlarma")
+    @PutMapping(value="/aceptar-alarma")
     public ResponseEntity<MensajeRespuesta> aceptarAlarma(@RequestBody Alarma alarma) {
         try {
             alarma.setFechaAceptacion(new Date());

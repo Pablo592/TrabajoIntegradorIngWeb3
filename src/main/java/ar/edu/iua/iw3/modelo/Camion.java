@@ -33,15 +33,15 @@ public class Camion  implements Serializable {
 
     @ApiModelProperty(notes = "Peso máximo de carga soportado por el camión (kg).", example = "2000", required = true)
     @Column(columnDefinition = "DOUBLE", nullable = false)
-    private double preset;              //Limite a cargar en el camion
+    private double preset;
 
     @ApiModelProperty(notes = "Peso del camión sin carga (kg).", example = "4000")
     @Column(columnDefinition = "DOUBLE default 0")
-    private double tara;                //Peso del camion vacio
+    private double tara;
 
     @ApiModelProperty(notes = "Peso del camión vacío mas el peso de la carga (kg).", example = "6000")
     @Column(columnDefinition = "DOUBLE default 0")
-    private double pesoFinalCamion;		//Peso del camion tras cargarse
+    private double pesoFinalCamion;
 
     @ApiModelProperty(notes = "El camión puede generar varias ordenes al abastecerse continuamente.")
     @OneToMany(targetEntity = Orden.class, mappedBy = "camion", fetch = FetchType.LAZY)

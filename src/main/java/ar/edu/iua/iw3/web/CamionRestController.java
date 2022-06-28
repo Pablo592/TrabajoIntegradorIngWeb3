@@ -51,6 +51,7 @@ public class CamionRestController {
 	@ApiResponses( value = {
 			@ApiResponse(code = 201 , message = "Camión registrado correctamente"),
 			@ApiResponse(code = 302 , message = "El camión ya se encuentra registrado"),
+			@ApiResponse(code = 400 , message = "Request mal estructurado"),
 			@ApiResponse(code = 500 , message = "Información incorrecta recibida")
 	})
 
