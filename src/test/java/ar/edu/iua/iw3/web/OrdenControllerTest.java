@@ -84,7 +84,7 @@ public class OrdenControllerTest {
 
 
     @Test
-    public void listOrdenById_Success() throws Exception {
+    public void getConciliacionByCodigoExterno_Success() throws Exception {
         String token = getToken();
         float pesajeInicial = 1000;
         float pesajeFinal = 2000;
@@ -95,26 +95,48 @@ public class OrdenControllerTest {
         float promedioTemperaturaProductoCelcius = 20;
         float promedioCaudalLitroSegundo = (float) 0.16;
 
-
-
         //given
         ConciliacionDTO conciliacionDTO = new ConciliacionDTO(pesajeInicial,pesajeFinal,masaAcumuladaKg,netoPorBalanza,diferenciaNetoPorBalanza_masaAcumuludada,promedDensidadProductoKilogramoMetroCub,promedioTemperaturaProductoCelcius,promedioCaudalLitroSegundo);
-
         //when
         when(ordenNegocio.obtenerConciliacion(orden.getCodigoExterno())).thenReturn(conciliacionDTO);
-
         //then
         mvc.perform(get("/test/api/v1/ordenes/conciliacion/" + orden.getCodigoExterno())
                         .param("xauthtoken", token)
                         .contentType(MediaType.APPLICATION_JSON))
-                        .andDo(print())
-                        .andExpect(status().isOk())
-                        .andExpect(jsonPath(("$.pesajeInicial"),is(conciliacionDTO.getPesajeInicial()),Float.class));
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath(("$.pesajeInicial"),is(conciliacionDTO.getPesajeInicial()),Float.class))
+                .andExpect(jsonPath(("$.pesajeFinal"),is(conciliacionDTO.getPesajeFinal()),Float.class))
+                .andExpect(jsonPath(("$.masaAcumuladaKg"),is(conciliacionDTO.getMasaAcumuladaKg()),Float.class))
+                .andExpect(jsonPath(("$.netoPorBalanza"),is(conciliacionDTO.getNetoPorBalanza()),Float.class))
+                .andExpect(jsonPath(("$.diferenciaNetoPorBalanza_masaAcumuludada"),is(conciliacionDTO.getDiferenciaNetoPorBalanza_masaAcumuludada()),Float.class))
+                .andExpect(jsonPath(("$.promedDensidadProductoKilogramoMetroCub"),is(conciliacionDTO.getPromedDensidadProductoKilogramoMetroCub()),Float.class))
+                .andExpect(jsonPath(("$.promedioTemperaturaProductoCelcius"),is(conciliacionDTO.getPromedioTemperaturaProductoCelcius()),Float.class))
+                .andExpect(jsonPath(("$.promedioCaudalLitroSegundo"),is(conciliacionDTO.getPromedioCaudalLitroSegundo()),Float.class));
     }
 
-    //buscar una orden por id
 
-    //obtener una concilicacion
+
+
+
+    //buscar una orden por id
+    @Test
+    public void getOrdenById_Success() throws Exception {
+        String token = getToken();
+        //given
+
+        //when
+        when(ordenNegocio.cargar(orden.getId())).thenReturn(orden);
+        //then
+        mvc.perform(get("/test/api/v1/ordenes/buscar-una/" + orden.getId())
+                        .param("xauthtoken", token)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath(("$.id"),is(orden.getId()),Long.class))
+                .andExpect(jsonPath(("$.codigoExterno"),is(orden.getCodigoExterno()),String.class))
+                .andExpect(jsonPath(("$.frecuencia"),is(orden.getFrecuencia()),Integer.class));
+    }
 
     //setear el peso inicial de un camion
 
