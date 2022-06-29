@@ -4,15 +4,19 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+import ar.edu.iua.iw3.modelo.*;
 import ar.edu.iua.iw3.modelo.Cuentas.Rol;
 import ar.edu.iua.iw3.modelo.Cuentas.Usuario;
-import ar.edu.iua.iw3.modelo.Orden;
 import ar.edu.iua.iw3.modelo.dto.ConciliacionDTO;
 import ar.edu.iua.iw3.negocio.OrdenNegocio;
 import ar.edu.iua.iw3.security.authtoken.AuthToken;
+import ar.edu.iua.iw3.util.MensajeRespuesta;
+import ar.edu.iua.iw3.util.RespuestaGenerica;
+import com.google.gson.Gson;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,11 +34,16 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
+
+
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -48,17 +57,46 @@ public class OrdenControllerTest {
     private OrdenNegocio ordenNegocio;
 
     Orden orden;
+    Cliente cliente ;
+    Chofer chofer;
+    Producto producto;
+    Camion camion;
     long id = 1;
 
     @Before
-    public  void setup_init() {
+    public  void setup_init() throws ParseException {
         mvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date fechaTurno = sdf.parse("2022-01-01");
 
         orden = new Orden();
         orden.setId(id);
         orden.setCodigoExterno("45");
-        orden.setFechaTurno(new Date());
+        orden.setFechaTurno(fechaTurno);
         orden.setFrecuencia(30);
+        ///////
+        cliente = new Cliente();
+        cliente.setRazonSocial("SA");
+        cliente.setContacto(3512151243L);
+        ///////
+        chofer = new Chofer();
+        chofer.setNombre("nuevo chofer nombre");
+        chofer.setApellido("apellidochofer");
+        chofer.setDocumento(40211001L);
+        ///////
+        producto = new Producto();
+        producto.setNombre("nuevoproducto");
+        ///////
+        camion = new Camion();
+        camion.setPatente("ad123as");
+        camion.setCisternadoLitros(1000);
+        camion.setPreset(3000);
+        ///////
+        orden.setCliente(cliente);
+        orden.setChofer(chofer);
+        orden.setProducto(producto);
+        orden.setCamion(camion);
     }
 
     @Test
@@ -76,10 +114,10 @@ public class OrdenControllerTest {
         mvc.perform(get("/test/api/v1/ordenes")
                         .param("xauthtoken", token)
                         .contentType(MediaType.APPLICATION_JSON))
-                        .andDo(print())
-                        .andExpect(status().isOk())
-                        .andExpect(jsonPath("$",hasSize(1)))
-                        .andExpect(jsonPath("$[0].id",is(orden.getId()),Long.class));
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$",hasSize(1)))
+                .andExpect(jsonPath("$[0].id",is(orden.getId()),Long.class));
     }
 
 
@@ -115,11 +153,30 @@ public class OrdenControllerTest {
                 .andExpect(jsonPath(("$.promedioCaudalLitroSegundo"),is(conciliacionDTO.getPromedioCaudalLitroSegundo()),Float.class));
     }
 
-
-
-
-
     //buscar una orden por id
+    /*@Test
+    public void agregarOrden_Success() throws Exception {
+        String token = getToken();
+        Gson gson = new Gson();
+        String JSON = gson.toJson(orden);
+        JSON = JSON.replaceAll("Jan 1, 2022, 12:00:00 AM" ,"2020-01-01");
+        //given
+        MensajeRespuesta m=new MensajeRespuesta();
+        RespuestaGenerica<Orden> r = new RespuestaGenerica<Orden>(orden, m);
+
+        //when
+        when(ordenNegocio.agregar(orden)).thenReturn(r);
+
+        //then
+        mvc.perform(post("/test/api/v1/ordenes/primer-envio")
+                        .param("xauthtoken", token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(JSON).accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+               .andExpect(status().isCreated());
+    }*/
+
+
     @Test
     public void getOrdenById_Success() throws Exception {
         String token = getToken();
