@@ -49,14 +49,9 @@ public class ChoferNegocio implements IChoferNegocio{
 		}
 
 		@Override
-		public Chofer agregar(Chofer chofer) throws NegocioException, EncontradoException {
-			try {
+		public Chofer agregar(Chofer chofer) throws NegocioException, EncontradoException{
 				   if(null!=findByDocumento(chofer.getDocumento()))
 				        throw new EncontradoException("Ya existe un chofer con el documento =" + chofer.getDocumento());
-					cargar(chofer.getId()); 									// tira excepcion sino no lo encuentra
-					throw new EncontradoException("Ya existe un chofer con id=" + chofer.getId());
-				} catch (NoEncontradoException e) {
-				}
 				try {
 					return choferDAO.save(chofer);
 				} catch (Exception e) {
@@ -73,30 +68,21 @@ public class ChoferNegocio implements IChoferNegocio{
 
 		@Override
 		public Chofer modificar(Chofer chofer) throws NegocioException, NoEncontradoException {
-					//Paso 1: busco existencia del id del chofer	
-					//Paso 2: busco existencia del documento duplicado 	
-					//Paso 3_a:si el documento del chofer esta asignado a un chofer con diferente id del que se quiere modificar entonces tengo se genera un error
-					//Paso 3_b:si el documento del chofer esta asociada al mismo id del chofer ya registrado entonces no se debe de generar error
-					//Paso 4: Si ningun chofer tiene asignado el documento se lo debe de modiicar sin problemas
-					
-					cargar(chofer.getId()); //Paso 1
+					cargar(chofer.getId());
 					Chofer choferWithDocumento = findByDocumento(chofer.getDocumento());
 					
-					if(null!=choferWithDocumento) { //Paso 2 
-						
+					if(null!=choferWithDocumento) {
 						if (chofer.getId() != choferWithDocumento.getId()) 
 							throw new NegocioException("Ya existe el chofer " + choferWithDocumento.getId() + "con el documento ="
-									+ chofer.getDocumento());	//Paso 3_a
-						
-						return	saveChofer(chofer);	//Paso 3_b
+									+ chofer.getDocumento());
+						return	saveChofer(chofer);
 					}
-					
-					return saveChofer(chofer);	//Paso 4
+					return saveChofer(chofer);
 		}
 		
 		private  Chofer saveChofer(Chofer componente) throws NegocioException {
 			try {
-				return choferDAO.save(componente); // sino existe el chofer lo cargo
+				return choferDAO.save(componente);
 			} catch (Exception e) {
 				log.error(e.getMessage(), e);
 				throw new NegocioException(e);
@@ -113,6 +99,5 @@ public class ChoferNegocio implements IChoferNegocio{
 				log.error(e.getMessage(), e);
 				throw new NegocioException(e);
 			}
-			
 		}
 }

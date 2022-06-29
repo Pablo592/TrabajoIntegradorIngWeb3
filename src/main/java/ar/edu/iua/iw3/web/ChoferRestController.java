@@ -36,8 +36,6 @@ public class ChoferRestController {
 			@ApiResponse(code = 200 , message = "Choferes enviados correctamente"),
 			@ApiResponse(code = 500 , message = "Información incorrecta recibida")
 	})
-
-	@PreAuthorize("hasRole('ROLE_USER')")
 	@GetMapping(value="")
 	public ResponseEntity<List<Chofer>> listado() {
 		try {
@@ -53,8 +51,6 @@ public class ChoferRestController {
 			@ApiResponse(code = 500 , message = "Información incorrecta recibida"),
 			@ApiResponse(code = 302 , message = "El chófer ya se encuentra registrado")
 	})
-
-	@PreAuthorize("hasRole('ROLE_USER')")
 	@PostMapping(value="")
 	public ResponseEntity<String> agregar(@RequestBody Chofer chofer) {
 		try {

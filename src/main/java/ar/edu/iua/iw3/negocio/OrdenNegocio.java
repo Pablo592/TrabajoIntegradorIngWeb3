@@ -259,7 +259,7 @@ public class OrdenNegocio implements IOrdenNegocio{
         if(null==ordenBD)
             throw new NoEncontradoException("No existe la orden con codigo externo =" + orden.getCodigoExterno());
 
-        camionNegocio.setearPesoIni(orden.getCamion(), ordenBD.getCamion());
+        camionNegocio.setearPesoInicialCamion(orden.getCamion(), ordenBD.getCamion());
         ordenBD = validarFechaPesajeInicial(orden, ordenBD);
 
         if(ordenBD.getEstado()!=1)
