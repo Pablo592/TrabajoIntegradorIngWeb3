@@ -85,7 +85,7 @@ public class CargaNegocio implements ICargaNegocio {
     }
 
     @Override
-    public RespuestaGenerica<Carga> agregar(Carga carga) throws NegocioException, NoEncontradoException, BadRequest, UnprocessableException, ConflictException, EncontradoException {
+    public RespuestaGenerica<Carga> agregar(Carga carga) throws NegocioException, NoEncontradoException, BadRequest, UnprocessableException, ConflictException{
         MensajeRespuesta m=new MensajeRespuesta();
         RespuestaGenerica<Carga> r = new RespuestaGenerica<Carga>(carga, m);
 
@@ -100,32 +100,28 @@ public class CargaNegocio implements ICargaNegocio {
         carga.checkFechasSalidaEsMenorFechaLlegada();
 
         carga.setOrden(orden);
-        if (orden.getCamion().getPreset() <= carga.getMasaAcumuladaKg()) { //si el tanque esta lleno
+        if (orden.getCamion().getPreset() <= carga.getMasaAcumuladaKg()) {
             cargaDAO.save(carga);
             orden.setEstado(3);
-            ordenNegocio.modificar(orden);  //actualizo la orden
+            ordenNegocio.modificar(orden);
             throw new UnprocessableException("Tanque lleno");
         }else{
             graphService.pushGraphDataCarga(orden.getCamion().getPreset(),carga.getMasaAcumuladaKg(),orden.getCodigoExterno());
         }
-
-        //obtengo y guardo los promedios de las cargas,
-        // lo tengo que poner porque sino hay cargas cargadas entonces no hay promedio
         try {
             CargaDTO cargaDTOAnterior = getPromedioDensidadAndTemperaturaAndCaudal(codigoExterno);
             orden.setPromedDensidadProductoKilogramoMetroCub(cargaDTOAnterior.getPromedDensidadProductoKilogramoMetroCub());
             orden.setPromedioCaudalLitroSegundo(cargaDTOAnterior.getPromedioCaudalLitroSegundo());
             orden.setPromedioTemperaturaProductoCelcius(cargaDTOAnterior.getPromedioTemperaturaProductoCelcius());
-        } catch (NoEncontradoException e) {   //Sino hay carga anterior entonces NoEncontradoException
+        } catch (NoEncontradoException e) {
             log.error(e.getMessage(), e);
-            orden.setMasaAcumuladaKg(0);      //digo que la carga inicial de la orden es "cero" si es la primera carga de la orden
+            orden.setMasaAcumuladaKg(0);
         }
-        //controlo que la carga acumulada actual sea mayor que la anterior, tirar excepcion
         if (!isValidoMasaAcumuadaActualCargaConLaAnterior(orden, carga))
             throw new UnprocessableException("La masa Acumulada actual debe ser mayor  a la masa acumulada de la carga anterior");
 
         if(carga.getTemperaturaProductoCelcius() > orden.getUmbralTemperaturaCombustible())
-            generarEvento(carga, CargaEvent.Tipo.SUPERADO_UMBRAL_DE_TEMPERATURA,orden);
+            generarAlarmaEvento(carga, CargaEvent.Tipo.SUPERADO_UMBRAL_DE_TEMPERATURA,orden);
 
         orden.setMasaAcumuladaKg(carga.getMasaAcumuladaKg());
         orden.setUltimoCaudalLitroSegundo(carga.getCaudalLitroSegundo());
@@ -136,10 +132,9 @@ public class CargaNegocio implements ICargaNegocio {
         if (orden.getFechaInicioProcesoCarga() == null)
             orden.setFechaInicioProcesoCarga(new Date());
 
-        Orden nuevaOrden = ordenNegocio.modificar(orden);
+        ordenNegocio.modificar(orden);
         Carga cargaNueva = carga;
-        //sino hay cargas en la bd entonces la tiempo inicial es
-        if(listado().size()==0 || proximoTiempoLimite == null) { //en caso de que se corte la luz
+        if(listado().size()==0 || proximoTiempoLimite == null) {
             cargaNueva = cargaDAO.save(carga);
             proximoTiempoLimite = sumarFrecuenciaConTiempo(orden.getFrecuencia(), orden.getFechaInicioProcesoCarga());
         }
@@ -153,7 +148,7 @@ public class CargaNegocio implements ICargaNegocio {
     }
 
 
-    private void  generarEvento(Carga carga, CargaEvent.Tipo tipo,Orden orden) throws NoEncontradoException, NegocioException, EncontradoException, BadRequest {
+    private void generarAlarmaEvento(Carga carga, CargaEvent.Tipo tipo, Orden orden) throws NoEncontradoException, NegocioException, BadRequest {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Usuario user = (Usuario) auth.getPrincipal();
         Alarma a = new Alarma();
@@ -169,8 +164,6 @@ public class CargaNegocio implements ICargaNegocio {
     private Date sumarFrecuenciaConTiempo(int frecuenciaEnSegundos, Date proximoTiempoLimite){
         Calendar cal = Calendar.getInstance();
         cal.setTime(proximoTiempoLimite);
-
-        //Le cambiamos los segundos
         cal.set(Calendar.SECOND,cal.get(Calendar.SECOND)+frecuenciaEnSegundos);
         return cal.getTime();
     }
@@ -199,9 +192,7 @@ public class CargaNegocio implements ICargaNegocio {
         Orden orden = existeOrden(codigoExterno);
         if (orden.getCargaList().size() == 0)
             throw new NoEncontradoException("No hay cargas registradas en esta orden, por lo que el promedio sera calculado ");
-
         try {
-            //calculo los datos de la orden y luego los actualizo
             return cargaDAO.getPromedioDensidadAndTemperaturaAndCaudal(orden.getId());
         } catch (Exception e) {
             log.error(e.getMessage(), e);
@@ -218,7 +209,7 @@ public class CargaNegocio implements ICargaNegocio {
 
     private Carga saveCarga(Carga carga) throws NegocioException {
         try {
-            return cargaDAO.save(carga); // sino existe la carga lo cargo
+            return cargaDAO.save(carga);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             throw new NegocioException(e);

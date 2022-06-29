@@ -19,7 +19,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
@@ -57,8 +56,8 @@ public class CargaRestController {
     })
 
     @PreAuthorize("hasRole('ROLE_USER')")
-    @GetMapping(value= "/promedio-cargas-por-codigo-externo")
-    public ResponseEntity<CargaDTO> ResumenCargaPorId(@RequestParam("codigoExterno") String codigoExterno) {
+    @GetMapping(value= "/carga-promedio")
+    public ResponseEntity<CargaDTO> CargaPromedioCodigoExterno(@RequestParam("codigoExterno") String codigoExterno) {
         try {
             return new ResponseEntity<CargaDTO>(cargaNegocio.getPromedioDensidadAndTemperaturaAndCaudal(codigoExterno), HttpStatus.OK);
         } catch (NegocioException e) {
@@ -73,8 +72,11 @@ public class CargaRestController {
     @ApiOperation("Registrar una nueva carga")
     @ApiResponses( value = {
             @ApiResponse(code = 201 , message = "Carga registrada correctamente"),
-            @ApiResponse(code = 500 , message = "Información incorrecta recibida"),
-            @ApiResponse(code = 404 , message = "No es posible localizar la orden")
+            @ApiResponse(code = 500 , message = "Error interno del servidor"),
+            @ApiResponse(code = 404 , message = "No es posible localizar la orden"),
+            @ApiResponse(code = 400 , message = "Request con informacion inconsistente"),
+            @ApiResponse(code = 422 , message = "Operacion no permitida"),
+            @ApiResponse(code = 409 , message = "Inconsistencia temporal de sucesos")
     })
 
     @PreAuthorize("hasRole('ROLE_USER')")
@@ -83,7 +85,7 @@ public class CargaRestController {
         try {
             carga.setFechaEntradaBackEnd(new Date());
             MensajeRespuesta r=cargaNegocio.agregar(carga).getMensaje();
-            return new ResponseEntity<MensajeRespuesta>(r, HttpStatus.OK);
+            return new ResponseEntity<MensajeRespuesta>(r, HttpStatus.CREATED);
         } catch (NegocioException e) {
             log.error(e.getMessage(), e);
             MensajeRespuesta r=new MensajeRespuesta(-1,e.getMessage());
@@ -104,17 +106,13 @@ public class CargaRestController {
             log.error(e.getMessage(), e);
             MensajeRespuesta r=new MensajeRespuesta(-1,e.getMessage());
             return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.CONFLICT);
-        } catch (EncontradoException e) {
-            log.error(e.getMessage(), e);
-            MensajeRespuesta r=new MensajeRespuesta(-1,e.getMessage());
-            return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.CONFLICT);
         }
     }
 
     @ApiOperation("Modificar una carga registrada")
     @ApiResponses( value = {
             @ApiResponse(code = 200 , message = "Carga modificada correctamente"),
-            @ApiResponse(code = 500 , message = "Información incorrecta recibida"),
+            @ApiResponse(code = 500 , message = "Error interno del servidor"),
             @ApiResponse(code = 404 , message = "No es posible localizar la carga")
     })
 
@@ -136,7 +134,7 @@ public class CargaRestController {
     @ApiOperation("Eliminar una carga registrada")
     @ApiResponses( value = {
             @ApiResponse(code = 200 , message = "Carga eliminada correctamente"),
-            @ApiResponse(code = 500 , message = "Información incorrecta recibida"),
+            @ApiResponse(code = 500 , message = "Error interno del servidor"),
             @ApiResponse(code = 404 , message = "No es posible localizar la carga")
     })
 

@@ -34,7 +34,7 @@ public class ChoferRestController {
 	@ApiOperation("Busca todos los choferes registrados")
 	@ApiResponses( value = {
 			@ApiResponse(code = 200 , message = "Choferes enviados correctamente"),
-			@ApiResponse(code = 500 , message = "Información incorrecta recibida")
+			@ApiResponse(code = 500 , message = "Error interno del servidor")
 	})
 	@GetMapping(value="")
 	public ResponseEntity<List<Chofer>> listado() {
@@ -48,7 +48,7 @@ public class ChoferRestController {
 	@ApiOperation("Registrar un nuevo chófer")
 	@ApiResponses( value = {
 			@ApiResponse(code = 201 , message = "Chófer registrado correctamente"),
-			@ApiResponse(code = 500 , message = "Información incorrecta recibida"),
+			@ApiResponse(code = 500 , message = "Error interno del servidor"),
 			@ApiResponse(code = 302 , message = "El chófer ya se encuentra registrado")
 	})
 	@PostMapping(value="")
@@ -70,7 +70,7 @@ public class ChoferRestController {
 	@ApiOperation("Modificar un chófer")
 	@ApiResponses( value = {
 			@ApiResponse(code = 200 , message = "Chófer modificado correctamente"),
-			@ApiResponse(code = 500 , message = "Información incorrecta recibida"),
+			@ApiResponse(code = 500 , message = "Error interno del servidor"),
 			@ApiResponse(code = 404 , message = "No es posible localizar al chófer")
 	})
 
@@ -91,7 +91,7 @@ public class ChoferRestController {
 	@ApiOperation("Eliminar un chófer")
 	@ApiResponses( value = {
 			@ApiResponse(code = 200 , message = "Chófer eliminado correctamente"),
-			@ApiResponse(code = 500 , message = "Información incorrecta recibida"),
+			@ApiResponse(code = 500 , message = "Error interno del servidor"),
 			@ApiResponse(code = 404 , message = "No es posible localizar al chófer")
 	})
 

@@ -36,7 +36,7 @@ public class AlarmaRestController {
     @ApiResponses( value = {
             @ApiResponse(code = 200 , message = "Alarmas listadas correctamente"),
             @ApiResponse(code = 404 , message = "No hay alarmas pertenecientes al autor"),
-            @ApiResponse(code = 500 , message = "Información incorrecta recibida o error interno del servidor")
+            @ApiResponse(code = 500 , message = "Error interno del servidor")
     })
     @GetMapping(value="/listar-author/{id}")
     public ResponseEntity<List<Alarma>> listadoAuthor(@PathVariable("id") Long id) {
@@ -56,7 +56,7 @@ public class AlarmaRestController {
     @ApiResponses( value = {
             @ApiResponse(code = 200 , message = "Alarmas aceptadas correctamente"),
             @ApiResponse(code = 404 , message = "No existe la orden a la que pertenece la alarma"),
-            @ApiResponse(code = 500 , message = "Información incorrecta recibida o error interno del servidor"),
+            @ApiResponse(code = 500 , message = "Error interno del servidor"),
             @ApiResponse(code = 409 , message = "Se ha producido una incosistencia con los datos ya guardados")
     })
     @PutMapping(value="/aceptar-alarma")
@@ -85,7 +85,7 @@ public class AlarmaRestController {
     @ApiResponses( value = {
             @ApiResponse(code = 200 , message = "Alarma eliminada correctamente"),
             @ApiResponse(code = 404 , message = "No existe la alarma o el autor a la que pertenece"),
-            @ApiResponse(code = 500 , message = "Información incorrecta recibida o error interno del servidor"),
+            @ApiResponse(code = 500 , message = "Error interno del servidor")
     })
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping(value="/{id}")

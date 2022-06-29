@@ -71,19 +71,17 @@ public class AlarmaNegocio implements IAlarmaNegocio {
 
 
     @Override
-    public RespuestaGenerica<Alarma> agregar(Alarma alarma) throws NegocioException, EncontradoException, BadRequest, NoEncontradoException {
+    public RespuestaGenerica<Alarma> agregar(Alarma alarma) throws NegocioException, BadRequest, NoEncontradoException {
         MensajeRespuesta m = new MensajeRespuesta();
         RespuestaGenerica<Alarma> r = new RespuestaGenerica<Alarma>(alarma, m);
-
         alarma.setFechaDeCreacion(new Date());
         Alarma alarmaNueva =  saveAlarma(alarma);
-
         m.setCodigo(0);
         m.setMensaje(alarmaNueva.toString());
         return r;
     }
 
-    @Override   //solo se modifica la fecha de aceptacion y el usuario que acepta la alarma
+    @Override
     public RespuestaGenerica<Alarma> aceptarAlarma(Alarma alarma) throws NegocioException, NoEncontradoException, ConflictException {
         MensajeRespuesta m=new MensajeRespuesta();
         RespuestaGenerica<Alarma> r = new RespuestaGenerica<Alarma>(alarma, m);
@@ -111,7 +109,7 @@ public class AlarmaNegocio implements IAlarmaNegocio {
 
     private Alarma saveAlarma(Alarma alarma) throws NegocioException {
         try {
-            return alarmaDAO.save(alarma); // sino existe la alarma la cargo
+            return alarmaDAO.save(alarma);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             throw new NegocioException(e);

@@ -34,7 +34,7 @@ public class ClienteRestController {
 	@ApiOperation("Busca todos los clientes registrados")
 	@ApiResponses( value = {
 			@ApiResponse(code = 200 , message = "Clientes enviados correctamente"),
-			@ApiResponse(code = 500 , message = "Información incorrecta recibida")
+			@ApiResponse(code = 500 , message = "Error interno del servidor")
 	})
 
 	@PreAuthorize("hasRole('ROLE_USER')")
@@ -51,7 +51,7 @@ public class ClienteRestController {
 	@ApiOperation("Registrar un nuevo chófer")
 	@ApiResponses( value = {
 			@ApiResponse(code = 201 , message = "Cliente registrado correctamente"),
-			@ApiResponse(code = 500 , message = "Información incorrecta recibida"),
+			@ApiResponse(code = 500 , message = "Error interno del servidor"),
 			@ApiResponse(code = 302 , message = "El cliente ya se encuentra registrado")
 	})
 
@@ -74,7 +74,7 @@ public class ClienteRestController {
 	@ApiOperation("Modificar un cliente")
 	@ApiResponses( value = {
 			@ApiResponse(code = 200 , message = "Cliente modificado correctamente"),
-			@ApiResponse(code = 500 , message = "Información incorrecta recibida"),
+			@ApiResponse(code = 500 , message = "Error interno del servidor"),
 			@ApiResponse(code = 404 , message = "No es posible localizar al cliente")
 	})
 
@@ -95,7 +95,7 @@ public class ClienteRestController {
 	@ApiOperation("Eliminar un cliente")
 	@ApiResponses( value = {
 			@ApiResponse(code = 200 , message = "Cliente eliminado correctamente"),
-			@ApiResponse(code = 500 , message = "Información incorrecta recibida"),
+			@ApiResponse(code = 500 , message = "Error interno del servidor"),
 			@ApiResponse(code = 404 , message = "No es posible localizar al cliente")
 	})
 

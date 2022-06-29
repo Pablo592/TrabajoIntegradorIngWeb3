@@ -33,7 +33,7 @@ public class CamionRestController {
 	@ApiOperation("Busca todos los camiones registrados")
 	@ApiResponses( value = {
 			@ApiResponse(code = 200 , message = "Camiones enviados correctamente"),
-			@ApiResponse(code = 500 , message = "Información incorrecta recibida")
+			@ApiResponse(code = 500 , message = "Error interno del servidor")
 	})
 
 	@PreAuthorize("hasRole('ROLE_USER')")
@@ -52,7 +52,7 @@ public class CamionRestController {
 			@ApiResponse(code = 201 , message = "Camión registrado correctamente"),
 			@ApiResponse(code = 302 , message = "El camión ya se encuentra registrado"),
 			@ApiResponse(code = 400 , message = "Request mal estructurado"),
-			@ApiResponse(code = 500 , message = "Información incorrecta recibida")
+			@ApiResponse(code = 500 , message = "Error interno del servidor")
 	})
 
 	@PreAuthorize("hasRole('ROLE_USER')")
@@ -79,7 +79,7 @@ public class CamionRestController {
 	@ApiResponses( value = {
 			@ApiResponse(code = 200 , message = "Camión modificado correctamente"),
 			@ApiResponse(code = 404 , message = "No es posible localizar el camión"),
-			@ApiResponse(code = 500 , message = "Información incorrecta recibida")
+			@ApiResponse(code = 500 , message = "Error interno del servidor")
 	})
 
 	@PreAuthorize("hasRole('ROLE_USER')")
@@ -101,7 +101,7 @@ public class CamionRestController {
 	@ApiResponses( value = {
 			@ApiResponse(code = 200 , message = "Camión eliminado correctamente"),
 			@ApiResponse(code = 404 , message = "No es posible localizar el camión"),
-			@ApiResponse(code = 500 , message = "Información incorrecta recibida")
+			@ApiResponse(code = 500 , message = "Error interno del servidor")
 	})
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
