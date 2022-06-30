@@ -154,7 +154,7 @@ public class OrdenControllerTest {
     }
 
     //buscar una orden por id
-    /*@Test
+    @Test
     public void agregarOrden_Success() throws Exception {
         String token = getToken();
         Gson gson = new Gson();
@@ -174,7 +174,7 @@ public class OrdenControllerTest {
                         .content(JSON).accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                .andExpect(status().isCreated());
-    }*/
+    }
 
 
     @Test
@@ -207,8 +207,7 @@ public class OrdenControllerTest {
         //int id, String nombre, String apellido, String email, String password, String username, Set<Rol> roles
         Usuario usuario1 = new Usuario(1,"Joel","Spítale","vspitale107@alumnos.iua.edu.ar","123","jspitale97",roles);
 
-        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(usuario1, null,
-                usuario1.getAuthorities());
+        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(usuario1, null,usuario1.getAuthorities());
 
         System.out.println("Autoridades = "+usuario1.getAuthorities());
 

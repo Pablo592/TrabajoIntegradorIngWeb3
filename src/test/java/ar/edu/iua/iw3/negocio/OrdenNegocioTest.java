@@ -158,7 +158,7 @@ public class OrdenNegocioTest {
 
     //segundo request
     @Test //caso feliz
-    public void setearFechaPesajeInicial() throws BadRequest, ConflictException, NoEncontradoException, NegocioException {
+    public void setearFechaPesajeInicial() throws BadRequest, ConflictException, NoEncontradoException, NegocioException, UnprocessableException {
         double taraCamion = 5000;
         Date fechaPesoInicial = new Date();
         orden.setEstado(1);
@@ -251,7 +251,7 @@ public class OrdenNegocioTest {
         when(ordenRepositoryMock.save(orden)).thenReturn(givenOrden.get());
         when(ordenRepositoryMock.findById(orden.getId())).thenReturn(givenOrden);
         //then
-        assertThrows(ConflictException.class, () -> ordenNegocio.establecerPesajeInicial(orden));
+        assertThrows(UnprocessableException.class, () -> ordenNegocio.establecerPesajeInicial(orden));
 
         //System.out.println(ordenNegocio.establecerPesajeInicial(orden).getMensaje().getMensaje()); //Solo se puede pasar a estado 2 las ordenes en estado 1
     }
@@ -416,7 +416,7 @@ public class OrdenNegocioTest {
     public void conciliacion() throws UnprocessableException, NoEncontradoException, NegocioException {
         double taraCamion = 5000;
         Date fechaPesoInicial = new Date();
-        orden.setEstado(3);
+        orden.setEstado(4);
         orden.setFechaPesajeInicial(fechaPesoInicial);
         orden.getCamion().setTara(taraCamion);
         orden.setMasaAcumuladaKg(1500);

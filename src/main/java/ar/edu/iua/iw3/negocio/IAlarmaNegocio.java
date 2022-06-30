@@ -10,11 +10,11 @@ public interface IAlarmaNegocio {
 
     Alarma cargar(long id) throws NegocioException, NoEncontradoException;
 
-    RespuestaGenerica<Alarma> agregar(Alarma alarma) throws NegocioException, EncontradoException, BadRequest, NoEncontradoException;
+    RespuestaGenerica<Alarma> agregar(Alarma alarma) throws NegocioException;
 
     List<Alarma> listarPorAutor(long id) throws NegocioException, NoEncontradoException;
 
     void eliminar(long id) throws NegocioException, NoEncontradoException;
 
-    RespuestaGenerica<Alarma> aceptarAlarma(Alarma alarma) throws NegocioException, NoEncontradoException, ConflictException;;
+    RespuestaGenerica<Alarma> aceptarAlarma(Alarma alarma) throws NegocioException, NoEncontradoException, ConflictException;
 }

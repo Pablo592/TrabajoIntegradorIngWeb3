@@ -37,7 +37,6 @@ public class GraphNegocio implements IGraphNegocio {
 		}
 	}
 
-
 	@Override
 	public void pushExistAlarma(Alarma alarma) {
 		try {

@@ -32,7 +32,7 @@ public class ProductoRestController {
     @ApiOperation("Busca todos los productos registrados")
     @ApiResponses( value = {
             @ApiResponse(code = 200 , message = "Productos enviados correctamente"),
-            @ApiResponse(code = 500 , message = "Información incorrecta recibida")
+            @ApiResponse(code = 500 , message = "Error interno del servidor")
     })
 
     @PreAuthorize("hasRole('ROLE_USER')")
@@ -48,7 +48,7 @@ public class ProductoRestController {
     @ApiOperation("Registrar un nuevo producto")
     @ApiResponses( value = {
             @ApiResponse(code = 201 , message = "Producto registrado correctamente"),
-            @ApiResponse(code = 500 , message = "Información incorrecta recibida"),
+            @ApiResponse(code = 500 , message = "Error interno del servidor"),
             @ApiResponse(code = 302 , message = "El producto ya se encuentra registrado")
     })
 
@@ -71,7 +71,7 @@ public class ProductoRestController {
     @ApiOperation("Modificar un producto")
     @ApiResponses( value = {
             @ApiResponse(code = 200 , message = "Producto modificado correctamente"),
-            @ApiResponse(code = 500 , message = "Información incorrecta recibida"),
+            @ApiResponse(code = 500 , message = "Error interno del servidor"),
             @ApiResponse(code = 404 , message = "No es posible localizar el producto")
     })
 
@@ -92,7 +92,7 @@ public class ProductoRestController {
     @ApiOperation("Eliminar un producto")
     @ApiResponses( value = {
             @ApiResponse(code = 200 , message = "Producto eliminado correctamente"),
-            @ApiResponse(code = 500 , message = "Información incorrecta recibida"),
+            @ApiResponse(code = 500 , message = "Error interno del servidor"),
             @ApiResponse(code = 404 , message = "No es posible localizar el producto")
     })
 

@@ -1,8 +1,8 @@
 package ar.edu.iua.iw3.negocio;
 
 import ar.edu.iua.iw3.modelo.Alarma;
+import ar.edu.iua.iw3.modelo.Cuentas.IUsuarioNegocio;
 import ar.edu.iua.iw3.modelo.Cuentas.Usuario;
-import ar.edu.iua.iw3.modelo.Cuentas.UsuarioNegocio;
 import ar.edu.iua.iw3.modelo.Orden;
 import ar.edu.iua.iw3.modelo.persistencia.AlarmaRepository;
 import ar.edu.iua.iw3.negocio.excepciones.*;
@@ -28,10 +28,10 @@ public class AlarmaNegocio implements IAlarmaNegocio {
     private AlarmaRepository alarmaDAO;
 
     @Autowired
-    private UsuarioNegocio usuarioNegocio;
+    private IUsuarioNegocio usuarioNegocio;
 
     @Autowired
-    private OrdenNegocio ordenNegocio;
+    private IOrdenNegocio ordenNegocio;
 
     @Override
     public Alarma cargar(long id) throws NegocioException, NoEncontradoException {
@@ -71,7 +71,7 @@ public class AlarmaNegocio implements IAlarmaNegocio {
 
 
     @Override
-    public RespuestaGenerica<Alarma> agregar(Alarma alarma) throws NegocioException, BadRequest, NoEncontradoException {
+    public RespuestaGenerica<Alarma> agregar(Alarma alarma) throws NegocioException{
         MensajeRespuesta m = new MensajeRespuesta();
         RespuestaGenerica<Alarma> r = new RespuestaGenerica<Alarma>(alarma, m);
         alarma.setFechaDeCreacion(new Date());

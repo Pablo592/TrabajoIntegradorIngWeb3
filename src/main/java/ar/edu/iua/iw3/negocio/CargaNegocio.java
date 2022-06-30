@@ -31,10 +31,10 @@ public class CargaNegocio implements ICargaNegocio {
     private CargaRepository cargaDAO;
 
     @Autowired
-    private OrdenNegocio ordenNegocio;
+    private IOrdenNegocio ordenNegocio;
 
     @Autowired
-    private AlarmaNegocio alarmaNegocio;
+    private IAlarmaNegocio alarmaNegocio;
 
     @Autowired
     private ApplicationEventPublisher appEventPublisher;
@@ -85,7 +85,7 @@ public class CargaNegocio implements ICargaNegocio {
     }
 
     @Override
-    public RespuestaGenerica<Carga> agregar(Carga carga) throws NegocioException, NoEncontradoException, BadRequest, UnprocessableException, ConflictException{
+    public RespuestaGenerica<Carga> agregar(Carga carga) throws NegocioException, NoEncontradoException, BadRequest, UnprocessableException, ConflictException {
         MensajeRespuesta m=new MensajeRespuesta();
         RespuestaGenerica<Carga> r = new RespuestaGenerica<Carga>(carga, m);
 
@@ -148,7 +148,7 @@ public class CargaNegocio implements ICargaNegocio {
     }
 
 
-    private void generarAlarmaEvento(Carga carga, CargaEvent.Tipo tipo, Orden orden) throws NoEncontradoException, NegocioException, BadRequest {
+    private void generarAlarmaEvento(Carga carga, CargaEvent.Tipo tipo, Orden orden) throws NegocioException{
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Usuario user = (Usuario) auth.getPrincipal();
         Alarma a = new Alarma();

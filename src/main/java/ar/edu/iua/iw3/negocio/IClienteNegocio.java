@@ -19,4 +19,6 @@ public interface IClienteNegocio {
 
 	void eliminar(long id) throws NegocioException, NoEncontradoException;
 
+	public Cliente findByContacto(long contacto);
+
 }

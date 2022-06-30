@@ -29,7 +29,7 @@ public class UsuarioRestController {
     @ApiOperation("Busca todos los usuarios registrados")
     @ApiResponses( value = {
             @ApiResponse(code = 200 , message = "Usuarios enviados correctamente"),
-            @ApiResponse(code = 500 , message = "Error del servidor")
+            @ApiResponse(code = 500 , message = "Error interno del servidor")
     })
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -47,7 +47,8 @@ public class UsuarioRestController {
     @ApiOperation("Busca un usuario registrado")
     @ApiResponses( value = {
             @ApiResponse(code = 200 , message = "Usuario enviado correctamente"),
-            @ApiResponse(code = 500 , message = "Error del servidor")
+            @ApiResponse(code = 500 , message = "Error interno del servidor"),
+            @ApiResponse(code = 404 , message = "No es posible localizar al usuario")
     })
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -68,7 +69,8 @@ public class UsuarioRestController {
     @ApiResponses( value = {
             @ApiResponse(code = 201 , message = "Usuario registrado correctamente"),
             @ApiResponse(code = 302 , message = "El usuario ya se encuentra registrado"),
-            @ApiResponse(code = 500 , message = "Error del servidor")
+            @ApiResponse(code = 500 , message = "Error interno del servidor"),
+            @ApiResponse(code = 400 , message = "Request con informacion inconsistente")
     })
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -96,7 +98,9 @@ public class UsuarioRestController {
     @ApiResponses( value = {
             @ApiResponse(code = 200 , message = "Usuario modificado correctamente"),
             @ApiResponse(code = 404 , message = "No es posible localizar el usuario"),
-            @ApiResponse(code = 500 , message = "Error del servidor")
+            @ApiResponse(code = 500 , message = "Error interno del servidor"),
+            @ApiResponse(code = 400 , message = "Request con informacion inconsistente"),
+            @ApiResponse(code = 409 , message = "Conflicto con un usuario ya existente")
     })
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -128,7 +132,7 @@ public class UsuarioRestController {
     @ApiResponses( value = {
             @ApiResponse(code = 200 , message = "Usuario eliminado correctamente"),
             @ApiResponse(code = 404 , message = "No es posible localizar el usuario"),
-            @ApiResponse(code = 500 , message = "Información incorrecta recibida")
+            @ApiResponse(code = 500 , message = "Error interno del servidor")
     })
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")

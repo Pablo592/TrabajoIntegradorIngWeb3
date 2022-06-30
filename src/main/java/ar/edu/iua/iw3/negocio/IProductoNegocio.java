@@ -18,4 +18,6 @@ public interface IProductoNegocio {
     Producto modificar(Producto producto) throws NegocioException, NoEncontradoException;
 
     void eliminar(long id) throws NegocioException, NoEncontradoException;
+
+    public Producto findProductoByNombre(String nombre);
 }

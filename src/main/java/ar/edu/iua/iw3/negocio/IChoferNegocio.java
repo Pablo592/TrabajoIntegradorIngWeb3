@@ -19,4 +19,5 @@ public interface IChoferNegocio {
 
 	void eliminar(long id) throws NegocioException, NoEncontradoException;
 
+	public Chofer findByDocumento(long documento);
 }

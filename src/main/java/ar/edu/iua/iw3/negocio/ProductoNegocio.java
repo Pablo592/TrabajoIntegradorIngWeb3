@@ -50,11 +50,8 @@ public class ProductoNegocio implements IProductoNegocio{
         try {
             if(null!=findProductoByNombre(producto.getNombre()))
                 throw new EncontradoException("Ya existe un producto con el nombre =" + producto.getNombre());
-            cargar(producto.getId()); 									// tira excepcion sino no lo encuentra
+            if(null!=cargar(producto.getId()))
             throw new EncontradoException("Ya existe un producto con id=" + producto.getId());
-        } catch (NoEncontradoException e) {
-        }
-        try {
             return productoDAO.save(producto);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
@@ -69,24 +66,24 @@ public class ProductoNegocio implements IProductoNegocio{
 
     @Override
     public Producto modificar(Producto producto) throws NegocioException, NoEncontradoException {
-        cargar(producto.getId()); //Paso 1
+        cargar(producto.getId());
         Producto productoWithNombre = findProductoByNombre(producto.getNombre());
 
-        if(null!=productoWithNombre) { //Paso 2
+        if(null!=productoWithNombre) {
 
             if (producto.getId() != productoWithNombre.getId())
                 throw new NegocioException("Ya existe el producto " + productoWithNombre.getId() + "con el nombre ="
-                        + producto.getNombre());	//Paso 3_a
+                        + producto.getNombre());
 
-            return	saveProducto(producto);	//Paso 3_b
+            return	saveProducto(producto);
         }
 
-        return saveProducto(producto);	//Paso 4
+        return saveProducto(producto);
     }
 
     private  Producto saveProducto(Producto producto) throws NegocioException {
         try {
-            return productoDAO.save(producto); // sino existe el producto lo cargo
+            return productoDAO.save(producto);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             throw new NegocioException(e);

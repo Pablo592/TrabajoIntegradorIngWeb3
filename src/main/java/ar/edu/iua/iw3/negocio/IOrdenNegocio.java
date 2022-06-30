@@ -17,9 +17,7 @@ public interface IOrdenNegocio {
 
     void eliminar(long id) throws NegocioException, NoEncontradoException;
 
-    RespuestaGenerica<Orden> establecerPesajeInicial(Orden orden) throws NegocioException, NoEncontradoException, BadRequest, ConflictException;
-
-    Orden traerUltimaCarga(String codigoExterno) throws NegocioException, NoEncontradoException;
+    RespuestaGenerica<Orden> establecerPesajeInicial(Orden orden) throws NegocioException, NoEncontradoException, BadRequest,UnprocessableException, ConflictException;
 
     RespuestaGenerica<Orden> frenarCargar(String codigoExterno) throws NegocioException, NoEncontradoException, UnprocessableException;
 
@@ -28,5 +26,7 @@ public interface IOrdenNegocio {
     ConciliacionDTO  obtenerConciliacion(String codigoExterno) throws NegocioException, NoEncontradoException, UnprocessableException;
 
     public RespuestaGenerica<Orden> cambiarUmbralTemperatura(Orden orden) throws BadRequest, NoEncontradoException, NegocioException, ConflictException;
+
+    public Orden findByCodigoExterno( String codigoExterno);
 }
 

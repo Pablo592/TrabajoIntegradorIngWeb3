@@ -13,4 +13,5 @@ public interface IUsuarioNegocio {
 	public RespuestaGenerica<Usuario> modificar(Usuario usuario) throws NegocioException, ConflictException, NoEncontradoException, BadRequest;
 	public Usuario cargarPorUsernameOEmail(String nombreOEmail) throws NegocioException, NoEncontradoException;
 	public RespuestaGenerica<Usuario> eliminar(int id) throws NegocioException, NoEncontradoException;
+	public Usuario findByid(int id);
 }

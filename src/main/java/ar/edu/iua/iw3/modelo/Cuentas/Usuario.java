@@ -188,10 +188,6 @@ public class Usuario implements UserDetails, Serializable {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-//		List<GrantedAuthority> roles=new ArrayList<GrantedAuthority>();
-//		for(Rol r: getRoles()) {
-//			roles.add(new SimpleGrantedAuthority(r.getNombre()));
-//		}
 		List<GrantedAuthority> roles=getRoles()
 				.stream()
 				.map(r -> new SimpleGrantedAuthority(r.getNombre()))
@@ -199,13 +195,6 @@ public class Usuario implements UserDetails, Serializable {
 		return roles;
 	}
 	
-	/*
-	 * - r1                                                              - SGA(r1)
-	 * - r2     r1 r2 r3 r4  map                                         - SGA(r2)
-	 * - r3 =>  -  -  -  -  ====>  SGA(r1) SGA(r12) SGA(r3) SGA(r4) =>   - SGA(r3)
-	 * - r4                                                              - SGA(r4)
-	 */
-
 	public String checkBasicData(){
 		if(getApellido().trim().length()==0)
 			return "El atributo 'apellido' es obligatorio";
