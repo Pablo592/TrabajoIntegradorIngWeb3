@@ -76,7 +76,7 @@ public class OrdenRestController {
             @ApiResponse(code = 404 , message = "No es posible localizar la orden")
     })
     @PreAuthorize("hasRole('ROLE_USER')")
-    @GetMapping(value= "/ordenes/buscar-una/{id}")
+    @GetMapping(value= "/ordenes/buscar/{id}")
     public ResponseEntity<Orden> buscarOrden(@PathVariable("id") long id) {
         try {
             return new ResponseEntity<Orden>(ordenNegocio.cargar(id), HttpStatus.OK);
@@ -97,7 +97,7 @@ public class OrdenRestController {
             @ApiResponse(code = 400 , message = "Request con informacion inconsistente")
     })
     @PreAuthorize("hasRole('ROLE_USER')")
-    @PostMapping(value= "/ordenes/primer-envio",consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value= "/ordenes/crear",consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<MensajeRespuesta> agregarPrimerRequest(@RequestBody Orden orden) {
         try {
             MensajeRespuesta r=ordenNegocio.agregar(orden).getMensaje();

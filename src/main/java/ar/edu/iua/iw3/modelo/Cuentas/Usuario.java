@@ -194,7 +194,7 @@ public class Usuario implements UserDetails, Serializable {
 				.collect(Collectors.toList());
 		return roles;
 	}
-	
+
 	public String checkBasicData(){
 		if(getApellido().trim().length()==0)
 			return "El atributo 'apellido' es obligatorio";
