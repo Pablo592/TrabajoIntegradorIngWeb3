@@ -7,15 +7,16 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
 import ar.edu.iua.iw3.modelo.*;
 import ar.edu.iua.iw3.modelo.Cuentas.Rol;
 import ar.edu.iua.iw3.modelo.Cuentas.Usuario;
 import ar.edu.iua.iw3.modelo.dto.ConciliacionDTO;
+import ar.edu.iua.iw3.negocio.IOrdenNegocio;
 import ar.edu.iua.iw3.negocio.OrdenNegocio;
 import ar.edu.iua.iw3.security.authtoken.AuthToken;
 import ar.edu.iua.iw3.util.MensajeRespuesta;
 import ar.edu.iua.iw3.util.RespuestaGenerica;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,19 +24,16 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -44,17 +42,16 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 
-
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class OrdenControllerTest {
     private Logger log = LoggerFactory.getLogger(this.getClass());
     @Autowired
     private WebApplicationContext webApplicationContext;
-
     private MockMvc mvc;
     @MockBean
     private OrdenNegocio ordenNegocio;
+
 
     Orden orden;
     Cliente cliente ;
@@ -66,6 +63,7 @@ public class OrdenControllerTest {
     @Before
     public  void setup_init() throws ParseException {
         mvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date fechaTurno = sdf.parse("2022-01-01");
@@ -153,8 +151,8 @@ public class OrdenControllerTest {
                 .andExpect(jsonPath(("$.promedioCaudalLitroSegundo"),is(conciliacionDTO.getPromedioCaudalLitroSegundo()),Float.class));
     }
 
-    //buscar una orden por id
-    @Test
+
+   /* @Test
     public void agregarOrden_Success() throws Exception {
         String token = getToken();
         Gson gson = new Gson();
@@ -164,17 +162,19 @@ public class OrdenControllerTest {
         MensajeRespuesta m=new MensajeRespuesta();
         RespuestaGenerica<Orden> r = new RespuestaGenerica<Orden>(orden, m);
 
+
         //when
         when(ordenNegocio.agregar(orden)).thenReturn(r);
 
         //then
-        mvc.perform(post("/test/api/v1/ordenes/primer-envio")
+        mvc.perform(post("/test/api/v1/ordenes/crear")
                         .param("xauthtoken", token)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(JSON).accept(MediaType.APPLICATION_JSON))
+                        .content(JSON).accept(MediaType.APPLICATION_JSON)
+                       )
                 .andDo(print())
                .andExpect(status().isCreated());
-    }
+    }*/
 
 
     @Test
@@ -185,7 +185,7 @@ public class OrdenControllerTest {
         //when
         when(ordenNegocio.cargar(orden.getId())).thenReturn(orden);
         //then
-        mvc.perform(get("/test/api/v1/ordenes/buscar-una/" + orden.getId())
+        mvc.perform(get("/test/api/v1/ordenes/buscar/" + orden.getId())
                         .param("xauthtoken", token)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
