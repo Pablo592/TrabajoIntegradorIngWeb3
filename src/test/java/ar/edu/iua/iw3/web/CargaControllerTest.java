@@ -6,6 +6,7 @@ import ar.edu.iua.iw3.modelo.Cuentas.Usuario;
 import ar.edu.iua.iw3.modelo.dto.CargaDTO;
 import ar.edu.iua.iw3.negocio.CargaNegocio;
 import ar.edu.iua.iw3.security.authtoken.AuthToken;
+import ar.edu.iua.iw3.util.Utilidades;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,9 +23,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-
 import java.util.*;
-
+import static ar.edu.iua.iw3.util.Constantes.URL_CARGAS;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.Mockito.when;
@@ -51,12 +51,11 @@ public class CargaControllerTest {
     private Camion camion;
     long idOrden = 1;
     long idCarga = 2;
-
-
+    private Utilidades utilidades;
     @Before
     public void setup_init() {
         mvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-
+        utilidades = new Utilidades();
         orden = new Orden();
         orden.setCodigoExterno("45");
         orden.setFechaTurno(new Date());
@@ -104,8 +103,8 @@ public class CargaControllerTest {
 
     }
     @Test
-    public void listSuccess() throws Exception {
-        String token = getToken();
+    public void listarAllCargas_Success() throws Exception {
+        String token = utilidades.getToken();
 
         //given
         List<Carga> cargaList= new ArrayList<Carga>();
@@ -115,7 +114,7 @@ public class CargaControllerTest {
         when(cargaNegocio.listado()).thenReturn(cargaList);
 
         //then
-        mvc.perform(get("/test/api/v1/cargas")
+        mvc.perform(get("/"+URL_CARGAS)
                         .param("xauthtoken", token)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -123,10 +122,9 @@ public class CargaControllerTest {
                 .andExpect(jsonPath("$",hasSize(1)))
                 .andExpect(jsonPath("$[0].id",is(carga.getId()),Long.class));
     }
-
     @Test
     public void getOrdenById_Success() throws Exception {
-        String token = getToken();
+        String token = utilidades.getToken();
         float promedioCaudal = (float) 0.05;
         float promedioDensidad = 19;
         float promedioTemp = 1;
@@ -136,7 +134,7 @@ public class CargaControllerTest {
         //when
         when(cargaNegocio.getPromedioDensidadAndTemperaturaAndCaudal(orden.getCodigoExterno())).thenReturn(cargaDTO);
         //then
-        mvc.perform(get("/test/api/v1/cargas/carga-promedio")
+        mvc.perform(get("/"+URL_CARGAS+"/carga-promedio")
                         .param("xauthtoken", token)
                         .param("codigoExterno", orden.getCodigoExterno())
                         .contentType(MediaType.APPLICATION_JSON))
@@ -146,32 +144,5 @@ public class CargaControllerTest {
                 .andExpect(jsonPath(("$.promedioTemperaturaProductoCelcius"),is(promedioTemp),Float.class))
                 .andExpect(jsonPath(("$.promedioCaudalLitroSegundo"),is(promedioCaudal),Float.class));
     }
-    private String getToken() {
-        Rol admin = new Rol(1, "ROLE_USER", "Testing del sistema");
-        Set<Rol> roles = new HashSet<Rol>();
-        roles.add(admin);
-
-        //int id, String nombre, String apellido, String email, String password, String username, Set<Rol> roles
-        Usuario usuario1 = new Usuario(1,"Joel","Spítale","vspitale107@alumnos.iua.edu.ar","123","jspitale97",roles);
-
-        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(usuario1, null,usuario1.getAuthorities());
-
-        System.out.println("Autoridades = "+usuario1.getAuthorities());
-
-        SecurityContextHolder.getContext().setAuthentication(auth);
-
-        Authentication auth1 = SecurityContextHolder.getContext().getAuthentication();
-        usuario1 = (Usuario) auth1.getPrincipal();
-
-        AuthToken newToken = new AuthToken(usuario1.getDuracionToken(), usuario1.getUsername());
-
-        String token = newToken.encodeCookieValue();
-        token = token.replace("[", "").replace("]", "");
-
-        System.out.println("Token = "+token);
-
-        return token;
-    }
-
 
 }

@@ -1,8 +1,6 @@
 package ar.edu.iua.iw3.negocio;
 
 import ar.edu.iua.iw3.modelo.*;
-import ar.edu.iua.iw3.modelo.Cuentas.IUsuarioNegocio;
-import ar.edu.iua.iw3.modelo.Cuentas.Rol;
 import ar.edu.iua.iw3.modelo.Cuentas.Usuario;
 import ar.edu.iua.iw3.modelo.Cuentas.UsuarioRepository;
 import ar.edu.iua.iw3.modelo.dto.CargaDTO;
@@ -12,6 +10,7 @@ import ar.edu.iua.iw3.modelo.persistencia.OrdenRepository;
 import ar.edu.iua.iw3.negocio.excepciones.*;
 import ar.edu.iua.iw3.util.MensajeRespuesta;
 import ar.edu.iua.iw3.util.RespuestaGenerica;
+import ar.edu.iua.iw3.util.Utilidades;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,27 +19,34 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.stream.Collectors;
-
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
-
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class CargaNegocioTest {
     private Logger log = LoggerFactory.getLogger(this.getClass());
+    @MockBean
+    CargaRepository cargaRepositoryMock;
+    @Autowired
+    CargaNegocio cargaNegocio;
+    @MockBean
+    OrdenRepository ordenRepositoryMock;
+    @Autowired
+    OrdenNegocio ordenNegocio;
+    @MockBean
+    AlarmaRepository alarmaRepositoryMock;
+    @MockBean
+    AlarmaNegocio alarmaNegocioMock;
+    @MockBean
+    UsuarioRepository usuarioRepositoryMock;
     private Orden orden;
     private Carga carga;
     private Cliente cliente;
@@ -50,30 +56,10 @@ public class CargaNegocioTest {
     private Camion camion;
     long idOrden = 1;
     long idCarga = 2;
-
-    @MockBean
-    CargaRepository cargaRepositoryMock;
-    @Autowired
-    CargaNegocio cargaNegocio;
-
-    @MockBean
-    OrdenRepository ordenRepositoryMock;
-    @Autowired
-    OrdenNegocio ordenNegocio;
-
-    @MockBean
-    AlarmaRepository alarmaRepositoryMock;
-    @MockBean
-    AlarmaNegocio alarmaNegocioMock;
-
-    @MockBean
-    UsuarioRepository usuarioRepositoryMock;
-
-    @Autowired
-    private IUsuarioNegocio userBusiness;
-
+    private Utilidades utilidades;
     @Before
     public void setup_init() {
+        utilidades = new Utilidades();
         orden = new Orden();
         orden.setCodigoExterno("45");
         orden.setFechaTurno(new Date());
@@ -121,7 +107,7 @@ public class CargaNegocioTest {
 
     }
     @Test//tercer envio caso feliz
-    public void agregarCargar() throws BadRequest, EncontradoException, UnprocessableException, ConflictException, NoEncontradoException, NegocioException {
+    public void crearCarga_Success() throws BadRequest, UnprocessableException, ConflictException, NoEncontradoException, NegocioException {
         //given
         Optional<Orden> givenOrden = Optional.of(orden);
         //when+
@@ -136,83 +122,60 @@ public class CargaNegocioTest {
         assertEquals(idCarga,carga1.getId());
     }
     @Test
-    public void enviarCargaConHoraHadwareDespuesDeHoraLlegadaBackend(){
-        Date fechaEntradaBackEnd = new Date();
-
+    public void intentarCrearCargaConHoraHadwareDespuesDeHoraLlegadaBackend_ConflictException(){
+        Date fechaEntradaBackEnd;
         try {
             fechaEntradaBackEnd = new SimpleDateFormat("yyyy-MM-dd").parse("2022-06-02");
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
         carga.setFechaEntradaBackEnd(fechaEntradaBackEnd);
-
         //given
         Optional<Orden> givenOrden = Optional.of(orden);
-
         //when
         when(ordenRepositoryMock.findById(orden.getId())).thenReturn(givenOrden);
         when(ordenRepositoryMock.findByCodigoExterno(orden.getCodigoExterno())).thenReturn(givenOrden);
         when(ordenRepositoryMock.save(orden)).thenReturn(givenOrden.get());
         when(cargaRepositoryMock.save(carga)).thenReturn(carga);
-
         //then
         assertThrows(ConflictException.class, () -> cargaNegocio.agregar(carga));
     }
-
-
     @Test
-    public void enviarCargaConOrdenEnEstadoIncorrecto(){
+    public void crearCargaConOrdenEnEstadoIncorrecto_UnprocessableException(){
         carga.getOrden().setEstado(1);
         //given
         Optional<Orden> givenOrden = Optional.of(orden);
-
         //when+
         when(ordenRepositoryMock.findById(orden.getId())).thenReturn(givenOrden);
         when(ordenRepositoryMock.findByCodigoExterno(orden.getCodigoExterno())).thenReturn(givenOrden);
         when(ordenRepositoryMock.save(orden)).thenReturn(givenOrden.get());
         when(cargaRepositoryMock.save(carga)).thenReturn(carga);
-
         //then
         assertThrows(UnprocessableException.class, () -> cargaNegocio.agregar(carga));
     }
-
     @Test
-    public void enviarCargasConsecutivasConMismaMasaAcumulada(){
+    public void crearCargasConsecutivasConMismaMasaAcumulada_UnprocessableException(){
         orden.getCargaList().add(carga);
         orden.setMasaAcumuladaKg(carga.getMasaAcumuladaKg());
-
         CargaDTO cargaDTO = new CargaDTO(carga.getDensidadProductoKilogramoMetroCub(),carga.getTemperaturaProductoCelcius(),carga.getCaudalLitroSegundo());
-
         //given
         Optional<Orden> givenOrden = Optional.of(orden);
-
         //when+
         when(ordenRepositoryMock.findById(orden.getId())).thenReturn(givenOrden);
         when(ordenRepositoryMock.findByCodigoExterno(orden.getCodigoExterno())).thenReturn(givenOrden);
         when(ordenRepositoryMock.save(orden)).thenReturn(givenOrden.get());
         when(cargaRepositoryMock.save(carga)).thenReturn(carga);
-        when(cargaRepositoryMock.getPromedioDensidadAndTemperaturaAndCaudal(orden.getId())).thenReturn(cargaDTO);   //se lo agrege
+        when(cargaRepositoryMock.getPromedioDensidadAndTemperaturaAndCaudal(orden.getId())).thenReturn(cargaDTO);
         assertThrows(UnprocessableException.class, () -> cargaNegocio.agregar(carga));
     }
-
     @Test
-    public void generarUnicaAlarmaYEnviarMail() throws BadRequest, EncontradoException, UnprocessableException, ConflictException, NoEncontradoException, NegocioException {
+    public void generarUnicaAlarmaYEnviarMail_Success() throws BadRequest, UnprocessableException, ConflictException, NoEncontradoException, NegocioException {
         carga.setTemperaturaProductoCelcius(26);
-        //los roles del usuario
-        Rol rol = new Rol();
-        rol.setNombre("ROLE_ADMIN");
-        Set<Rol> roles = new HashSet<>();
-        roles.add(rol);
-        usuario.setRoles(roles);
-        //SIMULAMOS UN LOGUIN
-        when(usuarioRepositoryMock.findFirstByUsernameOrEmail(usuario.getUsername(), usuario.getUsername())).thenReturn(Optional.ofNullable(usuario));
-        //userBusiness.cargarPorUsernameOEmail(usuario.getUsername());
-        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(usuario, null, usuario.getAuthorities());
-        SecurityContextHolder.getContext().setAuthentication(auth);
-
+        utilidades.getToken();
         //alarma
         Authentication auth_aux = SecurityContextHolder.getContext().getAuthentication();
         Usuario user = (Usuario) auth_aux.getPrincipal();
+
         Alarma a = new Alarma();
         a.setOrdenAlarma(orden);
         a.setAutor(user);
@@ -220,27 +183,22 @@ public class CargaNegocioTest {
 
         MensajeRespuesta m = new MensajeRespuesta();
         RespuestaGenerica<Alarma> r = new RespuestaGenerica<Alarma>(a, m);
-        m.setCodigo(0);//cero esta todo ok
+        m.setCodigo(0);
         m.setMensaje(a.toString());
-
         when(alarmaNegocioMock.agregar(a)).thenReturn(r);
-
         //given
         Optional<Orden> givenOrden = Optional.of(orden);
-
         //when
         when(ordenRepositoryMock.findById(orden.getId())).thenReturn(givenOrden);
         when(ordenRepositoryMock.findByCodigoExterno(orden.getCodigoExterno())).thenReturn(givenOrden);
         when(ordenRepositoryMock.save(orden)).thenReturn(givenOrden.get());
         when(cargaRepositoryMock.save(carga)).thenReturn(carga);
 
-        assertNotEquals(-1, cargaNegocio.agregar(carga).getMensaje().getCodigo());  //el -1 indica que se produjo un error
+        assertNotEquals(-1, cargaNegocio.agregar(carga).getMensaje().getCodigo());
         assertEquals(true, orden.isEnviarMailActivo());
     }
-
-
     @Test
-    public void tanqueLleno() throws BadRequest, EncontradoException, UnprocessableException, ConflictException, NoEncontradoException, NegocioException {
+    public void intentarCargarContanqueLleno_UnprocessableException() {
         //given
         Optional<Orden> givenOrden = Optional.of(orden);
         carga.setMasaAcumuladaKg((float) (camion.getPreset()+1));
@@ -249,7 +207,6 @@ public class CargaNegocioTest {
         when(ordenRepositoryMock.findByCodigoExterno(orden.getCodigoExterno())).thenReturn(givenOrden);
         when(ordenRepositoryMock.save(orden)).thenReturn(givenOrden.get());
         when(cargaRepositoryMock.save(carga)).thenReturn(carga);
-
         //then
         assertThrows(UnprocessableException.class, () -> cargaNegocio.agregar(carga));
     }

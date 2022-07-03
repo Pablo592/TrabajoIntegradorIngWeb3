@@ -2,6 +2,7 @@ package ar.edu.iua.iw3.modelo;
 
 import ar.edu.iua.iw3.modelo.dto.ConciliacionDTO;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -68,6 +69,7 @@ public class Orden implements Serializable{
 	private String codigoExterno;
 
 	@ApiModelProperty(notes = "Fecha prevista de la carga de combustible.", example = "2021-01-01", required = true)
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss.SSSSSS")
 	@Column(nullable = false)
 	private Date fechaTurno;
 
