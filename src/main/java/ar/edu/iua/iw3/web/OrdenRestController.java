@@ -1,6 +1,5 @@
 package ar.edu.iua.iw3.web;
 
-
 import ar.edu.iua.iw3.modelo.Orden;
 import ar.edu.iua.iw3.modelo.dto.ConciliacionDTO;
 import ar.edu.iua.iw3.negocio.IOrdenNegocio;
@@ -18,9 +17,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+
 @RestController
 @RequestMapping(Constantes.URL_ORDENES)
 public class OrdenRestController {
@@ -36,7 +35,7 @@ public class OrdenRestController {
     })
     @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping(value= "",produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Orden>> listado() {
+    public ResponseEntity<List<Orden>> listarAllOrdenes() {
         try {
             return new ResponseEntity<List<Orden>>(ordenNegocio.listado(), HttpStatus.OK);
         } catch (NegocioException e) {
@@ -54,7 +53,7 @@ public class OrdenRestController {
     })
     @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping(value= "/conciliacion/{codigoExterno}")
-    public ResponseEntity<ConciliacionDTO>  getConciliacion(@PathVariable("codigoExterno") String codigoExterno) {
+    public ResponseEntity<ConciliacionDTO>  getConciliacionByCodigoExterno(@PathVariable("codigoExterno") String codigoExterno) {
         try {
             return new ResponseEntity<ConciliacionDTO>(ordenNegocio.obtenerConciliacion(codigoExterno), HttpStatus.OK);
         } catch (NegocioException e) {
@@ -77,7 +76,7 @@ public class OrdenRestController {
     })
     @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping(value= "/buscar/{id}")
-    public ResponseEntity<Orden> buscarOrden(@PathVariable("id") long id) {
+    public ResponseEntity<Orden> buscarOrdenById(@PathVariable("id") long id) {
         try {
             return new ResponseEntity<Orden>(ordenNegocio.cargar(id), HttpStatus.OK);
         } catch (NegocioException e) {
@@ -98,7 +97,7 @@ public class OrdenRestController {
     })
     @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping(value= "/crear",consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<MensajeRespuesta> agregarPrimerRequest(@RequestBody Orden orden) {
+    public ResponseEntity<MensajeRespuesta> agregar(@RequestBody Orden orden) {
         try {
             MensajeRespuesta r=ordenNegocio.agregar(orden).getMensaje();
             return new ResponseEntity<MensajeRespuesta>(r, HttpStatus.CREATED);
@@ -122,14 +121,14 @@ public class OrdenRestController {
             @ApiResponse(code = 200 , message = "Orden actualizada correctamente"),
             @ApiResponse(code = 404 , message = "No es posible localizar la orden"),
             @ApiResponse(code = 500 , message = "Error interno del servidor"),
-            @ApiResponse(code = 400 , message = "Request con informacion inconsistente"),
-            @ApiResponse(code = 409 , message = "La patente no es vàlida"),
+            @ApiResponse(code = 400 , message = "Request con datos insuficientes o formato no valido"),
+            @ApiResponse(code = 409 , message = "Request con informacion inconsistente"),
             @ApiResponse(code = 422 , message = "Operacion no permitida")
     })
 
     @PreAuthorize("hasRole('ROLE_USER')")
     @PutMapping(value= "/tara")
-    public ResponseEntity<MensajeRespuesta> pesoInicialCamion(@RequestBody Orden orden) {
+    public ResponseEntity<MensajeRespuesta> setearPesoInicialCamion(@RequestBody Orden orden) {
         try {
             MensajeRespuesta r=ordenNegocio.establecerPesajeInicial(orden).getMensaje();
             return new ResponseEntity<MensajeRespuesta>(r, HttpStatus.OK);
@@ -161,7 +160,7 @@ public class OrdenRestController {
             @ApiResponse(code = 200 , message = "Orden actualizada correctamente"),
             @ApiResponse(code = 404 , message = "No es posible localizar la orden"),
             @ApiResponse(code = 500 , message = "Error interno del servidor"),
-            @ApiResponse(code = 409 , message = "La patente no es vàlida")
+            @ApiResponse(code = 422 , message = "Operacion no permitida")
     })
 
     @PreAuthorize("hasRole('ROLE_USER')")
@@ -191,12 +190,12 @@ public class OrdenRestController {
             @ApiResponse(code = 200 , message = "Orden actualizada correctamente"),
             @ApiResponse(code = 404 , message = "No es posible localizar la orden"),
             @ApiResponse(code = 500 , message = "Error interno del servidor"),
-            @ApiResponse(code = 409 , message = "La patente no es vàlida")
+            @ApiResponse(code = 422 , message = "Operacion no permitida")
     })
 
     @PreAuthorize("hasRole('ROLE_USER')")
     @PutMapping(value= "/peso-final")
-    public ResponseEntity<MensajeRespuesta> pesoFinalCamion(@RequestBody Orden orden) {
+    public ResponseEntity<MensajeRespuesta> setearPesoFinalCamion(@RequestBody Orden orden) {
         try {
             MensajeRespuesta r=ordenNegocio.establecerPesajeFinal(orden).getMensaje();
             return new ResponseEntity<MensajeRespuesta>(r, HttpStatus.OK);
@@ -244,9 +243,9 @@ public class OrdenRestController {
     @ApiOperation("Modificar umbral de temperatura del combustible")
     @ApiResponses( value = {
             @ApiResponse(code = 200 , message = "Orden modificada correctamente"),
-            @ApiResponse(code = 404 , message = "No es posible localizar la orden"),
+            @ApiResponse(code = 404 , message = "No es posible encontrar la orden"),
             @ApiResponse(code = 500 , message = "Error interno del servidor"),
-            @ApiResponse(code = 400 , message = "Request con informacion inconsistente"),
+            @ApiResponse(code = 400 , message = "Request con datos insuficientes o formato no valido"),
             @ApiResponse(code = 409 , message = "Conflicto con orden ya existente")
     })
 
@@ -278,7 +277,7 @@ public class OrdenRestController {
     @ApiOperation("Eliminar una orden")
     @ApiResponses( value = {
             @ApiResponse(code = 200 , message = "Orden eliminada correctamente"),
-            @ApiResponse(code = 404 , message = "No es posible localizar la orden"),
+            @ApiResponse(code = 404 , message = "No es posible encontrar la orden"),
             @ApiResponse(code = 500 , message = "Error interno del servidor")
     })
 

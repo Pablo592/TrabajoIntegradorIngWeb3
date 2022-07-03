@@ -13,8 +13,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
-
 import static ar.edu.iua.iw3.util.Constantes.*;
 
 @RequestMapping(Constantes.URL_AUTH)
