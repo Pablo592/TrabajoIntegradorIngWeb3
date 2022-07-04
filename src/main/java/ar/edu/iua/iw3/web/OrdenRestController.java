@@ -283,16 +283,18 @@ public class OrdenRestController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping(value= "/{id}")
-    public ResponseEntity<String> eliminar(@PathVariable("id") long id) {
+    public ResponseEntity<MensajeRespuesta> eliminar(@PathVariable("id") long id) {
         try {
-            ordenNegocio.eliminar(id);
-            return new ResponseEntity<String>(HttpStatus.OK);
+            MensajeRespuesta r = ordenNegocio.eliminar(id).getMensaje();
+            return new ResponseEntity<MensajeRespuesta>( r,HttpStatus.OK);
         } catch (NegocioException e) {
             log.error(e.getMessage(), e);
-            return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
+            MensajeRespuesta r=new MensajeRespuesta(-1,e.getMessage());
+            return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (NoEncontradoException e) {
             log.error(e.getMessage(), e);
-            return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
+            MensajeRespuesta r=new MensajeRespuesta(-1,e.getMessage());
+            return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.NOT_FOUND);
         }
     }
 

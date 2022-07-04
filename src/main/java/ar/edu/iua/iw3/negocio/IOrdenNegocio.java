@@ -15,7 +15,7 @@ public interface IOrdenNegocio {
 
     Orden modificar(Orden orden) throws NegocioException, NoEncontradoException, ConflictException;
 
-    void eliminar(long id) throws NegocioException, NoEncontradoException;
+    RespuestaGenerica<Orden>  eliminar(long id) throws NegocioException, NoEncontradoException;
 
     RespuestaGenerica<Orden> establecerPesajeInicial(Orden orden) throws NegocioException, NoEncontradoException, BadRequest,UnprocessableException, ConflictException;
 

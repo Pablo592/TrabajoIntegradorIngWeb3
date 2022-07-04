@@ -197,6 +197,9 @@ public class OrdenNegocio implements IOrdenNegocio{
         cargar(orden.getId());
         Orden ordenBD= findByCodigoExterno(orden.getCodigoExterno());
 
+        MensajeRespuesta m=new MensajeRespuesta();
+        RespuestaGenerica<Orden> r = new RespuestaGenerica<Orden>(orden, m);
+
         if(null!=ordenBD) {
 
             if (orden.getId() != ordenBD.getId())
@@ -219,11 +222,12 @@ public class OrdenNegocio implements IOrdenNegocio{
     }
 
     @Override
-    public void eliminar(long id) throws NegocioException, NoEncontradoException {
-        Orden o = cargar(id);
-        try {
-            Orden orden = cargar(id);
+    public RespuestaGenerica<Orden> eliminar(long id) throws NegocioException, NoEncontradoException {
+        Orden orden= cargar(id);
+        MensajeRespuesta m=new MensajeRespuesta();
+        RespuestaGenerica<Orden> r = new RespuestaGenerica<Orden>(orden, m);
 
+        try {
             for (Alarma a:orden.getAlarmaList()) {
                 alarmaNegocio.eliminar(a.getId());
             }
@@ -231,6 +235,10 @@ public class OrdenNegocio implements IOrdenNegocio{
                 cargaNegocio.eliminar(c.getId());
             }
             ordenDAO.deleteById(id);
+            m.setCodigo(0);
+            m.setMensaje("Se elimino la orden con id: " + id );
+            return r;
+
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             throw new NegocioException(e);

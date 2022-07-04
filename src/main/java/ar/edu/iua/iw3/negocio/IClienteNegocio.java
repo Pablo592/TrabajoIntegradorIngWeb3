@@ -6,6 +6,7 @@ import ar.edu.iua.iw3.modelo.Cliente;
 import ar.edu.iua.iw3.negocio.excepciones.EncontradoException;
 import ar.edu.iua.iw3.negocio.excepciones.NegocioException;
 import ar.edu.iua.iw3.negocio.excepciones.NoEncontradoException;
+import ar.edu.iua.iw3.util.RespuestaGenerica;
 
 public interface IClienteNegocio {
 
@@ -13,9 +14,9 @@ public interface IClienteNegocio {
 
 	Cliente cargar(long id) throws NegocioException, NoEncontradoException;
 
-	Cliente agregar(Cliente cliente) throws NegocioException, EncontradoException;
+	RespuestaGenerica<Cliente> agregar(Cliente cliente) throws NegocioException, EncontradoException;
 
-	Cliente modificar(Cliente cliente) throws NegocioException, NoEncontradoException;
+	RespuestaGenerica<Cliente> modificar(Cliente cliente) throws NegocioException, NoEncontradoException;
 
 	void eliminar(long id) throws NegocioException, NoEncontradoException;
 
