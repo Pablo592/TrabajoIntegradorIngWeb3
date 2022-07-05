@@ -18,6 +18,7 @@ angular.module('ordenes').controller('Ordenes', function ($scope, OrdenesService
     $scope.soyAdmin = false;
     $scope.listaOrdenes = [];
     $scope.eliminar = 0;
+    $scope.textoBuscado;
 
 
     OrdenesService.listaOrdenes().then(

@@ -188,3 +188,11 @@
 .form-check-label {
     width: 100% !important;
 }
+
+.searchOrdenes{
+    display: flex;
+    width: 20%;
+    height: 30px;
+    margin-left: 4%;
+    margin-bottom: 20px;
+}
