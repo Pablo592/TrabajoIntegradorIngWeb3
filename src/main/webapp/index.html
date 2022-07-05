@@ -38,15 +38,21 @@
     <script type="text/javascript" src="ui/modulos/ordenes-modulo.js"></script>
     <script type="text/javascript" src="ui/modulos/conciliacion-modulo.js"></script>
     <script type="text/javascript" src="ui/modulos/graficos-modulo.js"></script>
+    <script type="text/javascript" src="ui/modulos/crearUsuario-modulo.js"></script>
+
 
     <script type="text/javascript" src="ui/controladores/ordenes-controller.js"></script>
     <script type="text/javascript" src="ui/controladores/loginController.js"></script>
+    <script type="text/javascript" src="ui/controladores/crearUsuarioController.js"></script>
+
     <script type="text/javascript" src="ui/controladores/conciliacionController.js"></script>
     <script type="text/javascript" src="ui/controladores/graficosController.js"></script>
 
     <script type="text/javascript" src="ui/servicios/ordenes-service.js"></script>
     <script type="text/javascript" src="ui/servicios/conciliacion-service.js"></script>
     <script type="text/javascript" src="ui/servicios/core-service.js"></script>
+    <script type="text/javascript" src="ui/servicios/crearUsuario-service.js"></script>
+
 
     <link rel="stylesheet" type="text/css" href="ui/vistas/index.css">
     <link rel="stylesheet" type="text/css" href="ui/vistas/crearUsuario.css">
@@ -64,6 +70,9 @@
     </div>
     <div class="navCentr"></div>
     <div class="navDer">
+        <div ng-show="botonCrearUsuario()" ng-click="paginaCrearUsuario()" class="crearUsuarioBoton">
+            Crear usuario
+        </div>
         <img ng-show="!existeAlarma()" class="fotoNav" src="campana.png" alt="">
         <div ng-show="existeAlarma()" class="dropdown">
             <div class="imagenTexto">

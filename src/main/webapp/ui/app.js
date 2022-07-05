@@ -1,5 +1,5 @@
 var app = angular.module('trabajoIntegrador',
-    ['ngRoute', 'ordenes', 'conciliacion', 'ui.bootstrap', 'ngStorage', 'oitozero.ngSweetAlert', 'chart.js', 'ngStomp', 'graficos']);
+    ['ngRoute', 'ordenes', 'conciliacion', 'ui.bootstrap', 'ngStorage', 'oitozero.ngSweetAlert', 'chart.js', 'ngStomp', 'graficos','crearUsuario']);
 
 /*declaramos el modulo que tiene que estar escrito igual que en el tag del HTML
 y las dependencias y nombres de los modulos creados dentro del arreglo
@@ -18,7 +18,7 @@ app.config(function ($localStorageProvider) {
 
 
 app.run(['$rootScope', '$uibModal', 'CoreService', '$location', '$log', '$localStorage', '$stomp',
-    function ($rootScope, $uibModal, CoreService, $location, $log, $localStorage, $stomp, $scope,) {
+    function ($rootScope, $uibModal, CoreService, $location, $window, $localStorage, $stomp, $scope,) {
 
         $rootScope.alarma = {
             id: '',
@@ -134,6 +134,19 @@ app.run(['$rootScope', '$uibModal', 'CoreService', '$location', '$log', '$localS
                 $rootScope.listaAlarmas = [];
             });
         }
+        $rootScope.botonCrearUsuario = function () {
+            for (let i = 0; i < $rootScope.listaRoles.length; i++) {
+                if ($rootScope.listaRoles[i] === 'ROLE_ADMIN')
+                    return true;
+            }
+            return false;
+        }
+
+
+        $rootScope.paginaCrearUsuario = function () {
+            window.location.replace("http://localhost:8080/index.html#!/crearuser");
+        }
+
         //$rootScope.openLoginForm();
 
         $rootScope.getRole = function () {
@@ -143,8 +156,6 @@ app.run(['$rootScope', '$uibModal', 'CoreService', '$location', '$log', '$localS
             }
             return 'ROLE_USER'
         }
-
-
         $rootScope.iniciaWS = function () {
             CoreService.initStompClient('/iw3/alarma', function (payload, headers, res) {
                 let aux = JSON.stringify($rootScope.listaAlarmas)

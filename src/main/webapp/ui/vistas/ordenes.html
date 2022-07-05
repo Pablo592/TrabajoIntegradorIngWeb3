@@ -262,21 +262,21 @@
     <div class="tabla">
         <div class="encabezadoTabla">
             <div class="espacioVacio"></div>
-            <div class="fuenteTabla">Número</div>
-            <div class="fuenteTabla">Estado</div>
-            <div class="fuenteTabla">Camión</div>
-            <div class="fuenteTabla">Preset</div>
-            <div class="fuenteTabla">Carga</div>
-            <div class="fuenteTabla">Temperatura</div>
-            <div class="fuenteTabla">Densidad</div>
-            <div class="fuenteTabla">Caudal</div>
+            <div ng-click="ordenarOrdenes('codigoExterno')" class="fuenteTabla">Número</div>
+            <div ng-click="ordenarOrdenes('estado')" class="fuenteTabla">Estado</div>
+            <div ng-click="ordenarOrdenes('camion.patente')" class="fuenteTabla">Camión</div>
+            <div ng-click="ordenarOrdenes('camion.preset')" class="fuenteTabla">Preset</div>
+            <div ng-click="ordenarOrdenes('masaAcumuladaKg')" class="fuenteTabla">Carga</div>
+            <div ng-click="ordenarOrdenes('ultimaTemperaturaProductoCelcius')" class="fuenteTabla">Temperatura</div>
+            <div ng-click="ordenarOrdenes('ultimaDensidadProductoKilogramoMetroCub')" class="fuenteTabla">Densidad</div>
+            <div ng-click="ordenarOrdenes('ultimoCaudalLitroSegundo')" class="fuenteTabla">Caudal</div>
             <div class="fuenteTabla">Tiempo transcurrido (Minutos)</div>
             <div class="fuenteTabla">Tiempo restante (Minutos)</div>
             <div class="fuenteTabla">Estadisticas</div>
             <div class="fuenteTabla">Gráfica</div>
             <div class="espacioVacio margenIzquierdo"></div>
         </div>
-        <div class="filasTabla" ng-repeat="list in listaOrdenes">
+        <div class="filasTabla" ng-repeat="list in listaOrdenes  | orderBy: parametroOrdenamiento">
             <div class="espacioVacio"></div>
             <div class="celda">{{list.codigoExterno}}</div>
             <div class="celda">{{list.estado}}</div>

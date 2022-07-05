@@ -113,3 +113,12 @@
 .puntero {
     cursor: pointer;
 }
+
+.crearUsuarioBoton{
+    display: flex;
+    width: 40%;
+    font-size: 30px;
+    background-color: rgb(227, 226, 226);
+    margin-right: 10px;
+    cursor: pointer;
+}

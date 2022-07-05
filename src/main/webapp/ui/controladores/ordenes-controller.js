@@ -13,6 +13,7 @@ angular.module('ordenes').controller('Ordenes', function ($scope, OrdenesService
     };
     var ordenVacia = $scope.orden;
     $scope.situacion = 0;
+    $scope.parametroOrdenamiento = 'codigoExterno';
     $scope.elegido = '';
     $scope.soyAdmin = false;
     $scope.listaOrdenes = [];
@@ -31,6 +32,11 @@ angular.module('ordenes').controller('Ordenes', function ($scope, OrdenesService
             console.log(err);
         }
     );
+
+    $scope.ordenarOrdenes = function (parametro) {
+        $scope.parametroOrdenamiento = parametro;
+    }
+
 
     $scope.necesitoCrear = function () {
         console.log("check elegido necesitoCrear")

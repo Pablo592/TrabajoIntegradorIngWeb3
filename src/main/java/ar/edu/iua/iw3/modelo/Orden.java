@@ -69,7 +69,7 @@ public class Orden implements Serializable{
 	private String codigoExterno;
 
 	@ApiModelProperty(notes = "Fecha prevista de la carga de combustible.", example = "2021-01-01", required = true)
-	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss.SSSSSS")
+	@JsonFormat(pattern="yyyy-MM-dd")
 	@Column(nullable = false)
 	private Date fechaTurno;
 
