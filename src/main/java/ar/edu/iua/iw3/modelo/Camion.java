@@ -1,6 +1,5 @@
 package ar.edu.iua.iw3.modelo;
 
-import ar.edu.iua.iw3.negocio.excepciones.BadRequest;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -14,7 +13,7 @@ import javax.persistence.*;
 public class Camion  implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
+    @ApiModelProperty(notes="Identificador del camion, clave autogenerada", required=false)
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

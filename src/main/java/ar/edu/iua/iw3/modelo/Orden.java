@@ -118,22 +118,26 @@ public class Orden implements Serializable{
 	private float ultimoCaudalLitroSegundo;
 
 	@ApiModelProperty(notes = "El camión que sera cargado con combustible")
-	@ManyToOne(cascade = CascadeType.ALL)
+	//@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name = "id_camion")
 	private Camion camion;
 
 	@ApiModelProperty(notes = "El cliente al que se le entregara el combustible")
-	@ManyToOne(cascade = CascadeType.ALL)
+	//@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name = "id_cliente")
 	private Cliente cliente;
 
 	@ApiModelProperty(notes = "El chofer al que se le entregara el combustible")
-	@ManyToOne(cascade = CascadeType.ALL)
+	//@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name = "id_chofer")
 	private Chofer chofer;
 
 	@ApiModelProperty(notes = "El combustible introducido en el camión")
-	@ManyToOne(cascade = CascadeType.ALL)
+	//@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name = "id_producto")
 	private Producto producto;
 
@@ -155,6 +159,8 @@ public class Orden implements Serializable{
 	@ApiModelProperty(notes = "Representa si la orden tiene su alarma prendida o no, para no enviar muchas alarmas", example = "true||false")
 	@Column(columnDefinition = "boolean default false", nullable = false)
 	boolean enviarMailActivo = false;
+
+	public Orden() {}
 
 	public float getUmbralTemperaturaCombustible() {
 		return umbralTemperaturaCombustible;
@@ -260,11 +266,11 @@ public class Orden implements Serializable{
 		this.password = password;
 	}
 
-	public ar.edu.iua.iw3.modelo.Camion getCamion() {
+	public Camion getCamion() {
 		return camion;
 	}
 
-	public void setCamion(ar.edu.iua.iw3.modelo.Camion camion) {
+	public void setCamion(Camion camion) {
 		this.camion = camion;
 	}
 

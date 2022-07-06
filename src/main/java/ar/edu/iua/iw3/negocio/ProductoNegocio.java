@@ -50,8 +50,6 @@ public class ProductoNegocio implements IProductoNegocio{
         try {
             if(null!=findProductoByNombre(producto.getNombre()))
                 throw new EncontradoException("Ya existe un producto con el nombre =" + producto.getNombre());
-            if(null!=cargar(producto.getId()))
-            throw new EncontradoException("Ya existe un producto con id=" + producto.getId());
             return productoDAO.save(producto);
         } catch (Exception e) {
             log.error(e.getMessage(), e);

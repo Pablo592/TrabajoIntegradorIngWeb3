@@ -150,13 +150,24 @@ public class OrdenNegocio implements IOrdenNegocio{
             Chofer chofer = choferNegocio.findByDocumento(choferJson.getDocumento());
             Producto producto = productoNegocio.findProductoByNombre(productoJson.getNombre());
 
-            if(camion!= null)
-                orden.setCamion(camion);
-            if(cliente!= null)
+           if(camion == null)
+                orden.setCamion(camionNegocio.agregar(camionJson));
+           else
+               orden.setCamion(camion);
+
+            if(cliente == null)
+                orden.setCliente(clienteNegocio.agregar(clienteJson).getEntidad());
+            else
                 orden.setCliente(cliente);
-            if(chofer!= null)
+
+            if(chofer  == null)
+                orden.setChofer(choferNegocio.agregar(choferJson));
+            else
                 orden.setChofer(chofer);
-            if(producto != null)
+
+            if(producto == null)
+                orden.setProducto(productoNegocio.agregar(productoJson));
+            else
                 orden.setProducto(producto);
 
             orden.setEstado(1);
