@@ -4,7 +4,7 @@ angular.module('ordenes').factory('OrdenesService', function ($http, URL_BASE) {
             return $http.get(URL_BASE + '/ordenes');
         },
         add: function (p) {
-            return $http.post(URL_BASE + '/ordenes/primer-envio', p);
+            return $http.post(URL_BASE + '/ordenes', p);
         },
         edit: function (p) {
             return $http.put(URL_BASE + '/ordenes', p);
@@ -15,11 +15,11 @@ angular.module('ordenes').factory('OrdenesService', function ($http, URL_BASE) {
         },
 
         frenarCarga: function (p) {
-            return $http.put(URL_BASE + '/ordenes/frenar-carga', p);
+            return $http.put(URL_BASE + '/ordenes/frenar/carga', p);
         },
 
         pesoFinal: function (p) {
-            return $http.put(URL_BASE + '/ordenes/peso-final', p);
+            return $http.put(URL_BASE + '/ordenes/peso/final', p);
         },
 
         remove: function (p) {

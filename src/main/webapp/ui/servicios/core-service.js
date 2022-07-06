@@ -24,10 +24,10 @@ angular.module('trabajoIntegrador').factory('CoreService', function ($http, URL_
 			$http.get(URL_BASE + "/auth-info");
 		},
 		alarmas: function (p) {
-			return $http.get(URL_BASE + '/alarmas/listar-author/' + p);
+			return $http.get(URL_BASE + '/alarmas/author/' + p);
 		},
 		alarmaAceptar: function (alarma) {
-			return $http.put(URL_BASE + '/alarmas/aceptarAlarma', alarma);
+			return $http.put(URL_BASE + '/alarmas/aceptar', alarma);
 		},
 		initStompClient: function (topic, cb) {
 

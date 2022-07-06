@@ -52,8 +52,8 @@ public class OrdenRestController {
             @ApiResponse(code = 422 , message = "Operacion no permitida")
     })
     @PreAuthorize("hasRole('ROLE_USER')")
-    @GetMapping(value= "/conciliacion")
-    public ResponseEntity<ConciliacionDTO>  getConciliacionByCodigoExterno(@RequestParam("codigoExterno") String codigoExterno) {
+    @GetMapping(value= "/conciliacion/{codigoExterno}")
+    public ResponseEntity<ConciliacionDTO>  getConciliacionByCodigoExterno(@PathVariable("codigoExterno") String codigoExterno) {
         try {
             return new ResponseEntity<ConciliacionDTO>(ordenNegocio.obtenerConciliacion(codigoExterno), HttpStatus.OK);
         } catch (NegocioException e) {

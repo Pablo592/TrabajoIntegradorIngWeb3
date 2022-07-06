@@ -6,7 +6,6 @@ import ar.edu.iua.iw3.security.authtoken.IAuthTokenBusiness;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -84,7 +83,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests().antMatchers("/cerrarSesion.png").permitAll();
 		http.authorizeRequests().antMatchers("/fechaAbajo.png").permitAll();
 		//autorizo para que se acceda a este end-point para facilitar desde el front  evitar loguearme
-		http.authorizeRequests().antMatchers("/test/api/v1/ordenes").permitAll();
+		http.authorizeRequests().antMatchers("/produccion/api/v1/ordenes").permitAll();
 
 
 		//autorizo a que se accedan a los archivos que estan en los directorios hijos de ui
@@ -96,7 +95,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		// //.hasRole("ADMIN");
 		//http.authorizeRequests().antMatchers("/test*").hasAnyRole("ADMIN", "USER");
 
-		http.authorizeRequests().antMatchers("/test/api/v1/auth/login*").permitAll();
+		http.authorizeRequests().antMatchers("/produccion/api/v1/auth/login*").permitAll();
 
 
 		http.authorizeRequests().anyRequest().authenticated();
