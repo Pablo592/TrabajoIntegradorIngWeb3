@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(Constantes.URL_BASE)
+@RequestMapping(Constantes.URL_PRODUCTOS)
 public class ProductoRestController {
 
     @Autowired
@@ -36,7 +36,7 @@ public class ProductoRestController {
     })
 
     @PreAuthorize("hasRole('ROLE_USER')")
-    @GetMapping(value="/productos")
+    @GetMapping(value="")
     public ResponseEntity<List<Producto>> listado() {
         try {
             return new ResponseEntity<List<Producto>>(productoNegocio.listado(), HttpStatus.OK);
@@ -53,7 +53,7 @@ public class ProductoRestController {
     })
 
     @PreAuthorize("hasRole('ROLE_USER')")
-    @PostMapping(value="/productos")
+    @PostMapping(value="")
     public ResponseEntity<String> agregar(@RequestBody Producto producto) {
         try {
             Producto respuesta=productoNegocio.agregar(producto);
@@ -76,7 +76,7 @@ public class ProductoRestController {
     })
 
     @PreAuthorize("hasRole('ROLE_USER')")
-    @PutMapping(value="/productos")
+    @PutMapping(value="")
     public ResponseEntity<String> modificar(@RequestBody Producto producto) {
         try {
             productoNegocio.modificar(producto);
@@ -97,7 +97,7 @@ public class ProductoRestController {
     })
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @DeleteMapping(value="/productos/{id}")
+    @DeleteMapping(value="/{id}")
     public ResponseEntity<String> eliminar(@PathVariable("id") long id) {
         try {
             productoNegocio.eliminar(id);

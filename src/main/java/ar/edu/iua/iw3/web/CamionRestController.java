@@ -37,7 +37,7 @@ public class CamionRestController {
 	})
 
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@GetMapping(value="/listar")
+	@GetMapping(value="")
 	public ResponseEntity<List<Camion>> listado() {
 		try {
 			return new ResponseEntity<List<Camion>>(camionNegocio.listado(), HttpStatus.OK);

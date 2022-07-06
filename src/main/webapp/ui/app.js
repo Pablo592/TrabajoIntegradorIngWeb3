@@ -25,9 +25,7 @@ app.run(['$rootScope', '$uibModal', 'CoreService', '$location', '$log', '$localS
             usuarioAceptador: { "username": '' },
         };
 
-        $rootScope.listaRoles = [];
-        $rootScope.listaAlarmas = [];
-
+       
         $rootScope.alarmaDescripcionSeleccionada = "";
 
         let logueado = localStorage.getItem('iw3/userdata');
@@ -36,6 +34,8 @@ app.run(['$rootScope', '$uibModal', 'CoreService', '$location', '$log', '$localS
         $rootScope.idLogueado = logueadoJson.idUser;
         $rootScope.alarmas = false;
         $rootScope.stomp = $stomp;
+        $rootScope.listaRoles = [];
+        $rootScope.listaAlarmas = [];
 
         $rootScope.relocate = function (loc) {   //manejar el direccionamiento en el cliente
             $rootScope.oldLoc = $location.$$path;

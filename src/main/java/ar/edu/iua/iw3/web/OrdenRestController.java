@@ -52,8 +52,8 @@ public class OrdenRestController {
             @ApiResponse(code = 422 , message = "Operacion no permitida")
     })
     @PreAuthorize("hasRole('ROLE_USER')")
-    @GetMapping(value= "/conciliacion/{codigoExterno}")
-    public ResponseEntity<ConciliacionDTO>  getConciliacionByCodigoExterno(@PathVariable("codigoExterno") String codigoExterno) {
+    @GetMapping(value= "/conciliacion")
+    public ResponseEntity<ConciliacionDTO>  getConciliacionByCodigoExterno(@RequestParam("codigoExterno") String codigoExterno) {
         try {
             return new ResponseEntity<ConciliacionDTO>(ordenNegocio.obtenerConciliacion(codigoExterno), HttpStatus.OK);
         } catch (NegocioException e) {
@@ -75,7 +75,7 @@ public class OrdenRestController {
             @ApiResponse(code = 404 , message = "No es posible localizar la orden")
     })
     @PreAuthorize("hasRole('ROLE_USER')")
-    @GetMapping(value= "/buscar/{id}")
+    @GetMapping(value= "/{id}")
     public ResponseEntity<Orden> buscarOrdenById(@PathVariable("id") long id) {
         try {
             return new ResponseEntity<Orden>(ordenNegocio.cargar(id), HttpStatus.OK);
@@ -96,7 +96,7 @@ public class OrdenRestController {
             @ApiResponse(code = 400 , message = "Request con informacion inconsistente")
     })
     @PreAuthorize("hasRole('ROLE_USER')")
-    @PostMapping(value= "/crear",consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value= "",consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<MensajeRespuesta> agregar(@RequestBody Orden orden) {
         try {
             MensajeRespuesta r=ordenNegocio.agregar(orden).getMensaje();
@@ -164,7 +164,7 @@ public class OrdenRestController {
     })
 
     @PreAuthorize("hasRole('ROLE_USER')")
-    @PutMapping(value= "/frenar-carga")
+    @PutMapping(value= "/frenar/carga")
     public  ResponseEntity<MensajeRespuesta> frenarCargar(@RequestBody Orden orden) {
         try {
             MensajeRespuesta r=ordenNegocio.frenarCargar(orden.getCodigoExterno()).getMensaje();
@@ -194,7 +194,7 @@ public class OrdenRestController {
     })
 
     @PreAuthorize("hasRole('ROLE_USER')")
-    @PutMapping(value= "/peso-final")
+    @PutMapping(value= "/peso/final")
     public ResponseEntity<MensajeRespuesta> setearPesoFinalCamion(@RequestBody Orden orden) {
         try {
             MensajeRespuesta r=ordenNegocio.establecerPesajeFinal(orden).getMensaje();
@@ -250,7 +250,7 @@ public class OrdenRestController {
     })
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PutMapping(value= "/umbral-temperatura")
+    @PutMapping(value= "/umbral/temperatura")
     public ResponseEntity<MensajeRespuesta> modificarUmbralTemperatura(@RequestBody Orden orden) {
         try {
             MensajeRespuesta r = ordenNegocio.cambiarUmbralTemperatura(orden).getMensaje();

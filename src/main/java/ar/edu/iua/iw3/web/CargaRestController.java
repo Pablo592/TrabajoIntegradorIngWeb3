@@ -56,7 +56,7 @@ public class CargaRestController {
     })
 
     @PreAuthorize("hasRole('ROLE_USER')")
-    @GetMapping(value= "/carga-promedio")
+    @GetMapping(value= "/promedio")
     public ResponseEntity<CargaDTO> CargaPromedioCodigoExterno(@RequestParam("codigoExterno") String codigoExterno) {
         try {
             return new ResponseEntity<CargaDTO>(cargaNegocio.getPromedioDensidadAndTemperaturaAndCaudal(codigoExterno), HttpStatus.OK);

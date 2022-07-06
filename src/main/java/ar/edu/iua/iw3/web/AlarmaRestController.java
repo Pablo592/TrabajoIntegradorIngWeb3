@@ -38,7 +38,7 @@ public class AlarmaRestController {
             @ApiResponse(code = 404 , message = "No hay alarmas pertenecientes al autor"),
             @ApiResponse(code = 500 , message = "Error interno del servidor")
     })
-    @GetMapping(value="/listar-author/{id}")
+    @GetMapping(value="/author/{id}")
     public ResponseEntity<List<Alarma>> listadoAuthor(@PathVariable("id") Long id) {
         try {
             return new ResponseEntity<List<Alarma>>(alarmaNegocio.listarPorAutor(id), HttpStatus.OK);
@@ -59,7 +59,7 @@ public class AlarmaRestController {
             @ApiResponse(code = 500 , message = "Error interno del servidor"),
             @ApiResponse(code = 409 , message = "Se ha producido una incosistencia con los datos ya guardados")
     })
-    @PutMapping(value="/aceptar-alarma")
+    @PutMapping(value="/aceptar")
     public ResponseEntity<MensajeRespuesta> aceptarAlarma(@RequestBody Alarma alarma) {
         try {
             alarma.setFechaAceptacion(new Date());

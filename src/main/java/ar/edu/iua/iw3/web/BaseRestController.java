@@ -26,8 +26,6 @@ public class BaseRestController {
 	}
 
 	protected JSONObject userToJson(Usuario u) {
-		// AuthToken token = new AuthToken(sessionTimeout, u.getUsername());
-		// AuthToken token = new AuthToken(u.getSessionTimeout(), u.getUsername());
 		AuthToken token = new AuthToken(u.getDuracionToken() == 0 ? 300 : u.getDuracionToken(), u.getUsername());
 		String tokenValue = null;
 		try {
