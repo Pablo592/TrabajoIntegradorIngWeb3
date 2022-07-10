@@ -113,6 +113,10 @@ public class OrdenRestController {
             log.error(e.getMessage(), e);
             MensajeRespuesta r=new MensajeRespuesta(-1,e.getMessage());
             return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.BAD_REQUEST);
+        } catch (UnprocessableException e) {
+            log.error(e.getMessage(), e);
+            MensajeRespuesta r=new MensajeRespuesta(-1,e.getMessage());
+            return new ResponseEntity<MensajeRespuesta>(r,HttpStatus.UNPROCESSABLE_ENTITY);
         }
     }
 

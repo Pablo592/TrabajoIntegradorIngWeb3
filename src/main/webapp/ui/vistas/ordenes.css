@@ -158,7 +158,6 @@
     min-width: 1vh;
     background-color: transparent;
     height: 30px;
-    ;
 }
 
 .encabezado {
@@ -180,7 +179,7 @@
 }
 
 .scrollInferior {
-    min-height: 30vh;
+    height:calc(100% - 30vh);
     overflow: auto !important;
     overflow-x: hidden;
 }

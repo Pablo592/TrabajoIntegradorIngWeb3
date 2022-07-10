@@ -37,6 +37,10 @@ public class Chofer implements Serializable {
 	@JsonBackReference
 	private List<Orden> ordenList;
 
+	@ApiModelProperty(notes = "Flag que indica si el chofer esta ocupado o no")
+	@Column(columnDefinition = "boolean default false", nullable = false)
+	private boolean ocupado;
+
 	public long getId() {
 		return id;
 	}
@@ -75,6 +79,14 @@ public class Chofer implements Serializable {
 
 	public void setOrdenList(List<Orden> ordenList) {
 		this.ordenList = ordenList;
+	}
+
+	public boolean isOcupado() {
+		return ocupado;
+	}
+
+	public void setOcupado(boolean ocupado) {
+		this.ocupado = ocupado;
 	}
 
 	public String checkBasicData(){

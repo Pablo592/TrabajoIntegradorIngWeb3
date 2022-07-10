@@ -186,7 +186,7 @@ public class OrdenControllerTest {
         //when
         when(ordenNegocio.cargar(orden.getId())).thenReturn(orden);
         //then
-        mvc.perform(get("/"+URL_ORDENES+"/buscar/" + orden.getId())
+        mvc.perform(get("/"+URL_ORDENES+"/" + orden.getId())
                         .param("xauthtoken", token)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())

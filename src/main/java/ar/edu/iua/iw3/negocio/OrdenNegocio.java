@@ -125,7 +125,7 @@ public class OrdenNegocio implements IOrdenNegocio{
 
 
     @Override
-    public RespuestaGenerica<Orden> agregar(Orden orden) throws NegocioException, EncontradoException, BadRequest {
+    public RespuestaGenerica<Orden> agregar(Orden orden) throws NegocioException, EncontradoException, BadRequest, UnprocessableException {
         MensajeRespuesta m=new MensajeRespuesta();
         RespuestaGenerica<Orden> r = new RespuestaGenerica<Orden>(orden, m);
 
@@ -144,32 +144,45 @@ public class OrdenNegocio implements IOrdenNegocio{
         Producto productoJson = orden.getProducto();
         validarMetadata(camionJson,clienteJson,choferJson,productoJson);
         convertirMayusculasPatenteCamionYnombreProducto(camionJson,productoJson);
+
+
+        Cliente cliente = clienteNegocio.findByContacto(clienteJson.getContacto());
+        Camion camion = camionNegocio.findCamionByPatente(camionJson.getPatente());
+        Chofer chofer = choferNegocio.findByDocumento(choferJson.getDocumento());
+        Producto producto = productoNegocio.findProductoByNombre(productoJson.getNombre());
+
+        if (camion != null && camion.isOcupado())
+            throw new UnprocessableException("El camion con patente: " + camion.getPatente() + " esta ocupado por el momento, por favor seleccione otro camion");
+
+        if (chofer != null && chofer.isOcupado())
+            throw new UnprocessableException("El chofer con documento : " + chofer.getDocumento() + " esta ocupado por el momento, por favor seleccione otro chofer");
+
+
+        if(camion == null){
+            camionJson.setOcupado(true);
+            orden.setCamion(camionNegocio.agregar(camionJson));
+        }
+        else
+            orden.setCamion(camion);
+
+        if(cliente == null)
+            orden.setCliente(clienteNegocio.agregar(clienteJson).getEntidad());
+        else
+            orden.setCliente(cliente);
+
+        if(chofer  == null){
+            choferJson.setOcupado(true);
+            orden.setChofer(choferNegocio.agregar(choferJson));
+        }
+        else
+            orden.setChofer(chofer);
+
+        if(producto == null)
+            orden.setProducto(productoNegocio.agregar(productoJson));
+        else
+            orden.setProducto(producto);
+
         try {
-            Cliente cliente = clienteNegocio.findByContacto(clienteJson.getContacto());
-            Camion camion = camionNegocio.findCamionByPatente(camionJson.getPatente());
-            Chofer chofer = choferNegocio.findByDocumento(choferJson.getDocumento());
-            Producto producto = productoNegocio.findProductoByNombre(productoJson.getNombre());
-
-           if(camion == null)
-                orden.setCamion(camionNegocio.agregar(camionJson));
-           else
-               orden.setCamion(camion);
-
-            if(cliente == null)
-                orden.setCliente(clienteNegocio.agregar(clienteJson).getEntidad());
-            else
-                orden.setCliente(cliente);
-
-            if(chofer  == null)
-                orden.setChofer(choferNegocio.agregar(choferJson));
-            else
-                orden.setChofer(chofer);
-
-            if(producto == null)
-                orden.setProducto(productoNegocio.agregar(productoJson));
-            else
-                orden.setProducto(producto);
-
             orden.setEstado(1);
             Orden orderNueva = ordenDAO.save(orden);
 

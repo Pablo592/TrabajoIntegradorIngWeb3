@@ -16,7 +16,6 @@ public class Iw3Application extends SpringBootServletInitializer implements Comm
 	@Override
 	public void run(String... args) throws Exception {
 		// TODO Auto-generated method stub
-		
 	}
 
 	

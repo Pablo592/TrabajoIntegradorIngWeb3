@@ -11,7 +11,7 @@ public interface IOrdenNegocio {
 
     Orden cargar(long id) throws NegocioException, NoEncontradoException;
 
-    RespuestaGenerica<Orden> agregar(Orden orden) throws NegocioException, EncontradoException, BadRequest;
+    RespuestaGenerica<Orden> agregar(Orden orden) throws NegocioException, EncontradoException, BadRequest, UnprocessableException;
 
     Orden modificar(Orden orden) throws NegocioException, NoEncontradoException, ConflictException;
 

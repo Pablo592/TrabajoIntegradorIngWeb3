@@ -67,7 +67,7 @@
             ng-repeat="list in listaOrdenes"
             ng-selected="ordenParaActualizar()"
           >
-            Id: {{list.codigoExterno}} , Estado {{list.estado}}
+            Cod Ext: {{list.codigoExterno}} , Estado {{list.estado}}
           </option>
         </select>
         <div class="espacio"></div>
@@ -412,7 +412,7 @@
       aria-describedby="button-addon1"
     />
   </div>
-  <div class="tabla">
+  <div class="tabla" >
     <div class="encabezadoTabla">
       <div class="espacioVacio"></div>
       <div ng-click="ordenarOrdenes('codigoExterno')" class="fuenteTabla">

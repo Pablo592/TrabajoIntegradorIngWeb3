@@ -134,7 +134,7 @@ public class CargaControllerTest {
         //when
         when(cargaNegocio.getPromedioDensidadAndTemperaturaAndCaudal(orden.getCodigoExterno())).thenReturn(cargaDTO);
         //then
-        mvc.perform(get("/"+URL_CARGAS+"/carga-promedio")
+        mvc.perform(get("/"+URL_CARGAS+"/promedio")
                         .param("xauthtoken", token)
                         .param("codigoExterno", orden.getCodigoExterno())
                         .contentType(MediaType.APPLICATION_JSON))

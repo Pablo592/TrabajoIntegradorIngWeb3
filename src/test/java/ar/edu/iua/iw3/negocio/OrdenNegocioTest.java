@@ -103,7 +103,7 @@ public class OrdenNegocioTest {
         assertEquals(camion.getPatente(),ordenBuscada.getCamion().getPatente());
     }
     @Test
-    public void crearOrdenConMetadatosSuficientes_Success() throws EncontradoException, BadRequest, NegocioException {
+    public void crearOrdenConMetadatosSuficientes_Success() throws EncontradoException, BadRequest, NegocioException, UnprocessableException {
         //when + given
         when(ordenRepositoryMock.save(orden)).thenReturn(orden);
         Orden ordenCreada = ordenNegocio.agregar(orden).getEntidad();
