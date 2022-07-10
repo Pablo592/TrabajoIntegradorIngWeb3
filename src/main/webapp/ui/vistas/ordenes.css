@@ -116,7 +116,6 @@
     display: flex;
     width: 100%;
     flex-direction: row;
-    height: 100%;
 }
 
 
@@ -124,7 +123,6 @@
     display: flex;
     width: 100%;
     flex-direction: row;
-    height: 100%;
 }
 
 .celda {
@@ -173,13 +171,7 @@
 }
 
 .scrollSuperior {
-    height: 70vh;
-    overflow: auto !important;
-    overflow-x: hidden;
-}
-
-.scrollInferior {
-    height:calc(100% - 30vh);
+    height: calc(100vh);
     overflow: auto !important;
     overflow-x: hidden;
 }
