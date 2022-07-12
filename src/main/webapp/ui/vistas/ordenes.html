@@ -1,4 +1,4 @@
-<div class="scrollSuperior">
+<div class="scrollSuperior" id="scroll">
   <div class="encabezado">
     <div class="tabla">
       <div class="form-check filasTabla">
@@ -411,7 +411,7 @@
       />
     </div>
     <div>
-      <button class="botonRefrescar">Refrescar</button>
+      <button class="botonRefrescar" ng-click="buscarOrdenes()">Actualizar</button>
     </div>
   </div>
 
@@ -457,7 +457,7 @@
     </div>
     <div
       class="filasTabla"
-      ng-repeat="list in listaOrdenes  | orderBy: parametroOrdenamiento | filter: textoBuscado : list.codigoExterno"
+      ng-repeat="list in listaOrdenes.slice(((paginaActual-1)*itemsPorPagina), ((paginaActual)*itemsPorPagina))  | orderBy: parametroOrdenamiento | filter: textoBuscado : list.codigoExterno"
     >
       <div class="espacioVacio"></div>
       <div class="celda">{{list.codigoExterno}}</div>
@@ -489,6 +489,15 @@
         />
       </div>
       <div class="espacioVacio"></div>
+    </div>
+    <div style="text-align: center;">
+      <ul uib-pagination total-items="totalDeItems"
+          ng-model="paginaActual" max-size="5"
+          class="pagination-sm" items-per-page="itemsPorPagina"
+          next-text="Siguiente" previous-text="Anterior"></ul>
+    </div>
+    <div class="panel-footer" style="text-align: center;">
+      <pre>{{listaOrdenes.length}} ordenes en la lista.</pre>
     </div>
   </div>
 </div>

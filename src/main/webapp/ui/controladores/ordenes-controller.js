@@ -19,12 +19,16 @@ angular.module('ordenes').controller('Ordenes', function ($scope, OrdenesService
     $scope.listaOrdenes = [];
     $scope.eliminar = 0;
     $scope.textoBuscado;
-
+    $scope.verItemsPorPagina = 3;
+    $scope.totalDeItems = 0;
+    $scope.paginaActual = 1;
+    $scope.itemsPorPagina = $scope.verItemsPorPagina;
 
     OrdenesService.listaOrdenes().then(
         function (resp) {
             if (resp.status == 200) {
                 $scope.listaOrdenes = resp.data;
+                $scope.totalDeItems = $scope.listaOrdenes.length;
                 console.log($scope.listaOrdenes);
             }
             console.log(resp);
@@ -33,6 +37,12 @@ angular.module('ordenes').controller('Ordenes', function ($scope, OrdenesService
             console.log(err);
         }
     );
+
+
+    $scope.setItemsPorPagina = function(num) {
+        $scope.itemsPorPagina = num;
+        $scope.paginaActual = 1;
+    };
 
     $scope.ordenarOrdenes = function (parametro) {
         $scope.parametroOrdenamiento = parametro;
