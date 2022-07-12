@@ -18,16 +18,19 @@ app.run(['$rootScope', '$uibModal', 'CoreService', '$location', '$log', '$localS
             usuarioAceptador: { "username": '' },
         };
 
-       
+
         $rootScope.alarmaDescripcionSeleccionada = "";
 
         let logueado = localStorage.getItem('iw3/userdata');
         let logueadoJson = JSON.parse(logueado);
-        $rootScope.listaRoles = logueadoJson.roles;
-        $rootScope.idLogueado = logueadoJson.idUser;
+        $rootScope.listaRoles = [];
+        if( logueadoJson != null){
+            $rootScope.listaRoles = logueadoJson.roles;
+            $rootScope.idLogueado = logueadoJson.idUser;
+        }
         $rootScope.alarmas = false;
         $rootScope.stomp = $stomp;
-        $rootScope.listaRoles = [];
+
         $rootScope.listaAlarmas = [];
 
         $rootScope.relocate = function (loc) {
@@ -69,10 +72,10 @@ app.run(['$rootScope', '$uibModal', 'CoreService', '$location', '$log', '$localS
             return $rootScope.alarmas;
         }
 
-        $rootScope.openLoginForm = function (size) { 
+        $rootScope.openLoginForm = function (size) {
             if (!$rootScope.loginOpen) {
                 $localStorage.logged = false;
-                $rootScope.loginOpen = true;   
+                $rootScope.loginOpen = true;
                 $uibModal.open({
                     animation: true,
                     backdrop: 'static',
@@ -137,6 +140,7 @@ app.run(['$rootScope', '$uibModal', 'CoreService', '$location', '$log', '$localS
         }
 
         $rootScope.getRole = function () {
+
             for (let i = 0; i < $rootScope.listaRoles.length; i++) {
                 if ($rootScope.listaRoles[i] === 'ROLE_ADMIN')
                     return 'ROLE_ADMIN';
@@ -156,7 +160,7 @@ app.run(['$rootScope', '$uibModal', 'CoreService', '$location', '$log', '$localS
         }
       
        $rootScope.iniciaWS()
-       
+
         CoreService.authInfo();
     }
 ]);

@@ -24,6 +24,7 @@ angular.module('ordenes').controller('Ordenes', function ($scope, OrdenesService
     $scope.paginaActual = 1;
     $scope.itemsPorPagina = $scope.verItemsPorPagina;
 
+
     OrdenesService.listaOrdenes().then(
         function (resp) {
             if (resp.status == 200) {
@@ -196,6 +197,7 @@ angular.module('ordenes').controller('Ordenes', function ($scope, OrdenesService
     }
 
     $scope.buscarOrdenes = function () {
+        $rootScope.getRole();
         OrdenesService.listaOrdenes($scope.orden).then(
             function (resp) {
                 if (resp.status == 200) {
@@ -285,4 +287,5 @@ angular.module('ordenes').controller('Ordenes', function ($scope, OrdenesService
             console.log(mensaje)
         });
     };
+
 });
