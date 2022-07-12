@@ -11,6 +11,11 @@ angular.module('crearUsuario').controller('CrearUsuario',
                 id: 0
             }]
         }
+
+        $scope.volver = function () {
+            window.location.replace("http://localhost:8080/index.html#!/ordenes");
+        }
+
         $scope.crearUsaurio = function () {
             console.log($scope.usuarioACrear)
             CrearUsuarioService.crearUsuario($scope.usuarioACrear).then(
@@ -49,8 +54,8 @@ angular.module('crearUsuario').controller('CrearUsuario',
                 confirmButtonText: "Aceptar",
                 closeOnConfirm: true,
                 html: true
-            }, function (confirm) { 
-                window.location.replace("http://localhost:8080/index.html#!/ordenes");
+            }, function (confirm) {
+                $scope.volver();
             });
         };
 
