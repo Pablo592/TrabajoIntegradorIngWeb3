@@ -220,7 +220,14 @@ angular.module('ordenes').controller('Ordenes', function ($scope, OrdenesService
         return estado <= 2 ? tiempoRestante : "Finalizado";
     };
 
-    $scope.calculoTiempoTranscurrido = function (fechaI) {
+    $scope.calculoTiempoTranscurrido = function (fechaI,estado) {
+        console.log(fechaI);
+        if (fechaI === null)
+            return 0;
+
+            if(estado > 2 )
+            return "Carga ya finalizada"
+
         var fechaInicio = new Date(fechaI).getTime();
         var fechaFin = new Date()
         return parseFloat(Math.abs(fechaFin - fechaInicio) / (1000 * 60)).toFixed(2);

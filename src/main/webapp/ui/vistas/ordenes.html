@@ -469,7 +469,7 @@
       <div class="celda">{{list.ultimaDensidadProductoKilogramoMetroCub}}</div>
       <div class="celda">{{list.ultimoCaudalLitroSegundo}}</div>
       <div class="celda">
-        {{calculoTiempoTranscurrido(list.fechaInicioProcesoCarga)}}
+        {{calculoTiempoTranscurrido(list.fechaInicioProcesoCarga,list.estado)}}
       </div>
       <div class="celda">
         {{calculoTiempoRestante(list.ultimoCaudalLitroSegundo,list.ultimaDensidadProductoKilogramoMetroCub,list.camion.preset,list.masaAcumuladaKg,list.estado)}}
