@@ -136,7 +136,7 @@ public class CargaNegocio implements ICargaNegocio {
         Carga cargaNueva = carga;
         if(listado().size()==0 || proximoTiempoLimite == null) {
             cargaNueva = cargaDAO.save(carga);
-            proximoTiempoLimite = sumarFrecuenciaConTiempo(orden.getFrecuencia(), orden.getFechaInicioProcesoCarga());
+            proximoTiempoLimite = sumarFrecuenciaConTiempo(orden.getFrecuencia(), orden.getFechaInicioProcesoCarga());  // 10 seg +  FechaInicioProcesoCarga
         }
         if(proximoTiempoLimite.compareTo(carga.getFechaEntradaBackEnd())<0) {
             cargaNueva = cargaDAO.save(carga);
