@@ -261,6 +261,15 @@ public class OrdenNegocio implements IOrdenNegocio{
             ordenDAO.deleteById(id);
             m.setCodigo(0);
             m.setMensaje("Se elimino la orden con id: " + id );
+
+            Camion camionDesocupado =  orden.getCamion();
+            camionDesocupado.setOcupado(false);
+            camionNegocio.modificar(camionDesocupado);
+
+            Chofer choferDesocupado = orden.getChofer();
+            choferDesocupado.setOcupado(false);
+            choferNegocio.modificar(choferDesocupado);
+
             return r;
 
         } catch (Exception e) {
