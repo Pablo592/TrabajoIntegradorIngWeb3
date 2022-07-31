@@ -2,10 +2,11 @@ package ar.edu.iua.iw3.negocio;
 
 import ar.edu.iua.iw3.modelo.*;
 import ar.edu.iua.iw3.modelo.dto.ConciliacionDTO;
-import ar.edu.iua.iw3.modelo.persistencia.CamionRepository;
-import ar.edu.iua.iw3.modelo.persistencia.OrdenRepository;
+import ar.edu.iua.iw3.modelo.persistencia.*;
 import ar.edu.iua.iw3.negocio.excepciones.*;
 import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -38,6 +39,12 @@ public class OrdenNegocioTest {
     CamionNegocio camionNegocioMock;
     @MockBean
     CamionRepository camionRepositoryMock;
+    @MockBean
+    ClienteRepository clienteRepositoryMock;
+    @MockBean
+    ChoferRepository choferRepositoryMock;
+    @MockBean
+    ProductoRepository productoRepositoryMock;
     @Autowired
     OrdenNegocio ordenNegocio;
     @Autowired
@@ -52,18 +59,22 @@ public class OrdenNegocioTest {
         orden.setFrecuencia(30);
         ///////
         cliente = new Cliente();
+        cliente.setId(1);
         cliente.setRazonSocial("SA");
         cliente.setContacto(3512151243L);
         ///////
         chofer = new Chofer();
+        chofer.setId(1);
         chofer.setNombre("nuevo chofer nombre");
         chofer.setApellido("apellidochofer");
         chofer.setDocumento(40211001L);
         ///////
         producto = new Producto();
+        producto.setId(1);
         producto.setNombre("nuevoproducto");
         ///////
         camion = new Camion();
+        camion.setId(1);
         camion.setPatente("ad123as");
         camion.setCisternadoLitros(1000);
         camion.setPreset(3000);
@@ -104,8 +115,14 @@ public class OrdenNegocioTest {
     }
     @Test
     public void crearOrdenConMetadatosSuficientes_Success() throws EncontradoException, BadRequest, NegocioException, UnprocessableException {
+        Chofer chofer1 = new Chofer();
         //when + given
         when(ordenRepositoryMock.save(orden)).thenReturn(orden);
+        when(clienteRepositoryMock.findByContacto(cliente.getContacto())).thenReturn(Optional.ofNullable(cliente));
+        when(camionRepositoryMock.findByPatente(camion.getPatente())).thenReturn(Optional.ofNullable(camion));
+        when(choferRepositoryMock.findByDocumento(chofer.getDocumento())).thenReturn(Optional.ofNullable(chofer));
+        when(productoRepositoryMock.findByNombre(producto.getNombre())).thenReturn(Optional.ofNullable(producto));
+
         Orden ordenCreada = ordenNegocio.agregar(orden).getEntidad();
         //then
         assertEquals(ordenCreada.getCodigoExterno(),orden.getCodigoExterno());

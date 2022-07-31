@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: ar.edu.iua.iw3.negocio.CargaNegocioTest
 -------------------------------------------------------------------------------
-Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.508 s - in ar.edu.iua.iw3.negocio.CargaNegocioTest
+Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 12.358 s - in ar.edu.iua.iw3.negocio.CargaNegocioTest

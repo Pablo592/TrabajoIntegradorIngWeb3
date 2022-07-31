@@ -1,0 +1,18 @@
+<div class="cuerpoGrafico">
+
+	<div ng-show="calculoTiempoRestante() > 0" class="sectoTiempoRestanteGrafico">
+		Tiempo restante: {{calculoTiempoRestante()}} (Minutos)
+	</div>
+
+	<div class="sectorGrafica">
+		<canvas class="chart chart-bar" chart-options="graphOptions.demo.options"
+			chart-data="graphOptions.demo.data.data" chart-labels="graphOptions.demo.data.labels" height="80px"
+			width="100%">
+		</canvas>
+	</div>
+	<div class="sectorBoton">
+
+		<button ng-click="cerrarModal()" class="btn btn-success botonGrafica">Cerrar</button>
+	</div>
+
+</div>

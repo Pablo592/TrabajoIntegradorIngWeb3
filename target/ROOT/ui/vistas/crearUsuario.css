@@ -1,11 +1,12 @@
-.cuerpoo{
+.cuerpoo {
     display: flex;
     align-items: center;
     width: 100%;
     height: 100%;
     justify-content: center;
 }
-.paquete{
+
+.paquete {
     border-style: solid;
     border-radius: 5px;
     width: 100%;
@@ -18,7 +19,7 @@
     text-align: center;
 }
 
-.boton{
+.boton {
     margin-top: 20px;
     display: flex;
     width: 100%;
@@ -27,26 +28,35 @@
     background: rgb(194, 194, 194);
 }
 
-.boton:hover{
+.boton:hover {
     background: rgb(155, 154, 154);
 }
 
-.entrada{
+.entrada {
     display: flex;
     width: 100%;
 }
 
-.portaFoto{
+.portaFoto {
     justify-content: center;
     display: flex;
 }
 
-.foto{
+.foto {
     display: flex;
     width: 50%;
-    height: 50%;    
+    height: 50%;
 }
 
-.espaciado{
+.espaciado {
     height: 20px;
+}
+
+.crearUsuarioBotones{
+    margin-top: 10px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
 }

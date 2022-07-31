@@ -1,27 +1,32 @@
-angular.module('trabajoIntegrador').config(function ($routeProvider, $locationProvider, $httpProvider){ // $httpProvider lo uso para configurar las rutas
-    $locationProvider.hashPrefix('!');  //se o coloco antes del # para que me lo indexen los robots de google, osea se de cuenta que esta en un servidor la pagina
+angular.module('trabajoIntegrador').config(function ($routeProvider, $locationProvider, $httpProvider) {
+    $locationProvider.hashPrefix('!');
 
-    $httpProvider.interceptors.push('APIInterceptor');  //nombre del servicio de interpectores
+    $httpProvider.interceptors.push('APIInterceptor');
 
-    $routeProvider  //creamos las rutas
-        .when('/login',{
-            templateUrl : 'ui/vistas/login.html',//tengo que tener si o si este html
-            controller: 'Login' //tengo que crear este controlador
+    $routeProvider
+        .when('/login', {
+            templateUrl: 'ui/vistas/login.html',
+            controller: 'Login'
         })
 
-        .when('/ordenes',{
-        templateUrl : 'ui/vistas/ordenes.html',
-        controller: 'Ordenes'
+        .when('/ordenes', {
+            templateUrl: 'ui/vistas/ordenes.html',
+            controller: 'Ordenes'
         })
 
-        .when('/conciliacion',{
-            templateUrl : 'ui/vistas/conciliacion.html',
-            controller: 'Conciliacion'
-            })
+        .when('/graficos', {
+            templateUrl: 'ui/vistas/graficos.html',
+            controller: 'GraficosController'
+        })
+
+        .when('/crearuser', {
+            templateUrl: 'ui/vistas/crearUsuario.html',
+            controller: 'CrearUsuario'
+        })
 
         .otherwise({
-        redirectTo: '/ordenes'
-    });
+            redirectTo: '/ordenes'
+        });
 });
 
 

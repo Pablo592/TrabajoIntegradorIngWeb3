@@ -44,6 +44,7 @@
     font-size: 10px;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
 }
 
 .margenIzquierdo {
@@ -107,7 +108,6 @@
     display: flex;
     width: 100%;
     flex-direction: column;
-    height: 100%;
 }
 
 
@@ -115,7 +115,6 @@
     display: flex;
     width: 100%;
     flex-direction: row;
-    height: 100%;
 }
 
 
@@ -123,7 +122,6 @@
     display: flex;
     width: 100%;
     flex-direction: row;
-    height: 100%;
 }
 
 .celda {
@@ -157,7 +155,6 @@
     min-width: 1vh;
     background-color: transparent;
     height: 30px;
-    ;
 }
 
 .encabezado {
@@ -173,16 +170,30 @@
 }
 
 .scrollSuperior {
-    height: 70vh;
+    height: calc(90vh);
     overflow: auto !important;
     overflow-x: hidden;
 }
 
-.scrollInferior {
-    min-height: 30vh;
-    overflow: auto !important;
-    overflow-x: hidden;
+.form-check-label {
+    width: 100% !important;
 }
-.form-check-label{
-    width: 100%!important;
+
+.searchOrdenes{
+    display: flex;
+    width: 20%;
+    height: 30px;
+    margin-left: 4%;
+    margin-bottom: 20px;
+}
+
+.BuscarRefrescar{
+    display: flex;
+    flex-direction: row;
+}
+
+.botonRefrescar{
+    margin-left: 20px;
+    width: 100%;
+    height: 30px;
 }
