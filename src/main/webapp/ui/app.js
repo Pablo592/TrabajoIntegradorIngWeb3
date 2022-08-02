@@ -1,9 +1,9 @@
 var app = angular.module('trabajoIntegrador',
     ['ngRoute', 'ordenes', 'conciliacion', 'ui.bootstrap', 'ngStorage', 'oitozero.ngSweetAlert', 'chart.js', 'ngStomp', 'graficos','crearUsuario']);
 
-app.constant('URL_BASE','http://pgsj.mooo.com/produccion/api/v1');
-app.constant('URL_TOKEN','http://pgsj.mooo.com/produccion/api/v1/auth');
-app.constant('URL_WS','http://pgsj.mooo.com/produccion/api/v1/socket');
+app.constant('URL_BASE','https://pgsj.mooo.com/produccion/api/v1');
+app.constant('URL_TOKEN','https://pgsj.mooo.com/produccion/api/v1/auth');
+app.constant('URL_WS','https://pgsj.mooo.com/produccion/api/v1/socket');
 
 app.config(function ($localStorageProvider) {
     $localStorageProvider.setKeyPrefix('iw3/');
@@ -136,7 +136,7 @@ app.run(['$rootScope', '$uibModal', 'CoreService', '$location', '$log', '$localS
 
 
         $rootScope.paginaCrearUsuario = function () {
-            window.location.replace("http://pgsj.mooo.com/index.html#!/crearuser");
+            window.location.replace("https://pgsj.mooo.com/index.html#!/crearuser");
         }
 
         $rootScope.getRole = function () {
