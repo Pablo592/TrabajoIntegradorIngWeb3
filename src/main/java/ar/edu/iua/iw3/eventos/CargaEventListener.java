@@ -1,6 +1,7 @@
 package ar.edu.iua.iw3.eventos;
 
 import ar.edu.iua.iw3.modelo.Carga;
+import ar.edu.iua.iw3.modelo.Cuentas.Usuario;
 import ar.edu.iua.iw3.modelo.Orden;
 import ar.edu.iua.iw3.negocio.OrdenNegocio;
 import ar.edu.iua.iw3.negocio.excepciones.ConflictException;
@@ -13,6 +14,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationListener;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -24,8 +27,10 @@ public class CargaEventListener implements ApplicationListener<CargaEvent> {
     @Autowired
     private OrdenNegocio ordenNegocio;
 
-    @Value("${mail.carga.umbralTemperatura.to}")
     private String to;
+
+    @Value("${mail.carga.umbralTemperatura.to}")
+    private String from;
 
     @Autowired
     private JavaMailSender emailSender;
@@ -51,7 +56,7 @@ public class CargaEventListener implements ApplicationListener<CargaEvent> {
         True  --> False --> Acepta la alarma el usuario
         * */
         if(carga.getOrden().isEnviarMailActivo()){
-            System.out.println("como la alarma esta activada no se puede enviar el mail hasta que lo acepte");
+            log.info("como la alarma esta activada no se puede enviar el mail hasta que lo acepte");
             return;
         }else {
             try {
@@ -67,15 +72,17 @@ public class CargaEventListener implements ApplicationListener<CargaEvent> {
 
         log.info("Enviando mensaje '{}'",mensaje);
 
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Usuario user = (Usuario) auth.getPrincipal();
+        to = user.getEmail();
         try {
             SimpleMailMessage message =new SimpleMailMessage();
-            message.setFrom("spitalevictor@gmail.com");
+            message.setFrom(from);
             message.setTo(to);
             message.setSubject("Precaucion Altas temperaturas en el combustible de la orden " + carga.getOrden().getCodigoExterno());
             message.setText(mensaje);
             emailSender.send(message);
             log.trace("Mail enviado a: '{}'",to);
-
 
             Orden ordenConMailEnviado = carga.getOrden();
             ordenConMailEnviado.setEnviarMailActivo(true);

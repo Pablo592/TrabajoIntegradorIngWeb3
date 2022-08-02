@@ -1,6 +1,7 @@
 var app = angular.module('trabajoIntegrador',
     ['ngRoute', 'ordenes', 'conciliacion', 'ui.bootstrap', 'ngStorage', 'oitozero.ngSweetAlert', 'chart.js', 'ngStomp', 'graficos','crearUsuario']);
 
+
 app.constant('URL_BASE','https://pgsj.mooo.com/produccion/api/v1');
 app.constant('URL_TOKEN','https://pgsj.mooo.com/produccion/api/v1/auth');
 app.constant('URL_WS','https://pgsj.mooo.com/produccion/api/v1/socket');
