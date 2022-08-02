@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: ar.edu.iua.iw3.web.OrdenControllerTest
 -------------------------------------------------------------------------------
-Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.104 s - in ar.edu.iua.iw3.web.OrdenControllerTest
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.188 s - in ar.edu.iua.iw3.web.OrdenControllerTest

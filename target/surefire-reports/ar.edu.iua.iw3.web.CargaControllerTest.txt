@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: ar.edu.iua.iw3.web.CargaControllerTest
 -------------------------------------------------------------------------------
-Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.081 s - in ar.edu.iua.iw3.web.CargaControllerTest
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.751 s - in ar.edu.iua.iw3.web.CargaControllerTest

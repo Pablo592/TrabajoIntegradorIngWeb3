@@ -13,7 +13,7 @@ angular.module('crearUsuario').controller('CrearUsuario',
         }
 
         $scope.volver = function () {
-            window.location.replace("http://localhost:8080/index.html#!/ordenes");
+            window.location.replace("http://pgsj.mooo.com/index.html#!/ordenes");
         }
 
         $scope.crearUsaurio = function () {
