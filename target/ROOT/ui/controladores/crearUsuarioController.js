@@ -12,21 +12,44 @@ angular.module('crearUsuario').controller('CrearUsuario',
             }]
         }
 
-        $scope.volver = function () {
-            window.location.replace("http://localhost:8080/index.html#!/ordenes");
+
+        $scope.usuarioAdminACrear = {
+            nombre: '',
+            apellido: '',
+            email: '',
+            password: '',
+            username: '',
+            roles: [{
+                id: 2
+            }, 
+            {
+                id: 1
+            }]
         }
 
+
+        $scope.volver = function () {
+            window.location.replace("https://pgsj.mooo.com/index.html#!/ordenes");
+        }
+        let aux = null;
         $scope.crearUsaurio = function () {
-            console.log($scope.usuarioACrear)
-            CrearUsuarioService.crearUsuario($scope.usuarioACrear).then(
+            if ($scope.usuarioACrear.roles[0].id ==='2'){
+                $scope.usuarioAdminACrear.nombre    = $scope.usuarioACrear.nombre;
+                $scope.usuarioAdminACrear.apellido  = $scope.usuarioACrear.apellido
+                $scope.usuarioAdminACrear.email     = $scope.usuarioACrear.email
+                $scope.usuarioAdminACrear.password  = $scope.usuarioACrear.password
+                $scope.usuarioAdminACrear.username  = $scope.usuarioACrear.username
+                aux = $scope.usuarioAdminACrear;
+            }else{
+                aux = $scope.usuarioACrear;
+            }
+            CrearUsuarioService.crearUsuario(aux).then(
                 function (resp) {
                     if (resp.status == 201) {
                         $scope.notificacionAprobacion('Usuario creado con exito');
                     }
-                    console.log(resp);
                 },
                 function (err) {
-                    console.log(err);
                     $scope.notificacionError(err.data.error);
                 }
             );
